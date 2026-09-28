@@ -1,0 +1,92 @@
+# SPDX-FileCopyrightText: 2026 Dermot O'Brien
+# SPDX-License-Identifier: Apache-2.0
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  skills:
+    name: Agent Skills validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # Zero-dependency on purpose, so this job needs no install step.
+      - name: Validate skills against the agentskills.io spec
+        run: node scripts/validate-skills.mjs skills
+
+  example:
+    name: Worked example against diagram-model and markdown-deck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # The two skills this one depends on, each checked out on its own and found
+      # through AGENT_SKILLS_PATH, as they would be when an agent installed them
+      # somewhere other than beside pattern.
+      - uses: actions/checkout@v4
+        with:
+          repository: dermot-obrien/diagram-model
+          path: .deps/diagram-model
+      - uses: actions/checkout@v4
+        with:
+          repository: dermot-obrien/markdown-deck
+          path: .deps/markdown-deck
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install markdown-deck
+        working-directory: .deps/markdown-deck/skills/markdown-deck
+        run: npm install --no-audit --no-fund
+      - name: doctor finds both dependencies
+        env:
+          AGENT_SKILLS_PATH: ${{ github.workspace }}/.deps/diagram-model/skills:${{ github.workspace }}/.deps/markdown-deck/skills
+        run: |
+          python .deps/diagram-model/skills/model/bin/model.py doctor --skill pattern --json > doctor.json || true
+          python -c "import json,sys; d=json.load(open('doctor.json')); s=d.get('siblings',{}); print(sorted(s)); sys.exit(0 if {'model','markdown-deck'} <= set(s) else 1)"
+      - name: The worked example agrees with itself, without draw.io
+        working-directory: skills/pattern/examples/knowledge-retrieval
+        run: |
+          MODEL="$GITHUB_WORKSPACE/.deps/diagram-model/skills/model/bin/model.py"
+          DECK="$GITHUB_WORKSPACE/.deps/markdown-deck/skills/markdown-deck/bin/markdown-deck.mjs"
+          # The committed model.json is what the document extracts to.
+          python "$MODEL" extract index.md --format json --out /tmp/model.json
+          python -c "import json,sys; sys.exit(0 if json.load(open('/tmp/model.json')) == json.load(open('model.json')) else 1)"
+          # The document and the diagram agree, and syncing changes nothing.
+          python "$MODEL" validate index.md --against components.drawio
+          cp components.drawio /tmp/before.drawio
+          python "$MODEL" sync index.md components.drawio
+          cmp components.drawio /tmp/before.drawio
+          # Every committed view was rendered from the diagram as it is now.
+          for v in components scenario-s1 scenario-s2; do python "$MODEL" stamp --check "$v.svg"; done
+          # The deck builds.
+          node "$DECK" build index.md --out /tmp/dist --theme default --no-pdf
+
+  plugin:
+    name: Plugin manifests agree
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Versions agree across pattern's SKILL.md and the plugin manifests
+        run: |
+          skill=$(sed -n 's/^  version: "\(.*\)"/\1/p' skills/pattern/SKILL.md)
+          plugin=$(node -p "require('./.claude-plugin/plugin.json').version")
+          market=$(node -p "require('./.claude-plugin/marketplace.json').plugins[0].version")
+          echo "pattern SKILL.md $skill, plugin.json $plugin, marketplace.json $market"
+          test "$skill" = "$plugin" && test "$plugin" = "$market"
+
+  reuse:
+    name: REUSE compliance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: fsfe/reuse-action@v6

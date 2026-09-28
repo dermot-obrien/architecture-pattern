@@ -1,0 +1,9 @@
+{
+  "source": "components.drawio",
+  "sha256": "3e69571c3da99a8329bdb57d8793996ddc314f6b9392c274555948d395a7cbcd",
+  "layers": [
+    "Structure",
+    "S2 Source onboarding"
+  ],
+  "note": "Written by model render. A consumer compares sha256 with the source to detect a stale render. Commit it with the image."
+}

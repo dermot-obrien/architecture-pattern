@@ -1,0 +1,26 @@
+{
+  "name": "architecture-pattern",
+  "description": "The architecture-pattern plugin, shipping the pattern skill, as a Claude Code plugin depending on diagram-model and markdown-deck.",
+  "owner": {
+    "name": "Dermot O'Brien",
+    "url": "https://github.com/dermot-obrien"
+  },
+  "allowCrossMarketplaceDependenciesOn": [
+    "diagram-model",
+    "markdown-deck"
+  ],
+  "plugins": [
+    {
+      "name": "architecture-pattern",
+      "source": "./",
+      "description": "Author an architecture pattern at any scope as one Markdown document that is also the model and the deck: the draw.io diagram and scenario overlays are generated from its tables and validated against it, and its tagged sections publish as HTML slides and a PDF. Ships the pattern skill.",
+      "version": "0.8.0",
+      "category": "documentation",
+      "tags": [
+        "architecture",
+        "documentation",
+        "drawio"
+      ]
+    }
+  ]
+}

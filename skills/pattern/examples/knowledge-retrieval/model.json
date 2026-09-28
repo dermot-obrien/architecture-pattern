@@ -1,0 +1,255 @@
+{
+  "name": "PAT-900 Knowledge Retrieval",
+  "version": "0.1",
+  "source": "index.md",
+  "nodes": [
+    {
+      "id": "ABB-901",
+      "label": "Retrieval Service",
+      "group": "PAT-902",
+      "attrs": {
+        "role_in_this_pattern": "The seam. Accepts a query plus caller identity, returns cited passages or an explicit no-answer"
+      }
+    },
+    {
+      "id": "ABB-902",
+      "label": "Embedding Service",
+      "group": "PAT-903",
+      "attrs": {
+        "role_in_this_pattern": "Turns chunks into vectors, and holds the embedding model version"
+      }
+    },
+    {
+      "id": "ABB-903",
+      "label": "Vector Store",
+      "group": "PAT-903",
+      "attrs": {
+        "role_in_this_pattern": "Stores vectors with their permission labels and source references"
+      }
+    },
+    {
+      "id": "ABB-904",
+      "label": "Knowledge Graph",
+      "group": "PAT-902",
+      "attrs": {
+        "role_in_this_pattern": "Holds relationships between entities that vector similarity alone cannot express"
+      }
+    },
+    {
+      "id": "ABB-905",
+      "label": "Policy Decision Point",
+      "group": "loose",
+      "attrs": {
+        "role_in_this_pattern": "Evaluates the caller's entitlements at query time, inside the retrieval boundary"
+      }
+    },
+    {
+      "id": "ABB-906",
+      "label": "Identity Provider",
+      "group": "loose",
+      "attrs": {
+        "role_in_this_pattern": "Establishes who is asking, and issues the token retrieval evaluates"
+      }
+    },
+    {
+      "id": "ABB-907",
+      "label": "Audit Log",
+      "group": "loose",
+      "attrs": {
+        "role_in_this_pattern": "Records every query, every decision and every passage returned"
+      }
+    },
+    {
+      "id": "ABB-908",
+      "label": "Model Gateway",
+      "group": "loose",
+      "attrs": {
+        "role_in_this_pattern": "The consumer. Composes the grounded context into a prompt and routes the call"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "ABB-901",
+      "target": "ABB-908",
+      "id": "IF-01",
+      "label": "cited passages or an explicit no-answer",
+      "attrs": {
+        "protocol": "HTTPS",
+        "payload": "RetrievalResult v1",
+        "sync": "Sync",
+        "errors_and_retry": "Timeout 2s, retry twice on 503, never on 4xx",
+        "nfrs": "p95 800ms, 99.9%"
+      }
+    },
+    {
+      "source": "ABB-906",
+      "target": "ABB-901",
+      "id": "IF-02",
+      "label": "caller identity, as an audience-bound token",
+      "attrs": {
+        "protocol": "HTTPS",
+        "payload": "JWT",
+        "sync": "Sync",
+        "errors_and_retry": "Non-retryable; fail closed",
+        "nfrs": "p95 50ms"
+      }
+    },
+    {
+      "source": "ABB-905",
+      "target": "ABB-901",
+      "id": "IF-03",
+      "label": "entitlement decision for this caller and corpus",
+      "attrs": {
+        "protocol": "HTTPS",
+        "payload": "PolicyDecision v1",
+        "sync": "Sync",
+        "errors_and_retry": "Fail closed on timeout, no cached allow",
+        "nfrs": "p95 80ms, 99.95%"
+      }
+    },
+    {
+      "source": "ABB-903",
+      "target": "ABB-901",
+      "id": "IF-04",
+      "label": "nearest neighbours with permission labels",
+      "attrs": {
+        "protocol": "gRPC",
+        "payload": "VectorQuery v1",
+        "sync": "Sync",
+        "errors_and_retry": "Timeout 500ms, one retry, then degrade",
+        "nfrs": "p95 200ms"
+      }
+    },
+    {
+      "source": "ABB-904",
+      "target": "ABB-901",
+      "id": "IF-05",
+      "label": "related entities for query expansion",
+      "attrs": {
+        "protocol": "HTTPS",
+        "payload": "GraphQuery v1",
+        "sync": "Sync",
+        "errors_and_retry": "Optional path; on failure retrieval proceeds without it",
+        "nfrs": "p95 150ms"
+      }
+    },
+    {
+      "source": "ABB-902",
+      "target": "ABB-903",
+      "id": "IF-06",
+      "label": "vectors plus the embedding model version",
+      "attrs": {
+        "protocol": "Batch",
+        "payload": "EmbeddingBatch v1",
+        "sync": "Async",
+        "errors_and_retry": "At-least-once; idempotent on chunk id",
+        "nfrs": "10k chunks/min"
+      }
+    },
+    {
+      "source": "ABB-901",
+      "target": "ABB-907",
+      "id": "IF-07",
+      "label": "query, decision and passages returned",
+      "attrs": {
+        "protocol": "Async",
+        "payload": "AuditEvent v1",
+        "sync": "Async",
+        "errors_and_retry": "Buffered; retrieval fails if the buffer is full",
+        "nfrs": "no loss"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "PAT-902",
+      "label": "PAT-902"
+    },
+    {
+      "id": "PAT-903",
+      "label": "PAT-903"
+    },
+    {
+      "id": "loose",
+      "label": "loose"
+    }
+  ],
+  "scenarios": [
+    {
+      "key": "S1",
+      "name": "Grounded answer",
+      "steps": [
+        {
+          "step": 1,
+          "actor": "ABB-908",
+          "action": "forward the question with the caller's token",
+          "edge": "IF-01",
+          "target": "ABB-901"
+        },
+        {
+          "step": 2,
+          "actor": "ABB-901",
+          "action": "validate the token and resolve the caller",
+          "edge": "IF-02",
+          "target": "ABB-906"
+        },
+        {
+          "step": 3,
+          "actor": "ABB-901",
+          "action": "ask whether this caller may query this corpus",
+          "edge": "IF-03",
+          "target": "ABB-905"
+        },
+        {
+          "step": 4,
+          "actor": "ABB-901",
+          "action": "retrieve nearest neighbours, filtered by entitlement",
+          "edge": "IF-04",
+          "target": "ABB-903"
+        },
+        {
+          "step": 5,
+          "actor": "ABB-901",
+          "action": "expand with related entities where the graph has them",
+          "edge": "IF-05",
+          "target": "ABB-904"
+        },
+        {
+          "step": 6,
+          "actor": "ABB-901",
+          "action": "record the query, the decision and what was returned",
+          "edge": "IF-07",
+          "target": "ABB-907"
+        }
+      ]
+    },
+    {
+      "key": "S2",
+      "name": "Source onboarding",
+      "steps": [
+        {
+          "step": 1,
+          "actor": "ABB-902",
+          "action": "write vectors with permission labels and the model version",
+          "edge": "IF-06",
+          "target": "ABB-903"
+        },
+        {
+          "step": 2,
+          "actor": "ABB-903",
+          "action": "register entities and relationships found in the batch",
+          "edge": "IF-05",
+          "target": "ABB-904"
+        },
+        {
+          "step": 3,
+          "actor": "ABB-901",
+          "action": "record the corpus version now serving queries",
+          "edge": "IF-07",
+          "target": "ABB-907"
+        }
+      ]
+    }
+  ]
+}
