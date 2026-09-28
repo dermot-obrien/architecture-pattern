@@ -49,7 +49,7 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: doctor finds both dependencies
         env:
-          AGENT_SKILLS_PATH: ${{ github.workspace }}/.deps/diagram-model/skills:${{ github.workspace }}/.deps/markdown-deck/skills
+          AGENT_SKILLS_PATH: ${{ github.workspace }}/skills:${{ github.workspace }}/.deps/diagram-model/skills:${{ github.workspace }}/.deps/markdown-deck/skills
         run: |
           python .deps/diagram-model/skills/model/bin/model.py doctor --skill pattern --json > doctor.json || true
           python -c "import json,sys; d=json.load(open('doctor.json')); s=d.get('siblings',{}); print(sorted(s)); sys.exit(0 if {'model','markdown-deck'} <= set(s) else 1)"
