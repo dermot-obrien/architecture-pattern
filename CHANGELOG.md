@@ -6,6 +6,12 @@ Releases of the architecture-pattern plugin. The `pattern` skill keeps its own [
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.8.1] - 2026-09-29
+
+### Changed
+
+- `pattern` 0.8.1: the template's comments no longer name a particular capability model's rungs.
+
 ## [0.8.0] - 2026-09-29
 
 First release as its own repository.

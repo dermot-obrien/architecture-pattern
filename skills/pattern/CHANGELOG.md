@@ -2,6 +2,12 @@
 
 # Changelog
 
+## [0.8.1] - 2026-09-29
+
+### Changed
+
+- The template's comments on `realises` and its references no longer name a particular capability model's rungs. They say what each reference shows, as `SKILL.md` already did, so the template carries nothing specific to the framework it came from.
+
 ## [0.8.0] - 2026-09-29
 
 Extracted from AI-Assisted Architecture, where it was `skills/pattern`, into its own repository, https://github.com/dermot-obrien/architecture-pattern, so it can be installed and used without either framework. NOTICE records the source commits, and the history before this entry is the history of that path in AI-Assisted Architecture.
