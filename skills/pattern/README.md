@@ -19,6 +19,10 @@ This skill is composition. The work is done by two others:
 
 `SKILL.md` declares both in `metadata.x-skill-requires`. The Agent Skills specification has no dependency field yet and no agent installs dependencies from it, so this skill checks for them and stops with an instruction rather than improvising. It looks for each beside itself, then on `AGENT_SKILLS_PATH`, then in every project and user skills directory that VS Code with GitHub Copilot, Cursor, Claude Code, Codex and Gemini CLI read, then among Claude Code plugins.
 
+## Requirements
+
+Python 3.11 or newer and Node 18 or newer. PDF export additionally needs [Playwright](https://playwright.dev/) (`npm install playwright` where `markdown-deck` is installed); it prints with Microsoft Edge or Google Chrome where either is installed, so no browser download is needed on Windows. draw.io desktop is optional.
+
 ## Install
 
 Install `pattern`, `model` and `markdown-deck` wherever your agent reads skills: VS Code with GitHub Copilot, Cursor, Claude Code, Codex, Gemini CLI or any other agent that reads the Agent Skills format. See the [repository README](https://github.com/dermot-obrien/architecture-pattern#install) for every route.

@@ -60,7 +60,9 @@ Each repository is also a Claude Code plugin marketplace. This plugin declares `
 
 ### Requirements
 
-Python 3.11 or newer and Node 18 or newer. draw.io desktop is optional: without it, views are exported by hand from draw.io and stamped. PDF export needs `playwright`.
+- Python 3.11 or newer, and Node 18 or newer.
+- For PDF export only, [Playwright](https://playwright.dev/), which `markdown-deck` uses to print the deck: `npm install playwright` wherever `markdown-deck` is installed. Microsoft Edge or Google Chrome is used as the browser where installed, as on any Windows machine, so no browser download is needed. HTML decks, views and walkthroughs need neither.
+- draw.io desktop, optionally. Without it, views are exported by hand from draw.io and stamped.
 
 ## Dependencies between skills
 
