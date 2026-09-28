@@ -21,7 +21,7 @@ This skill is composition. The work is done by two others:
 
 ## Requirements
 
-Python 3.11 or newer and Node 18 or newer. PDF export additionally needs [Playwright](https://playwright.dev/) (`npm install playwright` where `markdown-deck` is installed); it prints with Microsoft Edge or Google Chrome where either is installed, so no browser download is needed on Windows. draw.io desktop is optional.
+Python 3.11 or newer and Node 18 or newer. Run `npm install` once where `markdown-deck` is installed; from markdown-deck 0.6.1 that also installs [Playwright](https://playwright.dev/) for PDF export, which prints with Microsoft Edge or Google Chrome where either is installed, so no browser download is needed on Windows. draw.io desktop is optional.
 
 ## Install
 
