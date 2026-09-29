@@ -2,6 +2,17 @@
 
 # Changelog
 
+## [0.10.2] - 2026-09-30
+
+### Fixed
+
+- publish.py passes `--theme` only when `deckTheme` is bound and the document sets no `deck_theme`. It used to pass `deckTheme`, or `default` when unset, on every build, which overrode a document's `deck_theme` and `[suite.markdown-deck] theme`. `deckTheme` no longer has a default in inputs.toml.
+- The knowledge-retrieval example declares its diagram, so publish.py publishes it, and it uses the animated walkthrough instead of one image per scenario. CI publishes the examples from above their binding files.
+
+### Changed
+
+- Requires model ^0.8.2, whose scan reads each document's own binding file.
+
 ## [0.10.1] - 2026-09-30
 
 ### Added

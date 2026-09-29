@@ -17,3 +17,6 @@ __pycache__/
 dist/
 .tmp/
 *.log
+
+# Built by run.sh and publish.py from the committed view
+skills/pattern/examples/**/scenarios.html

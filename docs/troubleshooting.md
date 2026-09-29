@@ -167,9 +167,9 @@ The document has no `deck:` tags. Add `<!-- deck:cover -->` after the H1 and `<!
 
 `deckTheme` names a theme markdown-deck does not have. Use `default`, or a path to a `.css` file.
 
-### The deck ignores a document's `deck_theme`
+### The deck does not use the theme I expected
 
-`publish.py` always passes the bound `deckTheme`, which wins over front matter. See [configuration](configuration.md#decktheme).
+The order is the document's `deck_theme`, then `[suite.pattern] deckTheme`, then `[suite.markdown-deck] theme`, then markdown-deck's default. Before pattern 0.10.2, `publish.py` always passed `deckTheme` (or `default`), which overrode the other two. See [configuration](configuration.md#decktheme).
 
 ### `skipped <file>: a scenario image needs draw.io desktop`
 

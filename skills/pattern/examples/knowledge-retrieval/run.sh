@@ -19,10 +19,9 @@ python "$MODEL" sync index.md components.drawio
 echo "4. check the document and the diagram agree"
 python "$MODEL" validate index.md --against components.drawio
 
-echo "5. render the structure and one image per scenario"
-python "$MODEL" render components.drawio --out components.svg  --layer Structure
-python "$MODEL" render components.drawio --out scenario-s1.svg --layer Structure --layer "S1 Grounded answer"
-python "$MODEL" render components.drawio --out scenario-s2.svg --layer Structure --layer "S2 Source onboarding"
+echo "5. render the structure view and animate the scenarios over it"
+python "$MODEL" render components.drawio --out components.svg --layer Structure
+python "$MODEL" animate index.md
 
 echo "6. publish the deck"
 node "$DECK" build index.md --out dist --theme default --eyebrow "PAT-900 Knowledge Retrieval"

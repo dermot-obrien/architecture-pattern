@@ -48,6 +48,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import os
 import shutil
 import subprocess
@@ -118,12 +119,25 @@ def run(cmd, timeout=600):
     return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
 
 
+def names_deck_theme(doc):
+    """Whether the document's front matter sets deck_theme."""
+    try:
+        with open(doc, encoding="utf-8") as fh:
+            text = fh.read()
+    except OSError:
+        return False
+    m = re.match(r"---\r?\n(.*?)\r?\n---", text, re.S)
+    return bool(m and re.search(r"(?m)^deck_theme\s*:", m.group(1)))
+
+
 def nonempty(path):
     return os.path.isfile(path) and os.path.getsize(path) > 0
 
 
 def deck_theme(folder):
-    """The bound deck theme: a built-in name, or a path to a .css file.
+    """The bound deck theme, a built-in name or a path to a .css file, or None when the
+    repository binds no deckTheme. None leaves the choice to markdown-deck: the document's
+    deck_theme, then [suite.markdown-deck] theme, then its own default.
 
     A repository that keeps its own theme rather than one in the skill names it by path.
     That path is written relative to the binding file, as every other path in that file
@@ -133,9 +147,11 @@ def deck_theme(folder):
              "--near", folder, "--json"])
     try:
         doc = json.loads(r.stdout)
-        theme = doc["resolved"].get("deckTheme") or "default"
+        theme = doc["resolved"].get("deckTheme")
     except (ValueError, KeyError):
-        return "default"
+        return None
+    if not theme:
+        return None
     if theme.endswith(".css") and not os.path.isabs(theme):
         bindings = doc.get("bindingFile")
         if bindings:
@@ -263,7 +279,11 @@ def publish(entry, theme, pdf, dry_run, thumbnails=False, scenario_images=False,
         return ok, notes
 
     out_dir = os.path.join(docdir, "dist", deck_name(entry["doc"]))
-    cmd = ["node", DECK, "build", entry["doc"], "--out", out_dir, "--theme", theme]
+    cmd = ["node", DECK, "build", entry["doc"], "--out", out_dir]
+    # A document's own deck_theme wins over the repository's deckTheme; with neither,
+    # markdown-deck resolves the theme itself.
+    if theme and not names_deck_theme(entry["doc"]):
+        cmd += ["--theme", theme]
     # Explicit either way, so a repository's pdf default cannot override --no-pdf.
     cmd.append("--pdf" if pdf else "--no-pdf")
     if thumbnails:
@@ -361,14 +381,14 @@ def main():
                         "notes": comp_notes + notes, **extra})
 
     if a.json:
-        print(json.dumps({"folder": a.folder, "theme": theme, "results": results,
+        print(json.dumps({"folder": a.folder, "theme": theme or "markdown-deck's own", "results": results,
                           "undeclared": scanned.get("skipped", [])}, indent=2))
     else:
         for res in results:
             print(f"  {res['status']:<8} {res['doc']}")
             for n in res["notes"]:
                 print(f"           {n}")
-        print(f"  {len(results)} model(s), theme '{theme}'"
+        print(f"  {len(results)} model(s), theme '{theme or "markdown-deck's own"}'"
               + (", dry run" if a.dry_run else ""))
     return 0 if all(r["status"] == "ok" for r in results) else 1
 
