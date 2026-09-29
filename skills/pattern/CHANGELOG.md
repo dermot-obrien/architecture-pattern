@@ -2,6 +2,14 @@
 
 # Changelog
 
+## [0.9.0] - 2026-09-29
+
+### Changed
+
+- Follows DD-11 of AI-Assisted Work. `x-skill-requires` names its dependencies by Package URL and range: `pkg:generic/dermot-obrien/diagram-model/model ^0.7.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0`. `model` 0.7.0 is the first release whose sibling discovery reads that form, so the requirement moves to `^0.7.0`.
+- The skill's identifier is `pkg:generic/dermot-obrien/architecture-pattern/pattern`, and releases are tagged `pattern--v<version>`, named after the skill rather than the repository.
+- The marketplace defines one package per skill: install it as `pattern@architecture-pattern`, not `architecture-pattern@architecture-pattern`. It depends on `model@diagram-model` `^0.7.0` and `markdown-deck@markdown-deck` `^0.6.0`.
+
 ## [0.8.2] - 2026-09-29
 
 ### Changed

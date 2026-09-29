@@ -6,6 +6,12 @@ Releases of the architecture-pattern plugin. The `pattern` skill keeps its own [
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.9.0] - 2026-09-29
+
+### Changed
+
+- `pattern` 0.9.0: DD-11 identifiers, purl requirements, the tag `pattern--v0.9.0`, and one package per skill, `pattern@architecture-pattern`.
+
 ## [0.8.2] - 2026-09-29
 
 ### Changed

@@ -51,7 +51,7 @@ Each repository is also a Claude Code plugin marketplace. This plugin declares `
 /plugin marketplace add dermot-obrien/diagram-model
 /plugin marketplace add dermot-obrien/markdown-deck
 /plugin marketplace add dermot-obrien/architecture-pattern
-/plugin install architecture-pattern@architecture-pattern
+/plugin install pattern@architecture-pattern
 ```
 
 ### Finding the dependencies
@@ -70,15 +70,19 @@ The Agent Skills specification has no dependency field yet, so `SKILL.md` declar
 
 ```yaml
 metadata:
-  version: "0.8.0"
-  x-skill-requires: "model@^0.6.0, markdown-deck@^0.6.0"
+  version: "0.9.0"
+  x-skill-requires: "pkg:generic/dermot-obrien/diagram-model/model ^0.7.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
 ```
 
-No agent installs a skill's dependencies from that field today, so in every agent `pattern` checks for them before it starts and stops with an instruction if one is missing. For Claude Code, the plugin additionally repeats the requirement in `.claude-plugin/plugin.json`, resolved against the release tags of the two repositories, so there the dependencies are installed for you.
+No agent installs a skill's dependencies from that field today, so in every agent `pattern` checks for them before it starts and stops with an instruction if one is missing. For Claude Code, its package entry in `.claude-plugin/marketplace.json` additionally repeats the requirement, resolved against the `model--v<version>` and `markdown-deck--v<version>` release tags, so there the dependencies are installed for you.
 
 ## Configuring it for a repository
 
 A repository binds the skills to its own layout in `.agents/skill-bindings.toml`: where new patterns go, its own template, its catalogue of building-block identifiers, its deck theme. `python <skills>/model/bin/model.py doctor --skill pattern` shows what is bound and what is missing. See `skills/pattern/SKILL.md`.
+
+## Versions and identifiers
+
+`pattern` is identified by the Package URL `pkg:generic/dermot-obrien/architecture-pattern/pattern`, which names no host, so a mirror or a move changes where it is fetched from but not what it is called. It has its own Semantic Version in `SKILL.md` (`metadata.version`), and each release is tagged `pattern--v<version>`. Its requirements name the skills it needs the same way, with a range. This follows DD-11 of [AI-Assisted Work](https://github.com/dermot-obrien/ai-assisted-work/blob/main/docs/about/design-decisions.md).
 
 ## Origin
 

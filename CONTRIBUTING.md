@@ -27,11 +27,11 @@ To run the worked example end to end, clone [diagram-model](https://github.com/d
 
 Keep the skill generic. It is used by many organisations, so nothing in it may name or imply one: no organisation names, internal hosts, identifiers or brand palettes in code, templates, tests or examples. An organisation's own template, catalogue and theme belong in its own repository, bound through `[suite.pattern]` of its own `.agents/skill-bindings.toml`.
 
-Record a user-visible change in `skills/pattern/CHANGELOG.md` and raise the version in `skills/pattern/SKILL.md` (`metadata.version`) and `.claude-plugin/plugin.json` and `marketplace.json` together.
+Record a user-visible change in `skills/pattern/CHANGELOG.md` and raise the version in `skills/pattern/SKILL.md` (`metadata.version`) and the skill's entry in `.claude-plugin/marketplace.json` together.
 
 ## Releases
 
-A release is a commit on `main` whose versions all agree, tagged twice: `architecture-pattern--v<version>`, which Claude Code resolves plugin dependency ranges against, and `v<version>`, which `gh skill install` and people read. `claude plugin tag` creates the first and checks that the manifests agree.
+Each skill is versioned and released on its own, as DD-11 of AI-Assisted Work sets out. A release is a commit on `main` whose versions agree for that skill, tagged `<skill>--v<version>`, for example `pattern--v0.9.0`. Claude Code resolves a dependency range against those tags, and `gh skill install` reads them. Earlier releases were tagged after the repository, such as `architecture-pattern--v0.8.0`, and those tags stay where they are.
 
 ## Licensing of contributions
 

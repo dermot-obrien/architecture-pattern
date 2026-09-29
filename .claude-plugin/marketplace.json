@@ -1,6 +1,6 @@
 {
   "name": "architecture-pattern",
-  "description": "The architecture-pattern plugin, shipping the pattern skill, as a Claude Code plugin depending on diagram-model and markdown-deck.",
+  "description": "The architecture-pattern bundle's skills, one package per skill.",
   "owner": {
     "name": "Dermot O'Brien",
     "url": "https://github.com/dermot-obrien"
@@ -11,15 +11,42 @@
   ],
   "plugins": [
     {
-      "name": "architecture-pattern",
+      "name": "pattern",
       "source": "./",
-      "description": "Author an architecture pattern at any scope as one Markdown document that is also the model and the deck: the draw.io diagram and scenario overlays are generated from its tables and validated against it, and its tagged sections publish as HTML slides and a PDF. Ships the pattern skill.",
-      "version": "0.8.2",
-      "category": "documentation",
-      "tags": [
+      "strict": false,
+      "description": "Author an architecture pattern at any scope as one Markdown document that is also the model and the deck: the draw.io diagram and scenario overlays are generated from its tables and validated against it, and its tagged sections publish as HTML slides and a PDF.",
+      "version": "0.9.0",
+      "author": {
+        "name": "Dermot O'Brien",
+        "url": "https://github.com/dermot-obrien"
+      },
+      "homepage": "https://github.com/dermot-obrien/architecture-pattern",
+      "repository": "https://github.com/dermot-obrien/architecture-pattern",
+      "license": "CC-BY-4.0 AND Apache-2.0",
+      "keywords": [
         "architecture",
-        "documentation",
-        "drawio"
+        "pattern",
+        "reference-architecture",
+        "drawio",
+        "togaf",
+        "c4",
+        "agent-skill"
+      ],
+      "category": "documentation",
+      "skills": [
+        "./skills/pattern"
+      ],
+      "dependencies": [
+        {
+          "name": "model",
+          "version": "^0.7.0",
+          "marketplace": "diagram-model"
+        },
+        {
+          "name": "markdown-deck",
+          "version": "^0.6.0",
+          "marketplace": "markdown-deck"
+        }
       ]
     }
   ]
