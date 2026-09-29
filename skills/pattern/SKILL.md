@@ -4,7 +4,7 @@ description: Author an architecture pattern as one Markdown document that is als
 license: CC-BY-4.0 AND Apache-2.0. Content under CC BY 4.0, code under Apache-2.0; see LICENSE and NOTICE.
 compatibility: Python 3.11+ and Node 18+. Requires the `model` skill (diagram-model repository) and the `markdown-deck` skill (markdown-deck repository), installed wherever the agent reads skills. draw.io desktop is optional; without it, views are exported by hand from draw.io desktop or online and stamped. PDF export needs playwright.
 metadata:
-  version: "0.8.1"
+  version: "0.8.2"
   homepage: https://github.com/dermot-obrien/architecture-pattern
   x-skill-requires: "model@^0.6.0, markdown-deck@^0.6.0"
   x-derived-from: "https://github.com/dermot-obrien/ai-assisted-architecture/tree/5a1c13860ad5093125afb3c41a82793e084cc0b7/skills/pattern"
@@ -33,7 +33,7 @@ Do not proceed on an error, and do not guess a path. Every path this skill needs
 | `outputDir` | Where a new pattern folder is created |
 | `template` | The repository's own template, if it declares one. Otherwise use `assets/template.md` from this skill |
 | `deckTheme` | Passed to markdown-deck |
-| `ontologySchema` | The schema the section structure is expected to match, if declared |
+| `ontologySchema` | The repository's own schema, which the section structure is expected to match, if declared. Guidance only; nothing validates a pattern against it |
 
 The contract is declared in `inputs.toml` beside this file. The repository answers it in `[suite.pattern]` of its `.agents/skill-bindings.toml`.
 

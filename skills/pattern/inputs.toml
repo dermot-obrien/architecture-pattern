@@ -40,11 +40,13 @@ description = "Theme name passed to markdown-deck when publishing the deck"
 [inputs.options.ontologySchema]
 type = "file"
 required = false
-description = """Schema the document's section structure is expected to conform to, vendored
-into this repository. Pin its digest with `ontologySchemaSha256` so a drifted copy is caught
-rather than silently used."""
+description = """The repository's own ontology schema, which the document's section structure is
+expected to conform to. The repository owns and edits it; the skill only reads it, as guidance for
+the section order."""
 
 [inputs.options.ontologySchemaSha256]
 type = "str"
 required = false
-description = "SHA-256 of ontologySchema, so a vendored copy that has drifted is an error"
+description = """SHA-256 of ontologySchema. Only for a schema that is a copy of one maintained
+elsewhere and never edited here: a copy that drifts is then an error. Leave it unset for a schema
+the repository maintains itself, or every edit to the schema breaks `doctor` until it is updated."""

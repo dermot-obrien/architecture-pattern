@@ -6,6 +6,12 @@ Releases of the architecture-pattern plugin. The `pattern` skill keeps its own [
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.8.2] - 2026-09-29
+
+### Changed
+
+- `pattern` 0.8.2: `ontologySchema` is the repository's own schema; pin it with `ontologySchemaSha256` only if it is a copy maintained elsewhere.
+
 ## [0.8.1] - 2026-09-29
 
 ### Changed

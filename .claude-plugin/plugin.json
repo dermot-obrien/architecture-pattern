@@ -1,6 +1,6 @@
 {
   "name": "architecture-pattern",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Author an architecture pattern at any scope as one Markdown document that is also the model and the deck: the draw.io diagram and scenario overlays are generated from its tables and validated against it, and its tagged sections publish as HTML slides and a PDF. Ships the pattern skill.",
   "author": {
     "name": "Dermot O'Brien",

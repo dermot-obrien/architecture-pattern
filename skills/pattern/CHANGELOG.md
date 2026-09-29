@@ -2,6 +2,12 @@
 
 # Changelog
 
+## [0.8.2] - 2026-09-29
+
+### Changed
+
+- `ontologySchema` is described as the repository's own schema, which the skill reads as guidance, rather than a copy vendored from elsewhere. `ontologySchemaSha256` is recommended only for a schema copied from elsewhere and never edited here; for a schema the repository maintains, a pin breaks `doctor` on every edit until someone updates it, and stops the skill at step 0.
+
 ## [0.8.1] - 2026-09-29
 
 ### Changed
