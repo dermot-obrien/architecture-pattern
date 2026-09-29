@@ -253,5 +253,10 @@
         }
       ]
     }
-  ]
+  ],
+  "attrs": {
+    "model": {
+      "diagram": "components.drawio"
+    }
+  }
 }

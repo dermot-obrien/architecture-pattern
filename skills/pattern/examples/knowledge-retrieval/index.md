@@ -10,6 +10,8 @@ last_modified: 2026-09-25
 provenance:
   origin: ai-generated
   review_state: ai-raw
+model:
+  diagram: components.drawio
 ---
 
 # PAT-900 Knowledge Retrieval
@@ -110,7 +112,9 @@ IF-03 and IF-07 are the two that must not be softened. Failing open on the entit
 
 ## Scenarios
 
-<!-- deck:slide label="S1 Grounded answer" -->
+Step through them in the [animated scenario walkthrough](./scenarios.html): each step is numbered on the acting box, the arrow is drawn to its target and the rest of the diagram dims. It opens from disk; arrow keys step and space plays.
+
+<!-- deck:html src="./scenarios.html" title="Scenario walkthrough" header="true" -->
 
 ### S1 Grounded answer
 
@@ -119,8 +123,6 @@ A staff member asks a question and receives an answer grounded in content they a
 Start: ABB-908 Model Gateway
 
 Finish: ABB-901 Retrieval Service
-
-![PAT-900 scenario S1](./scenario-s1.svg)
 
 | Step | Actor | Target | Action | Interface |
 |---|---|---|---|---|
@@ -137,13 +139,9 @@ Step 4 does the filtering inside the retrieval boundary rather than afterwards. 
 The no-answer case is not drawn. A communication diagram has no combined fragments, so the branch where entitlement is denied or no passage clears the confidence threshold belongs in a sequence diagram rather than an overlay.
 <!-- /deck:skip -->
 
-<!-- deck:slide label="S2 Ingestion" -->
-
 ### S2 Source onboarding
 
 A new source class is connected and its content becomes retrievable, carrying the permissions it had at source.
-
-![PAT-900 scenario S2](./scenario-s2.svg)
 
 | Step | Actor | Target | Action | Interface |
 |---|---|---|---|---|

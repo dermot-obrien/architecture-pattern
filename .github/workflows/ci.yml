@@ -95,9 +95,17 @@ jobs:
           python "$MODEL" sync index.md components.drawio
           cmp components.drawio /tmp/before.drawio
           # Every committed view was rendered from the diagram as it is now.
-          for v in components scenario-s1 scenario-s2; do python "$MODEL" stamp --check "$v.svg"; done
-          # The deck builds.
+          python "$MODEL" stamp --check components.svg
+          # The walkthrough builds over the committed view, and the deck builds.
+          python "$MODEL" animate index.md
           node "$DECK" build index.md --out /tmp/dist --theme default --no-pdf
+      - name: publish.py publishes the examples from above their binding files
+        working-directory: skills/pattern
+        env:
+          AGENT_SKILLS_PATH: ${{ github.workspace }}/.deps/diagram-model/skills:${{ github.workspace }}/.deps/markdown-deck/skills
+        run: |
+          python scripts/publish.py examples --recursive --no-deck --render never --json > /tmp/publish.json
+          python -c "import json,sys; r=json.load(open('/tmp/publish.json'))['results']; print(r); sys.exit(0 if r and all(x['status'] == 'ok' for x in r) else 1)"
       - name: The composite example resolves, and the approval gate holds
         working-directory: skills/pattern/examples
         run: |

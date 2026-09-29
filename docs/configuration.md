@@ -34,7 +34,7 @@ The keys the `pattern` skill declares in `inputs.toml`.
 | `outputDir` | directory | yes | none | The agent, for new patterns; `model` for compositions |
 | `template` | file | no | the skill's `assets/template.md` | The agent |
 | `idSeries` | string | no | `PAT` | The agent |
-| `deckTheme` | string | no | `default` | `publish.py` |
+| `deckTheme` | string | no | unset: markdown-deck chooses | `publish.py` |
 | `ontologySchema` | file | no | none | The agent, as guidance |
 | `ontologySchemaSha256` | string | no | none | `doctor` |
 | `patternsRoot` | directory | no | `outputDir` | `model`, for compositions |
@@ -73,7 +73,7 @@ The theme `publish.py` passes to markdown-deck as `--theme`: a built-in name (`d
 deckTheme = "themes/house.css"      # .agents/themes/house.css
 ```
 
-Precedence: `publish.py` always passes `--theme`, and markdown-deck's command-line option wins over a document's `deck_theme` and over `[suite.markdown-deck] theme`. So for decks built by `publish.py`, `deckTheme` is the setting that counts, and it is `default` when unset. Set it to the same value as `[suite.markdown-deck] theme` if you set that. A deck built directly with `markdown-deck build` follows markdown-deck's own order: option, then front matter, then binding.
+Precedence: a document's `deck_theme` always wins. Otherwise `publish.py` passes `deckTheme` as `--theme` when it is set, and when it is unset passes nothing, so markdown-deck chooses: `[suite.markdown-deck] theme`, then its own default. A deck built directly with `markdown-deck build` follows the same order, with its command-line option first.
 
 ### ontologySchema
 
@@ -232,7 +232,7 @@ section = "Scenarios"
 [suite.pattern]
 outputDir        = "../architecture/patterns"
 idSeries         = "PAT"
-deckTheme        = "default"
+# deckTheme      = "default"      # unset: markdown-deck chooses
 approvedStatuses = ["Final", "Approved", "Active", "Published"]
 
 [suite.markdown-deck]

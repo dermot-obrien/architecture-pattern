@@ -34,8 +34,10 @@ description = "Identifier prefix for patterns, e.g. PAT gives PAT-001"
 [inputs.options.deckTheme]
 type = "str"
 required = false
-default = "default"
-description = "Theme name passed to markdown-deck when publishing the deck"
+description = """Theme passed to markdown-deck when publishing the deck: a built-in name or a
+path to a .css file, relative to the binding file. Unset, publish passes no theme and
+markdown-deck chooses: the document's deck_theme, then [suite.markdown-deck] theme, then
+its own default. A document's deck_theme always wins over this."""
 
 [inputs.options.ontologySchema]
 type = "file"

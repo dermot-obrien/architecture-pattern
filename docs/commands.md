@@ -44,7 +44,7 @@ A model is a document that declares its diagram in front matter (`model: diagram
 | `--no-deck` | Render the views and the walkthrough only. For a site build that builds its own decks: run it with `--recursive` first, so no deck embeds a missing or stale view |
 | `--json` | Print the results as JSON instead of the report: `folder`, `theme`, `results` (each `doc`, `status` of `ok`, `failed` or `skipped`, `notes`, and `composition` for a composite pattern) and `undeclared` (documents with no declared diagram) |
 
-The theme is `[suite.pattern] deckTheme`, and wins over a document's `deck_theme`; see [configuration](configuration.md#decktheme).
+The theme is the document's `deck_theme` if it sets one, else `[suite.pattern] deckTheme`, else whatever markdown-deck chooses; see [configuration](configuration.md#decktheme).
 
 Exit codes: 0 all published; 1 a model failed or was skipped; 2 usage, or `model scan` failed; 3 `model`, `markdown-deck` or `node` missing.
 
