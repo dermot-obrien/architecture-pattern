@@ -6,6 +6,14 @@ Releases of the architecture-pattern plugin. The `pattern` skill keeps its own [
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.9.1] - 2026-09-29
+
+### Added
+
+- `pattern` 0.9.1: `scripts/check.py`, the post-install check.
+- `bundle.json`, the bundle manifest DD-11 of AI-Assisted Work defines: the `pattern` skill, its purl, its requirements (`model ^0.7.0`, `markdown-deck ^0.6.0`, as `x-skill-requires` states them) and its check. The marketplace is its `claude-plugin` adapter.
+- CI validates `bundle.json` with `scripts/validate-bundle.mjs`, and runs the check unbound (it must fail) and bound (it must pass). The validator and the schema are copies from AI-Assisted Work, in `scripts/` and `scripts/vendor/`, so CI needs no network.
+
 ## [0.9.0] - 2026-09-29
 
 ### Changed

@@ -4,7 +4,7 @@ description: Author an architecture pattern as one Markdown document that is als
 license: CC-BY-4.0 AND Apache-2.0. Content under CC BY 4.0, code under Apache-2.0; see LICENSE and NOTICE.
 compatibility: Python 3.11+ and Node 18+. Requires the `model` skill (diagram-model repository) and the `markdown-deck` skill (markdown-deck repository), installed wherever the agent reads skills. draw.io desktop is optional; without it, views are exported by hand from draw.io desktop or online and stamped. PDF export needs playwright.
 metadata:
-  version: "0.9.0"
+  version: "0.9.1"
   homepage: https://github.com/dermot-obrien/architecture-pattern
   x-skill-requires: "pkg:generic/dermot-obrien/diagram-model/model ^0.7.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
   x-derived-from: "https://github.com/dermot-obrien/ai-assisted-architecture/tree/5a1c13860ad5093125afb3c41a82793e084cc0b7/skills/pattern"
@@ -23,6 +23,8 @@ python <skills>/model/bin/model.py doctor --skill pattern --json
 ```
 
 `<skills>` is the directory this skill is installed in, where `model` usually sits beside it. If there is no `<skills>/model`, the model skill was installed elsewhere: look in the other skills directories agents read (`.agents/skills`, `.github/skills`, `.cursor/skills`, `.claude/skills` in the project, and the same under the home directory, plus `~/.copilot/skills`), and if it is in none of them, stop and tell the user to install it from https://github.com/dermot-obrien/diagram-model. The command prints the sibling skills wherever they are installed, the resolved absolute paths for every binding, and a `result` of `ok`, `warn` or `error`. It exits non-zero on `error`.
+
+`python scripts/check.py`, run from the workspace root, is the post-install check: it confirms `model` and `markdown-deck` are installed, then runs the same `doctor`.
 
 Do not proceed on an error, and do not guess a path. Every path this skill needs comes from that output:
 
