@@ -2,6 +2,21 @@
 
 # Changelog
 
+## [0.10.0] - 2026-09-30
+
+### Added
+
+- Chaining patterns, step 6 of `SKILL.md`: a scenario step's optional Uses column calls a scenario of another pattern, `PAT-905 S1`, or marks a child flow not yet written, `TBD <name>`. It covers sketching top down with TBD children, assembling approved patterns into a wider one, the join at the step's Actor and Target, the chain report and the approval gate, and listing every child in Patterns Applied.
+- The template's scenario table shows the optional Uses column, with a comment on how to fill it; its Patterns Applied comment asks for every child.
+- `inputs.toml` declares `patternsRoot`, where children are found (unset, `outputDir` is used), and `approvedStatuses`, default Final, Approved, Active, Published.
+- `publish.py` prints the chain of every pattern that calls others, adds it to `--json` as `chain`, and lists every chain error in full when a pattern is skipped; the approval gate fails validation like any other error.
+- `check.py` reports the patterns root and the approved statuses, and fails when the installed model predates chaining.
+- `examples/chaining`: PAT-910 calls S1 of the knowledge-retrieval example and has one open child flow.
+
+### Changed
+
+- Requires `model` `^0.8.0`, the first release that reads the Uses column.
+
 ## [0.9.1] - 2026-09-29
 
 ### Added

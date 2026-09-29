@@ -32,9 +32,24 @@ jobs:
       # The two skills this one depends on, each checked out on its own and found
       # through AGENT_SKILLS_PATH, as they would be when an agent installed them
       # somewhere other than beside pattern.
+      #
+      # diagram-model at the branch of the same name when one exists, so a change made in
+      # both repositories is tested together before either merges; otherwise its main.
+      - name: Choose the diagram-model ref
+        id: model-ref
+        env:
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          ref=main
+          if git ls-remote --exit-code --heads https://github.com/dermot-obrien/diagram-model "refs/heads/$BRANCH" >/dev/null 2>&1; then
+            ref="$BRANCH"
+          fi
+          echo "diagram-model at $ref"
+          echo "ref=$ref" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
         with:
           repository: dermot-obrien/diagram-model
+          ref: ${{ steps.model-ref.outputs.ref }}
           path: .deps/diagram-model
       - uses: actions/checkout@v4
         with:
@@ -83,6 +98,22 @@ jobs:
           for v in components scenario-s1 scenario-s2; do python "$MODEL" stamp --check "$v.svg"; done
           # The deck builds.
           node "$DECK" build index.md --out /tmp/dist --theme default --no-pdf
+      - name: The chaining example resolves, and the approval gate holds
+        working-directory: skills/pattern/examples
+        run: |
+          MODEL="$GITHUB_WORKSPACE/.deps/diagram-model/skills/model/bin/model.py"
+          DOC=chaining/PAT-910-staff-assistant/index.md
+          python "$MODEL" chain "$DOC"
+          python "$MODEL" validate "$DOC"
+          # One call resolved to PAT-900, one open TBD, nothing missing, no cycle.
+          python "$MODEL" chain "$DOC" --json > /tmp/chain.json
+          python -c "import json,sys; s=json.load(open('/tmp/chain.json'))['summary']; print(s); sys.exit(0 if (s['callouts'], s['patterns'], s['open'], s['missing'], s['cycles']) == (2, 1, 1, 0, 0) else 1)"
+          # Approved, it must fail: PAT-900 is not approved and a TBD remains.
+          cp -r . /tmp/examples
+          sed -i 's/^status: Draft/status: Approved/' /tmp/examples/$DOC
+          if python "$MODEL" validate /tmp/examples/$DOC; then
+            echo "::error::an approved pattern passed over an unapproved child"; exit 1
+          fi
 
   versions:
     name: Each skill's versions agree

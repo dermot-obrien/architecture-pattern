@@ -50,3 +50,16 @@ required = false
 description = """SHA-256 of ontologySchema. Only for a schema that is a copy of one maintained
 elsewhere and never edited here: a copy that drifts is then an error. Leave it unset for a schema
 the repository maintains itself, or every edit to the schema breaks `doctor` until it is updated."""
+
+[inputs.options.patternsRoot]
+type = "dir"
+required = false
+description = """Where a scenario step's Uses finds the pattern it calls, searched to any depth.
+Unset, outputDir is used; model's own [model] patterns_root wins over both."""
+
+[inputs.options.approvedStatuses]
+type = "list"
+required = false
+default = ["Final", "Approved", "Active", "Published"]
+description = """Front matter statuses that count as approved. A pattern whose status is one of
+these cannot rest on a chained child that is not, or on a TBD child flow."""

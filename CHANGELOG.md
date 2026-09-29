@@ -6,6 +6,17 @@ Releases of the architecture-pattern plugin. The `pattern` skill keeps its own [
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.10.0] - 2026-09-30
+
+### Added
+
+- `pattern` 0.10.0: chaining patterns through a scenario step's Uses column, the chain report in `publish.py`, the patterns root in `check.py`, `patternsRoot` and `approvedStatuses` bindings, and `examples/chaining`.
+- CI tests against diagram-model's branch of the same name when one exists, else its main, so a change made in both is tested together; it runs the chaining example and checks the approval gate fails an approved pattern over an unapproved child.
+
+### Changed
+
+- Requires `model` `^0.8.0`, in `SKILL.md`, `bundle.json` and the marketplace entry.
+
 ## [0.9.1] - 2026-09-29
 
 ### Added

@@ -15,7 +15,7 @@
       "source": "./",
       "strict": false,
       "description": "Author an architecture pattern at any scope as one Markdown document that is also the model and the deck: the draw.io diagram and scenario overlays are generated from its tables and validated against it, and its tagged sections publish as HTML slides and a PDF.",
-      "version": "0.9.1",
+      "version": "0.10.0",
       "author": {
         "name": "Dermot O'Brien",
         "url": "https://github.com/dermot-obrien"
@@ -39,7 +39,7 @@
       "dependencies": [
         {
           "name": "model",
-          "version": "^0.7.0",
+          "version": "^0.8.0",
           "marketplace": "diagram-model"
         },
         {
