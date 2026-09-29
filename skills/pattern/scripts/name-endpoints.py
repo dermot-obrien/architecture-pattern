@@ -5,7 +5,7 @@
 A Provider or Consumer cell in Interfaces, or an Actor or Target cell in a scenario's
 steps table under Scenarios, holding only an identifier ("ABB-901", "04") is rewritten as
 the identifier followed by the name its Building Blocks row gives it ("ABB-901 Retrieval
-Retrieval Service", "04 Identity provider"). The model reads only the leading identifier,
+Service", "04 Identity provider"). The model reads only the leading identifier,
 so the diagram, validation and the walkthrough are unchanged; the document and every deck
 built from it become readable without a lookup.
 
@@ -112,7 +112,7 @@ def markdown(paths):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("paths", nargs="+")
+    ap.add_argument("paths", nargs="+", help="Markdown files, or folders searched recursively")
     ap.add_argument("--check", action="store_true", help="change nothing; exit 1 if any cell would change")
     a = ap.parse_args()
     total = 0

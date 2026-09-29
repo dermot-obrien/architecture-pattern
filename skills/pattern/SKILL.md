@@ -4,7 +4,7 @@ description: Author an architecture pattern as one Markdown document that is als
 license: CC-BY-4.0 AND Apache-2.0. Content under CC BY 4.0, code under Apache-2.0; see LICENSE and NOTICE.
 compatibility: Python 3.11+ and Node 18+. Requires the `model` skill (diagram-model repository) and the `markdown-deck` skill (markdown-deck repository), installed wherever the agent reads skills. draw.io desktop is optional; without it, views are exported by hand from draw.io desktop or online and stamped. PDF export needs playwright.
 metadata:
-  version: "0.10.0"
+  version: "0.10.1"
   homepage: https://github.com/dermot-obrien/architecture-pattern
   x-skill-requires: "pkg:generic/dermot-obrien/diagram-model/model ^0.8.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
   x-derived-from: "https://github.com/dermot-obrien/ai-assisted-architecture/tree/5a1c13860ad5093125afb3c41a82793e084cc0b7/skills/pattern"
@@ -13,6 +13,8 @@ metadata:
 # Pattern
 
 One document is the source. The diagram is generated from its tables, the deck is generated from its sections, and both are checked against it.
+
+People learning the skill, rather than agents running it, start from the documentation at https://github.com/dermot-obrien/architecture-pattern/tree/main/docs: a quick start, concepts, every binding and flag, and every error message with its fix.
 
 ## Step 0, before anything else
 
@@ -33,6 +35,7 @@ Do not proceed on an error, and do not guess a path. Every path this skill needs
 | `siblings.model` | The model CLI, at `<that>/bin/model.py` |
 | `siblings.markdown-deck` | The deck CLI, at `<that>/bin/markdown-deck.mjs` |
 | `outputDir` | Where a new pattern folder is created |
+| `idSeries` | The prefix for a new pattern's id, `PAT` by default. Take the next free number in it |
 | `template` | The repository's own template, if it declares one. Otherwise use `assets/template.md` from this skill |
 | `deckTheme` | Passed to markdown-deck |
 | `ontologySchema` | The repository's own schema, which the section structure is expected to match, if declared. Guidance only; nothing validates a pattern against it |
