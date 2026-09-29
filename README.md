@@ -70,8 +70,8 @@ The Agent Skills specification has no dependency field yet, so `SKILL.md` declar
 
 ```yaml
 metadata:
-  version: "0.9.2"
-  x-skill-requires: "pkg:generic/dermot-obrien/diagram-model/model ^0.7.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
+  version: "0.10.0"
+  x-skill-requires: "pkg:generic/dermot-obrien/diagram-model/model ^0.8.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
 ```
 
 No agent installs a skill's dependencies from that field today, so in every agent `pattern` checks for them before it starts and stops with an instruction if one is missing. For Claude Code, its package entry in `.claude-plugin/marketplace.json` additionally repeats the requirement, resolved against the `model--v<version>` and `markdown-deck--v<version>` release tags, so there the dependencies are installed for you.
@@ -92,7 +92,7 @@ On Windows, set `PYTHONUTF8=1` before running `skills-ref`, which otherwise read
 
 ## Configuring it for a repository
 
-A repository binds the skills to its own layout in `.agents/skill-bindings.toml`: where new patterns go, its own template, its catalogue of building-block identifiers, its deck theme. `python <skills>/model/bin/model.py doctor --skill pattern` shows what is bound and what is missing. See `skills/pattern/SKILL.md`.
+A repository binds the skills to its own layout in `.agents/skill-bindings.toml`: where new patterns go and where a composite pattern's participating patterns are found, its own template, its catalogue of building-block identifiers, its deck theme. `python <skills>/model/bin/model.py doctor --skill pattern` shows what is bound and what is missing. See `skills/pattern/SKILL.md`.
 
 ## Versions and identifiers
 

@@ -2,6 +2,25 @@
 
 # Changelog
 
+## [0.10.0] - 2026-09-30
+
+### Added
+
+- Composing patterns, step 6 of `SKILL.md`: a composite pattern's scenario steps run other patterns' flows through an optional Uses column, `PAT-905 S1`, or mark an open participating pattern, `TBD <name>`. It covers sketching top down with open participating patterns, composing approved patterns, the join at the participation step's Actor and Target, the composition report and the approval gate, and listing every participating pattern in Patterns Applied.
+- The template's scenario table shows the optional Uses column, with a comment on how to fill it; its Patterns Applied comment asks for every participating pattern.
+- `inputs.toml` declares `patternsRoot`, where participating patterns are found (unset, `outputDir` is used), and `approvedStatuses`, default Final, Approved, Active, Published.
+- `publish.py` prints the composition of every composite pattern, adds it to `--json` as `composition`, and lists every composition error in full when a pattern is skipped; the approval gate fails validation like any other error.
+- `check.py` reports the patterns root and the approved statuses, and fails when the installed model predates composing.
+- Declared start and finish, role binding, participating patterns' regions and the call-activity marker (UML 2.5.1 ports and collaboration use, BPMN 2.0.2 call activity and start and end events): step 6 of `SKILL.md` and the template's comments cover `Start:` and `Finish:` lines under a scenario heading, a binding after the scenario key, `PAT-005 S1 (02=ABB-011)`, the `Participating patterns` layer and the `[+]` marker.
+- Links from each box to its page: `SKILL.md` documents the model bindings `[model] link_site` and `link_target` and the `[[links]]` rules (`match`, `locate`, `href` with `{id}`, `{site}`, `{located}`, `{rel}`, and `target`), which make declared ids clickable in the walkthrough and in draw.io; `inputs.toml` points to them, and the template's comment says declared ids link in the walkthrough.
+- `references/compose.md` and `references/links.md` hold the detail of composing and of links; `SKILL.md` summarises both and links them, so it stays within the specification's size guidance that 0.9.2 checks.
+- `publish.py` renders the structure with the `Participating patterns` layer by default; `--no-regions` leaves it out, and the hand-export note names the layers to stamp.
+- `examples/composite`: PAT-910 runs S1 of the knowledge-retrieval example through a binding, joining at that scenario's declared Start and Finish, and has one open participating pattern. The knowledge-retrieval example's S1 declares its Start and Finish, and its `model.json` carries them.
+
+### Changed
+
+- Requires `model` `^0.8.0`, the first release that reads the Uses column.
+
 ## [0.9.2] - 2026-09-30
 
 ### Added

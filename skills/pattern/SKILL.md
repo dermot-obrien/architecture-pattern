@@ -4,9 +4,9 @@ description: Author an architecture pattern as one Markdown document that is als
 license: CC-BY-4.0 AND Apache-2.0. Content under CC BY 4.0, code under Apache-2.0; see LICENSE and NOTICE.
 compatibility: Python 3.11+ and Node 18+. Requires the `model` skill (diagram-model repository) and the `markdown-deck` skill (markdown-deck repository), installed wherever the agent reads skills. draw.io desktop is optional; without it, views are exported by hand from draw.io desktop or online and stamped. PDF export needs playwright.
 metadata:
-  version: "0.9.2"
+  version: "0.10.0"
   homepage: https://github.com/dermot-obrien/architecture-pattern
-  x-skill-requires: "pkg:generic/dermot-obrien/diagram-model/model ^0.7.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
+  x-skill-requires: "pkg:generic/dermot-obrien/diagram-model/model ^0.8.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
   x-derived-from: "https://github.com/dermot-obrien/ai-assisted-architecture/tree/5a1c13860ad5093125afb3c41a82793e084cc0b7/skills/pattern"
 ---
 
@@ -36,8 +36,14 @@ Do not proceed on an error, and do not guess a path. Every path this skill needs
 | `template` | The repository's own template, if it declares one. Otherwise use `assets/template.md` from this skill |
 | `deckTheme` | Passed to markdown-deck |
 | `ontologySchema` | The repository's own schema, which the section structure is expected to match, if declared. Guidance only; nothing validates a pattern against it |
+| `patternsRoot` | Where a participation step's Uses finds the participating pattern. Unset, `outputDir` is used. `doctor` prints the root in use as `composition.patternsRoot` |
+| `approvedStatuses` | Front matter statuses the composition's approval gate counts as approved. Default Final, Approved, Active, Published |
 
 The contract is declared in `inputs.toml` beside this file. The repository answers it in `[suite.pattern]` of its `.agents/skill-bindings.toml`.
+
+### Links to each box's page
+
+The model skill's own bindings in the same file, `[model] link_site` and `link_target` and the `[[links]]` rules, make each declared id a link to its page in the walkthrough and in draw.io. They are `model` bindings, not `[suite.pattern]` ones; [references/links.md](references/links.md) shows them.
 
 ## Prerequisites
 
@@ -98,7 +104,7 @@ Target at most about ten pages, and far less for a problem-scope pattern. Tables
 
 Copy the template into `<outputDir>/<slug>/index.md`, using the `template` binding if the repository declares one and `assets/template.md` from this skill if it does not. A repository's own template carries its identifier series, its deliverable code and its palette; the one shipped here is deliberately free of all three. Fill it in this order, which is not document order:
 
-Intent, or Context and Non-Goals for a wider scope, then Patterns Applied where published patterns cover part of the design, then Building Blocks, then Interfaces. Interfaces is where most of the real thinking happens and it usually sends you back to revise Building Blocks. Write each Provider and Consumer, and each Actor and Target in a scenario's steps, as the identifier followed by the name, as Building Blocks has it (`ABB-901 Retrieval Service`, `04 Identity provider`), never the bare identifier: the table is read on the page and on its deck slide, and a reader should not have to look names up. The model reads only the leading identifier. `python <skills>/pattern/scripts/name-endpoints.py <file-or-folder>` fills in names from the Building Blocks table, and `--check` reports without changing anything; `publish.py` notes any document that still needs it. Only then the diagram, then Scenarios, then the controls and decisions, which are the residue of everything above.
+Intent, or Context and Non-Goals for a wider scope, then Patterns Applied where published patterns cover part of the design, including every participating pattern a composite pattern's scenarios run (see step 6), then Building Blocks, then Interfaces. Interfaces is where most of the real thinking happens and it usually sends you back to revise Building Blocks. Write each Provider and Consumer, and each Actor and Target in a scenario's steps, as the identifier followed by the name, as Building Blocks has it (`ABB-901 Retrieval Service`, `04 Identity provider`), never the bare identifier: the table is read on the page and on its deck slide, and a reader should not have to look names up. The model reads only the leading identifier. `python <skills>/pattern/scripts/name-endpoints.py <file-or-folder>` fills in names from the Building Blocks table, and `--check` reports without changing anything; `publish.py` notes any document that still needs it. Only then the diagram, then Scenarios, then the controls and decisions, which are the residue of everything above.
 
 ### 2. Generate the diagram
 
@@ -163,9 +169,17 @@ Tag the sections an audience needs, typically six to twelve, then publish the fo
 python <skills>/pattern/scripts/publish.py <folder>
 ```
 
-It runs `model scan`, and for every document that declares a diagram and passes validation it renders `<stem>.svg` beside the document, builds the animated walkthrough when the model has scenarios, then builds `dist/<name>/deck.html` and `deck.pdf` with the bound `deckTheme`. `--scenario-images` also renders one `<stem>-sN.svg` per scenario; `--no-animate` skips the walkthrough. `--render auto` (the default) renders a view only when it is missing or older than its diagram and draw.io desktop is installed, and otherwise requires it to be current; `--render never` never calls draw.io, for a build machine without it, and fails naming each view to export and stamp; `--render always` re-renders every view. `--no-deck` stops after the views and the walkthrough, for a site build that builds its own decks from them: run it with `--recursive` over the pattern folders before the site's deck build, so a deck never embeds a missing or stale view. `<name>` is the file stem, or the folder name for an `index.md`. Reference the views in the document by those names. A model that fails validation is skipped unless `--force`; `--dry-run` says what would be done, `--no-pdf` stops at HTML, and `--thumbnails` opens each deck's slide index with thumbnails rather than titles. The script works on any declared model, so a folder holding a pattern and two alternative views publishes all three in one run.
+It runs `model scan`, prints the composition of every composite pattern, and for every document that declares a diagram and passes validation it renders `<stem>.svg` beside the document, builds the animated walkthrough when the model has scenarios, then builds `dist/<name>/deck.html` and `deck.pdf` with the bound `deckTheme`. `--scenario-images` also renders one `<stem>-sN.svg` per scenario; `--no-animate` skips the walkthrough. `--render auto` (the default) renders a view only when it is missing or older than its diagram and draw.io desktop is installed, and otherwise requires it to be current; `--render never` never calls draw.io, for a build machine without it, and fails naming each view to export and stamp; `--render always` re-renders every view. `--no-deck` stops after the views and the walkthrough, for a site build that builds its own decks from them: run it with `--recursive` over the pattern folders before the site's deck build, so a deck never embeds a missing or stale view. `<name>` is the file stem, or the folder name for an `index.md`. Reference the views in the document by those names. A model that fails validation, including the composition's approval gate, is skipped unless `--force`, and the errors are listed; `--dry-run` says what would be done, `--no-pdf` stops at HTML, and `--thumbnails` opens each deck's slide index with thumbnails rather than titles. The script works on any declared model, so a folder holding a pattern and two alternative views publishes all three in one run.
 
 The document keeps its detail; the deck shows a selection of it. Untagged sections stay document-only, and `deck:skip` removes detail from a slide without removing it from the document.
+
+### 6. Compose patterns
+
+A composite pattern is one whose scenario steps run other patterns' flows, its participating patterns. Sketch it top down with open participating patterns, `TBD <name>`, and solve each as its own pattern, or compose approved patterns bottom up.
+
+In the scenario's step table, a `Uses` column names on a participation step the participating pattern's id and scenario key, `PAT-905 S1`, optionally with a role binding of its boxes to this pattern's, `PAT-905 S1 (01=03)`. The step's Actor and Target are where that flow enters and leaves. A scenario another pattern may run declares `Start: <box>` and `Finish: <box>` as separate paragraphs under its heading. List every participating pattern in Patterns Applied, check with `model composition index.md` and `model validate index.md`, and approve the participating patterns before the composite pattern: an approved pattern cannot rest on unapproved or unwritten ones.
+
+Read [references/compose.md](references/compose.md) before composing: it has the notation and its grounding in UML 2.5.1 and BPMN 2.0.2, the join rules, the approval gate, and how the diagram's `Participating patterns` regions, the `[+]` marker and the walkthrough's drill-in work.
 
 ## Rules that are easy to get wrong
 
@@ -181,4 +195,4 @@ Identifiers are never hyperlinked in body text. Write the plain identifier and i
 
 ## Reporting back
 
-Say which of the artefacts you produced (document, diagram, walkthrough, deck), give the counts and the derived abstraction from the validator, the capabilities the pattern `realises` if any, name anything that failed and why, and give the paths. Never report a render or a PDF as successful without checking the file exists and is non-empty.
+Say which of the artefacts you produced (document, diagram, walkthrough, deck), give the counts and the derived abstraction from the validator, the capabilities the pattern `realises` if any, the composition summary and any open participating patterns if it is a composite pattern, name anything that failed and why, and give the paths. Never report a render or a PDF as successful without checking the file exists and is non-empty.

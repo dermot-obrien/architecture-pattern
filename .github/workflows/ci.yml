@@ -32,9 +32,24 @@ jobs:
       # The two skills this one depends on, each checked out on its own and found
       # through AGENT_SKILLS_PATH, as they would be when an agent installed them
       # somewhere other than beside pattern.
+      #
+      # diagram-model at the branch of the same name when one exists, so a change made in
+      # both repositories is tested together before either merges; otherwise its main.
+      - name: Choose the diagram-model ref
+        id: model-ref
+        env:
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          ref=main
+          if git ls-remote --exit-code --heads https://github.com/dermot-obrien/diagram-model "refs/heads/$BRANCH" >/dev/null 2>&1; then
+            ref="$BRANCH"
+          fi
+          echo "diagram-model at $ref"
+          echo "ref=$ref" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
         with:
           repository: dermot-obrien/diagram-model
+          ref: ${{ steps.model-ref.outputs.ref }}
           path: .deps/diagram-model
       - uses: actions/checkout@v4
         with:
@@ -83,6 +98,24 @@ jobs:
           for v in components scenario-s1 scenario-s2; do python "$MODEL" stamp --check "$v.svg"; done
           # The deck builds.
           node "$DECK" build index.md --out /tmp/dist --theme default --no-pdf
+      - name: The composite example resolves, and the approval gate holds
+        working-directory: skills/pattern/examples
+        run: |
+          MODEL="$GITHUB_WORKSPACE/.deps/diagram-model/skills/model/bin/model.py"
+          DOC=composite/PAT-910-staff-assistant/index.md
+          python "$MODEL" composition "$DOC"
+          python "$MODEL" validate "$DOC"
+          # One participation step runs PAT-900, one is open, nothing missing, no cycle.
+          python "$MODEL" composition "$DOC" --json > /tmp/composition.json
+          python -c "import json,sys; s=json.load(open('/tmp/composition.json'))['summary']; print(s); sys.exit(0 if (s['participations'], s['patterns'], s['open'], s['missing'], s['cycles']) == (2, 1, 1, 0, 0) else 1)"
+          # Step 2 is bound, and joins at PAT-900 S1's declared Start and Finish.
+          python -c "import json,sys; p=json.load(open('/tmp/composition.json'))['tree']['participations'][0]; print(p['binding'], p['join']); sys.exit(0 if p['binding'] == {'ABB-908': '03'} and p['join'] == {'start': 'declared', 'finish': 'declared'} else 1)"
+          # Approved, it must fail: PAT-900 is not approved and a TBD remains.
+          cp -r . /tmp/examples
+          sed -i 's/^status: Draft/status: Approved/' /tmp/examples/$DOC
+          if python "$MODEL" validate /tmp/examples/$DOC; then
+            echo "::error::an approved composite pattern passed over an unapproved participating pattern"; exit 1
+          fi
 
   versions:
     name: Each skill's versions agree

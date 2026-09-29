@@ -116,6 +116,10 @@ IF-03 and IF-07 are the two that must not be softened. Failing open on the entit
 
 A staff member asks a question and receives an answer grounded in content they are entitled to see. This is the path that exercises confidentiality and latency together.
 
+Start: ABB-908 Model Gateway
+
+Finish: ABB-901 Retrieval Service
+
 ![PAT-900 scenario S1](./scenario-s1.svg)
 
 | Step | Actor | Target | Action | Interface |

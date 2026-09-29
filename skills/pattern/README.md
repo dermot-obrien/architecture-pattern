@@ -49,6 +49,10 @@ Or let `scripts/publish.py <folder>` do all of it for every pattern in a folder.
 
 [examples/knowledge-retrieval](./examples/knowledge-retrieval) is a complete worked example with a `run.sh` that produces every output.
 
+## Composing patterns
+
+A composite pattern's scenario steps run other patterns' flows through an optional Uses column, `PAT-905 S1`, or mark an open participating pattern, not yet written, `TBD <name>`, and may bind its boxes to the composite pattern's, `PAT-905 S1 (01=03)`. A scenario declares where its flow starts and finishes with `Start:` and `Finish:` lines. Each participating pattern is drawn as a dashed region on the diagram's `Participating patterns` layer, and a participation step carries BPMN's `[+]` call-activity marker. The notation follows UML 2.5.1 collaboration use and ports and BPMN 2.0.2 call activity and start and end events. Sketch a composite pattern top down with open participating patterns and solve each as its own pattern, or compose approved patterns. `model composition index.md` prints the composition tree, `validate` checks it and its approval gate, and the walkthrough drills into each participating pattern's. [examples/composite](./examples/composite) runs the knowledge-retrieval example. See `SKILL.md`, step 6.
+
 ## Tying it to capabilities
 
 A pattern may declare `realises: [CAP-NNN]` in its front matter, with optional `flows` and `references` of type `cost-model` and `evidence`. A capability model can then count it as evidence of how far each capability has been defined. See `SKILL.md`.
