@@ -11,7 +11,9 @@
 - `inputs.toml` declares `patternsRoot`, where participating patterns are found (unset, `outputDir` is used), and `approvedStatuses`, default Final, Approved, Active, Published.
 - `publish.py` prints the composition of every composite pattern, adds it to `--json` as `composition`, and lists every composition error in full when a pattern is skipped; the approval gate fails validation like any other error.
 - `check.py` reports the patterns root and the approved statuses, and fails when the installed model predates composing.
-- `examples/composite`: PAT-910 runs S1 of the knowledge-retrieval example and has one open participating pattern.
+- Declared start and finish, role binding, participating patterns' regions and the call-activity marker (UML 2.5.1 ports and collaboration use, BPMN 2.0.2 call activity and start and end events): step 6 of `SKILL.md` and the template's comments cover `Start:` and `Finish:` lines under a scenario heading, a binding after the scenario key, `PAT-005 S1 (02=ABB-011)`, the `Participating patterns` layer and the `[+]` marker.
+- `publish.py` renders the structure with the `Participating patterns` layer by default; `--no-regions` leaves it out, and the hand-export note names the layers to stamp.
+- `examples/composite`: PAT-910 runs S1 of the knowledge-retrieval example through a binding, joining at that scenario's declared Start and Finish, and has one open participating pattern. The knowledge-retrieval example's S1 declares its Start and Finish, and its `model.json` carries them.
 
 ### Changed
 

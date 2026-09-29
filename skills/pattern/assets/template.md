@@ -281,20 +281,30 @@ Step through them in the [animated scenario walkthrough](./scenarios.html): each
 <!-- One sentence on what this scenario proves and which quality attribute it exercises. -->
 
 <!--
+Start and Finish are OPTIONAL, and worth writing on any scenario another pattern may run.
+Each goes on its own line, as a separate paragraph, before the steps table: the box's id
+and name. Start is the first step's Actor; Finish is the last step's Actor or Target.
+
+    Start: COMP-NNN Official Name
+
+    Finish: 07 Local role name
+
 Uses is OPTIONAL. Delete the column unless this is a composite pattern, one whose steps
 run other patterns' flows. A participation step's Uses names the participating pattern's
 id and scenario key, PAT-NNN S1, and stands for that pattern's whole flow: its Actor is
 where the flow enters, its Target where it leaves, both required, and its Interface is
-optional. Write TBD and a name for an open participating pattern, not yet written; it is
-reported as open, and an approved pattern cannot keep one. Leave Uses empty on every other
-step. Check the composition with model composition index.md, and list each participating
-pattern in Patterns Applied.
+optional. A role binding may follow the key, participating pattern's box = this
+pattern's box: PAT-NNN S1 (02=07). It is how a local box joins across patterns. Write TBD
+and a name for an open participating pattern, not yet written, never with a binding; it
+is reported as open, and an approved pattern cannot keep one. Leave Uses empty on every
+other step. Check the composition with model composition index.md, and list each
+participating pattern in Patterns Applied.
 -->
 
 | Step | Actor | Target | Action | Interface | Uses |
 |---:|---|---|---|---|---|
 | 1 | COMP-NNN Official Name | 07 Local role name | What happens | IF-01 | |
-| 2 | 07 Local role name | COMP-NNN Official Name | What the participating pattern's flow achieves | | PAT-NNN S1 |
+| 2 | 07 Local role name | COMP-NNN Official Name | What the participating pattern's flow achieves | | PAT-NNN S1 (02=07) |
 
 <!-- deck:skip -->
 <!--

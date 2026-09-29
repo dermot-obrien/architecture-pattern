@@ -108,6 +108,8 @@ jobs:
           # One participation step runs PAT-900, one is open, nothing missing, no cycle.
           python "$MODEL" composition "$DOC" --json > /tmp/composition.json
           python -c "import json,sys; s=json.load(open('/tmp/composition.json'))['summary']; print(s); sys.exit(0 if (s['participations'], s['patterns'], s['open'], s['missing'], s['cycles']) == (2, 1, 1, 0, 0) else 1)"
+          # Step 2 is bound, and joins at PAT-900 S1's declared Start and Finish.
+          python -c "import json,sys; p=json.load(open('/tmp/composition.json'))['tree']['participations'][0]; print(p['binding'], p['join']); sys.exit(0 if p['binding'] == {'ABB-908': '03'} and p['join'] == {'start': 'declared', 'finish': 'declared'} else 1)"
           # Approved, it must fail: PAT-900 is not approved and a TBD remains.
           cp -r . /tmp/examples
           sed -i 's/^status: Draft/status: Approved/' /tmp/examples/$DOC

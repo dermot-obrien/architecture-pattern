@@ -8,7 +8,7 @@ related models into one set of images and one deck per document.
 
     python scripts/publish.py <folder> [--recursive] [--no-pdf] [--thumbnails]
                               [--scenario-images] [--no-animate] [--no-deck]
-                              [--render auto|always|never] [--force] [--dry-run]
+                              [--render auto|always|never] [--no-regions] [--force] [--dry-run]
 
 Per model, written beside the document:
 
@@ -27,6 +27,10 @@ renders a view only when it is missing or older than its diagram and draw.io is
 installed, and otherwise requires it to be current: exported by hand, from draw.io
 desktop or online, and recorded with `model stamp`. --render never never calls draw.io,
 for a build machine without it; --render always re-renders every view.
+
+A composite pattern's diagram has a Participating patterns layer of dashed regions, one
+per participating pattern; the structure view includes it by default, and --no-regions
+leaves it out.
 
 <name> is the document's file stem, or its folder name for an index.md. A model that
 fails validation is not published unless --force, because a deck built from a document
@@ -52,6 +56,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL_DIR = os.path.dirname(HERE)
 SKILLS = os.path.dirname(SKILL_DIR)
 NAME_ENDPOINTS = os.path.join(HERE, "name-endpoints.py")
+# The layer model keeps for a composite pattern's participating patterns.
+REGIONS_LAYER = "Participating patterns"
 
 # Where agents install skills: VS Code with GitHub Copilot, Cursor, Claude Code, Codex and
 # Gemini CLI between them read these, in a project and in the user's home directory.
@@ -170,8 +176,17 @@ def composition_report(doc):
     return [ln[2:] if ln.startswith("  ") else ln for ln in text.splitlines() if ln.strip()], summary
 
 
+def regions_layer(diagram):
+    """True when the diagram has the participating patterns' regions layer."""
+    r = run([sys.executable, MODEL, "layers", diagram, "--json"])
+    try:
+        return any(x.get("name") == REGIONS_LAYER for x in json.loads(r.stdout))
+    except ValueError:
+        return False
+
+
 def publish(entry, theme, pdf, dry_run, thumbnails=False, scenario_images=False, animate=True,
-            deck=True, render="auto", has_drawio=True):
+            deck=True, render="auto", has_drawio=True, regions=True):
     """Render one model's views, animate its scenarios and build its deck. Returns (ok, notes)."""
     notes, ok = [], True
     docdir = os.path.dirname(entry["doc"])
@@ -186,6 +201,8 @@ def publish(entry, theme, pdf, dry_run, thumbnails=False, scenario_images=False,
     views = [v for v in entry["views"] if scenario_images or not v.get("scenario")]
     has_scenarios = any(v.get("scenario") for v in entry["views"])
 
+    # The participating patterns' regions are rendered with the structure by default.
+    with_regions = regions and regions_layer(entry["diagram"])
     for v in views:
         out = os.path.join(docdir, v["file"])
         fresh = os.path.exists(out) and current(out)
@@ -198,15 +215,20 @@ def publish(entry, theme, pdf, dry_run, thumbnails=False, scenario_images=False,
                 ok = False
                 state = "is older than its diagram" if os.path.exists(out) else "is missing"
                 why = "rendering is off (--render never)" if render == "never" else                     "draw.io desktop is not installed to render it"
-                notes.append(f"{v['file']} {state} and {why}. Export the {v['layers'][-1]!r} layer by hand, from draw.io "
+                shown = [v['layers'][-1]] + ([REGIONS_LAYER] if with_regions else [])
+                flags = " ".join(f'--layer "{x}"' for x in shown)
+                notes.append(f"{v['file']} {state} and {why}. Export the "
+                             f"{' and '.join(repr(x) for x in shown)} layer(s) by hand, from draw.io "
                              f"desktop or online, then: model stamp {v['file']} --diagram "
-                             f"{os.path.basename(entry['diagram'])} --layer \"{v['layers'][-1]}\"")
+                             f"{os.path.basename(entry['diagram'])} {flags}")
             continue
         if not has_drawio:
             ok = False
             notes.append(f"cannot render {v['file']}: --render always needs draw.io desktop")
             continue
         cmd = [sys.executable, MODEL, "render", entry["diagram"], "--out", out]
+        if not regions:
+            cmd.append("--no-regions")
         for layer in v["layers"]:
             cmd += ["--layer", layer]
         if dry_run:
@@ -279,6 +301,8 @@ def main():
     ap.add_argument("--render", default="auto", choices=("auto", "always", "never"),
                     help="auto: render a view only when it is missing or stale and draw.io is "
                          "installed; never: require committed, stamped views; always: re-render all")
+    ap.add_argument("--no-regions", action="store_true",
+                    help="render the structure without the Participating patterns layer")
     ap.add_argument("--no-deck", action="store_true",
                     help="render the views and the walkthrough only; build no deck")
     ap.add_argument("--json", action="store_true")
@@ -329,7 +353,7 @@ def main():
             continue
         ok, notes = publish(e, theme, not a.no_pdf, a.dry_run, a.thumbnails,
                             a.scenario_images, not a.no_animate, not a.no_deck,
-                            a.render, has_drawio)
+                            a.render, has_drawio, not a.no_regions)
         results.append({"doc": name, "status": "ok" if ok else "failed",
                         "notes": comp_notes + notes, **extra})
 
