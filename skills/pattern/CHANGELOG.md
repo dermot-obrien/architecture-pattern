@@ -2,6 +2,12 @@
 
 # Changelog
 
+## [0.9.1] - 2026-09-29
+
+### Added
+
+- `scripts/check.py`, the skill's post-install check, as DD-11 of AI-Assisted Work defines it. Run from the workspace root, it confirms `model` and `markdown-deck` are installed where an agent finds them, then runs `model doctor --skill pattern` against the workspace's `[suite.pattern]` bindings. A missing draw.io desktop is a warning. Exit 0 when all is well, 1 with one line per problem, 2 for a usage or environment error. A patch release: before 1.0.0 a minor would fall outside a dependent's `^0.9.0`, and nothing here breaks one.
+
 ## [0.9.0] - 2026-09-29
 
 ### Changed
