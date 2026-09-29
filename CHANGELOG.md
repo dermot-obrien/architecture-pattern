@@ -10,7 +10,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- `pattern` 0.10.0: composite patterns, whose scenario steps run participating patterns through a Uses column, the composition report in `publish.py`, the patterns root in `check.py`, `patternsRoot` and `approvedStatuses` bindings, declared Start and Finish, role binding, the `Participating patterns` regions (`publish.py --no-regions`), the `[+]` call-activity marker, and `examples/composite`.
+- `pattern` 0.10.0: composite patterns, whose scenario steps run participating patterns through a Uses column, the composition report in `publish.py`, the patterns root in `check.py`, `patternsRoot` and `approvedStatuses` bindings, declared Start and Finish, role binding, the `Participating patterns` regions (`publish.py --no-regions`), the `[+]` call-activity marker, links from declared ids to their pages (model's `[[links]]` bindings), and `examples/composite`.
 - CI tests against diagram-model's branch of the same name when one exists, else its main, so a change made in both is tested together; it runs the composite example and checks the approval gate fails an approved composite pattern over an unapproved participating pattern.
 
 ### Changed
