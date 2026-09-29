@@ -17,6 +17,12 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Requires `model` `^0.8.0`, in `SKILL.md`, `bundle.json` and the marketplace entry.
 
+## [0.9.2] - 2026-09-30
+
+### Added
+
+- `pattern` 0.9.2: CI validates it with `skills-ref`, the Agent Skills reference validator, and checks its size against the specification's guidance. The README says how to run both locally.
+
 ## [0.9.1] - 2026-09-29
 
 ### Added

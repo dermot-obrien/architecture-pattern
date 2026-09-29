@@ -76,6 +76,20 @@ metadata:
 
 No agent installs a skill's dependencies from that field today, so in every agent `pattern` checks for them before it starts and stops with an instruction if one is missing. For Claude Code, its package entry in `.claude-plugin/marketplace.json` additionally repeats the requirement, resolved against the `model--v<version>` and `markdown-deck--v<version>` release tags, so there the dependencies are installed for you.
 
+## Agent Skills conformance
+
+`pattern` conforms to the [Agent Skills specification](https://agentskills.io/specification). Its `SKILL.md` carries only the fields the specification defines, its `name` is the name of the directory it is installed into (`skills/pattern` here, and `pattern` under whichever skills directory an installer uses), every `metadata` value is a string, and the file stays within the specification's guidance of 500 lines and 5,000 tokens, with detail in files it links by a relative path one level deep. The `x-` keys in `metadata` are this project's own, which the specification allows.
+
+CI checks this on every pull request and every push to `main`, with `skills-ref`, the specification's reference validator, beside this repository's own `scripts/validate-skills.mjs`, which also checks that relative links resolve. To run the same checks locally, from the repository root:
+
+```bash
+python -m pip install "git+https://github.com/agentskills/agentskills@69ef37e9424c0a7ea9dd2293b559e43ec8176379#subdirectory=skills-ref"
+skills-ref validate skills/pattern
+node scripts/validate-skills.mjs skills
+```
+
+On Windows, set `PYTHONUTF8=1` before running `skills-ref`, which otherwise reads `SKILL.md` in the system's code page.
+
 ## Configuring it for a repository
 
 A repository binds the skills to its own layout in `.agents/skill-bindings.toml`: where new patterns go and where a composite pattern's participating patterns are found, its own template, its catalogue of building-block identifiers, its deck theme. `python <skills>/model/bin/model.py doctor --skill pattern` shows what is bound and what is missing. See `skills/pattern/SKILL.md`.

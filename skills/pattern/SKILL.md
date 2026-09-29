@@ -43,21 +43,7 @@ The contract is declared in `inputs.toml` beside this file. The repository answe
 
 ### Links to each box's page
 
-The model skill's own section of the same file says how a declared identifier links to its page, so every walkthrough, and the diagram in draw.io, can open a building block, product, pattern or capability from its box. These are `model` bindings, not `[suite.pattern]` ones:
-
-```toml
-[model]
-link_site   = "http://localhost:3000/docs"            # {site}; optional
-link_target = "new"                                   # "new" (default) or "same"
-
-[[links]]
-match  = 'ABB-[0-9]{3}'                               # full match on the id; rules tried in order
-locate = "../building-blocks/abbs/*/{id}-*"           # optional glob, relative to the binding file
-href   = "{site}/building-blocks/abbs/{located}/"     # {id}, {site}, {located}, {rel}
-target = "same"                                       # optional; wins over link_target
-```
-
-`{located}` is the glob's first match relative to its fixed folders, with a matched `index.md` dropped; `{rel}` is the path from the generated page to the match. Add one rule per identifier series the site has pages for, patterns included, so a participation step's participating pattern links to its page beside the drill-in. Local ids never link. A rule that matches but finds nothing is a `link_unresolved` warning. `model doctor --doc index.md` shows what each box resolves to.
+The model skill's own bindings in the same file, `[model] link_site` and `link_target` and the `[[links]]` rules, make each declared id a link to its page in the walkthrough and in draw.io. They are `model` bindings, not `[suite.pattern]` ones; [references/links.md](references/links.md) shows them.
 
 ## Prerequisites
 
@@ -189,47 +175,11 @@ The document keeps its detail; the deck shows a selection of it. Untagged sectio
 
 ### 6. Compose patterns
 
-A composite pattern is one whose scenario steps run other patterns' flows, its participating patterns. Compose in three ways:
+A composite pattern is one whose scenario steps run other patterns' flows, its participating patterns. Sketch it top down with open participating patterns, `TBD <name>`, and solve each as its own pattern, or compose approved patterns bottom up.
 
-- Top down. Sketch the composite pattern first, with each hard part an open participating pattern, `TBD`. Solve each as its own pattern, then replace the `TBD` with its id and scenario key.
-- Bottom up. Compose approved patterns: each step that one of them already solves runs its scenario rather than repeating it.
-- Both at once, as the work finds its level.
+In the scenario's step table, a `Uses` column names on a participation step the participating pattern's id and scenario key, `PAT-905 S1`, optionally with a role binding of its boxes to this pattern's, `PAT-905 S1 (01=03)`. The step's Actor and Target are where that flow enters and leaves. A scenario another pattern may run declares `Start: <box>` and `Finish: <box>` as separate paragraphs under its heading. List every participating pattern in Patterns Applied, check with `model composition index.md` and `model validate index.md`, and approve the participating patterns before the composite pattern: an approved pattern cannot rest on unapproved or unwritten ones.
 
-The notation borrows from two standards rather than inventing: a participation step is BPMN 2.0.2's call activity (UML's InteractionUse, a `ref` fragment, in a sequence diagram), a scenario's Start and Finish are its BPMN start and end events and its UML 2.5.1 ports, and a role binding, drawn as a dashed region round the boxes it binds, is UML 2.5.1's collaboration use.
-
-Add a `Uses` column to the scenario's step table. On a participation step its value is the participating pattern's id and scenario key, `PAT-905 S1`, with anything after the key read as prose, or `TBD <name>` for an open participating pattern, not yet written. Leave it empty on every other step.
-
-| Step | Actor | Target | Action | Interface | Uses |
-|---:|---|---|---|---|---|
-| 2 | 03 Order service | ABB-901 Payments hub | take payment | | PAT-905 S1 (01=03) |
-| 3 | ABB-901 Payments hub | 01 Storefront | notify the customer | | TBD notification |
-
-A participation step is one arrow in the composite pattern standing for the participating pattern's whole flow. Its Actor is where that flow enters and its Target where it leaves; both are required, and the Interface is optional.
-
-Give each scenario a participating pattern will run a declared start and finish, on their own lines under its heading and before its steps table, each a box's id and name, as separate paragraphs:
-
-```markdown
-### S1 Payment capture
-
-Start: 01 Order service
-
-Finish: ABB-901 Payments hub
-```
-
-The Start must be the first step's actor and the Finish the last step's actor or target; `validate` holds them to it. A composite pattern then joins to them: the step's Actor must correspond to the Start and its Target to the Finish. Without them, the first step's actor and the last step's actor or target are used.
-
-Boxes correspond through the step's role binding first: a parenthesised group of `id=id` pairs directly after the scenario key, participating pattern's box on the left, this pattern's on the right, as `PAT-905 S1 (01=03)` above. A binding is how a local box in one pattern is joined to a box in another; each box appears at most once on each side, and an open participating pattern cannot carry one. Otherwise boxes correspond when they share a catalogue id, or when a local box maps to it in Catalogue Mapping. A mismatch is a warning naming both boxes: bind them, or map the local box, rather than renaming it. List every participating pattern in Patterns Applied.
-
-A participating pattern is the folder named `<ID>-<slug>` holding `index.md` under `patternsRoot`, else `outputDir`; with neither bound, the folders above the composite pattern are searched. Check the composition with:
-
-```bash
-python <model>/bin/model.py composition index.md    # the composition tree; --json for data
-python <model>/bin/model.py validate index.md       # errors, warnings and a one-line summary
-```
-
-`validate` fails on a participating pattern or scenario that cannot be found, a binding that names a box that is not there, a declared Start or Finish the steps do not bear out, and a cycle, and warns on each open participating pattern and on a join it cannot establish. The approval gate: once the composite pattern's front matter `status` is one of `approvedStatuses`, every participating pattern at any depth must be approved too and no `TBD` may remain. Approve the participating patterns first.
-
-In the diagram, a participation step's arrow is drawn dash-dotted and labelled `[+] 2: PAT-905 S1`, the plus being BPMN's call-activity marker. `emit` and `sync` keep a layer named `Participating patterns` holding one dashed region per participating pattern, labelled with its id and name, round the boxes bound to it; they are recomputed on every `sync`, so move the boxes, not the regions. Views of the structure include that layer; `publish.py --no-regions` leaves it out. In the walkthrough, a participation step carries a drill-in badge with a boxed plus that opens the participating pattern's `scenarios.html` at that scenario, with a link back to the composite pattern's step; an open participating pattern's marker is greyed and has no link. Publish the participating patterns with the composite pattern (`publish.py --recursive` over their common folder) so the links resolve.
+Read [references/compose.md](references/compose.md) before composing: it has the notation and its grounding in UML 2.5.1 and BPMN 2.0.2, the join rules, the approval gate, and how the diagram's `Participating patterns` regions, the `[+]` marker and the walkthrough's drill-in work.
 
 ## Rules that are easy to get wrong
 

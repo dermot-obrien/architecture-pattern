@@ -13,12 +13,26 @@
 - `check.py` reports the patterns root and the approved statuses, and fails when the installed model predates composing.
 - Declared start and finish, role binding, participating patterns' regions and the call-activity marker (UML 2.5.1 ports and collaboration use, BPMN 2.0.2 call activity and start and end events): step 6 of `SKILL.md` and the template's comments cover `Start:` and `Finish:` lines under a scenario heading, a binding after the scenario key, `PAT-005 S1 (02=ABB-011)`, the `Participating patterns` layer and the `[+]` marker.
 - Links from each box to its page: `SKILL.md` documents the model bindings `[model] link_site` and `link_target` and the `[[links]]` rules (`match`, `locate`, `href` with `{id}`, `{site}`, `{located}`, `{rel}`, and `target`), which make declared ids clickable in the walkthrough and in draw.io; `inputs.toml` points to them, and the template's comment says declared ids link in the walkthrough.
+- `references/compose.md` and `references/links.md` hold the detail of composing and of links; `SKILL.md` summarises both and links them, so it stays within the specification's size guidance that 0.9.2 checks.
 - `publish.py` renders the structure with the `Participating patterns` layer by default; `--no-regions` leaves it out, and the hand-export note names the layers to stamp.
 - `examples/composite`: PAT-910 runs S1 of the knowledge-retrieval example through a binding, joining at that scenario's declared Start and Finish, and has one open participating pattern. The knowledge-retrieval example's S1 declares its Start and Finish, and its `model.json` carries them.
 
 ### Changed
 
 - Requires `model` `^0.8.0`, the first release that reads the Uses column.
+
+## [0.9.2] - 2026-09-30
+
+### Added
+
+- CI runs `skills-ref validate` on the skill, the reference validator of the [Agent Skills specification](https://agentskills.io/specification), pinned to a commit, and fails a `SKILL.md` over the specification's guidance of 500 lines or about 5,000 body tokens.
+- The README has an Agent Skills conformance section: what conforming means here, and how to run the same checks locally. CONTRIBUTING lists `skills-ref validate`.
+
+### Changed
+
+- The README's `metadata` example shows the current version.
+
+Nothing in the skill's behaviour changed. It already conformed: `skills-ref` reported it valid before this release, and its `SKILL.md` is 184 lines and about 3,100 body tokens.
 
 ## [0.9.1] - 2026-09-29
 
