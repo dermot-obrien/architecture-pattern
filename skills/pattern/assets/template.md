@@ -32,7 +32,7 @@ HOW TO USE THIS TEMPLATE
   author, and the abstraction model validate derives. A problem-scope pattern answers ONE
   recurring problem: rename ## Context to ## Intent (the problem, its forces, the
   invariant enforced) and delete the sections marked WIDER SCOPE. What is often called a
-  pattern is a wide-scope pattern.
+  reference architecture is a wide-scope pattern.
 - Boxes may be any mix of local roles (01 Gateway), catalogued logical building blocks,
   catalogued products and external context. model validate derives the abstraction from
   them: all local is conceptual, logical blocks is logical, every box a product is

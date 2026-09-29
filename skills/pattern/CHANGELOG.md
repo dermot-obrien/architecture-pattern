@@ -2,6 +2,21 @@
 
 # Changelog
 
+## [0.10.1] - 2026-09-30
+
+### Added
+
+- Documentation for people, in the repository's `docs/`: a quick start from an empty folder to a published pattern and a composite pattern, run end to end on Windows in PowerShell and bash; concepts; everyday workflow; composing patterns; a configuration reference covering every `[suite.pattern]` key, the `model` keys a pattern relies on, front matter and environment variables, with a complete binding for the shipped template; a command reference; troubleshooting keyed to the tools' messages and rule ids; and the examples. `SKILL.md` and the skill's README link to it.
+- `SKILL.md`'s binding table lists `idSeries`, which the agent uses to number a new pattern.
+- `publish.py --help` describes `folder`, `--recursive` and `--json`, and its usage line lists `--json`; `name-endpoints.py --help` describes its paths.
+
+### Fixed
+
+- The template said "What is often called a pattern is a wide-scope pattern"; it is a reference architecture that is a wide-scope pattern.
+- `name-endpoints.py`'s description repeated a word in its example, "ABB-901 Retrieval Retrieval Service".
+- `check.py`'s description implied `SKILL_DIR` must be set; it defaults to the skill the script is in.
+- The skill README's usage ran the model CLI by a path relative to the skill folder and did not mention the bindings or front matter a pattern needs.
+
 ## [0.10.0] - 2026-09-30
 
 ### Added

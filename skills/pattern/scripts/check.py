@@ -2,7 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 """Post-install check for the pattern skill (DD-11 of AI-Assisted Work).
 
-Run from the workspace root, with SKILL_DIR set to the installed skill's directory:
+Run from the workspace root. SKILL_DIR, the installed skill's directory, defaults to the
+folder above this script; an installer sets it:
 
     python scripts/check.py
 

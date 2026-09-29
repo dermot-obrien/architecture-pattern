@@ -15,9 +15,35 @@ This repository ships the `pattern` [Agent Skill](https://agentskills.io/specifi
 | `model` | [diagram-model](https://github.com/dermot-obrien/diagram-model) | Generates, syncs, validates and renders the diagram from the document's tables, and resolves the repository's bindings |
 | `markdown-deck` | [markdown-deck](https://github.com/dermot-obrien/markdown-deck) | Turns the document's tagged sections into HTML slides and a PDF |
 
+## Quick start
+
+Install the three skills into a workspace (below), bind it in `.agents/skill-bindings.toml`, write a pattern, then:
+
+```
+python .agents/skills/pattern/scripts/check.py
+python .agents/skills/model/bin/model.py emit patterns/PAT-001-order-intake/index.md --to drawio --out patterns/PAT-001-order-intake/components.drawio
+python .agents/skills/model/bin/model.py validate patterns/PAT-001-order-intake/index.md
+python .agents/skills/pattern/scripts/publish.py patterns --recursive
+```
+
+Or ask your agent for a pattern and it does the same. The [quick start](docs/quick-start.md) goes from an empty folder to a published pattern and a composite pattern in about ten minutes, in PowerShell and bash, with a small example to copy and the output you should see at each step.
+
+## Documentation
+
+| Page | For |
+|---|---|
+| [Quick start](docs/quick-start.md) | From nothing to a published pattern, its view, walkthrough, deck and PDF, and a composite pattern |
+| [Concepts](docs/concepts.md) | What a pattern is, and the ideas behind the tables, the diagram, the walkthrough and the deck |
+| [Everyday workflow](docs/workflow.md) | Authoring, syncing, adopting a hand-drawn diagram, promoting local ids, working without draw.io, publishing, CI |
+| [Composing patterns](docs/composing.md) | Composite patterns: the Uses column, Start and Finish, role bindings, the approval gate |
+| [Configuration](docs/configuration.md) | Every binding key, front matter key and environment variable |
+| [Commands](docs/commands.md) | Every script and flag, and the `model` and `markdown-deck` commands a pattern uses |
+| [Troubleshooting](docs/troubleshooting.md) | Each error and warning message, and its fix |
+| [Examples](docs/examples.md) | The worked examples and what each shows |
+
 ## Install
 
-Install all three wherever your agent reads skills. They need not be in the same directory.
+Install all three skills wherever your agent reads skills. They need not be in the same directory.
 
 | Directory | Read by |
 |---|---|
@@ -26,6 +52,8 @@ Install all three wherever your agent reads skills. They need not be in the same
 | `.cursor/skills/` in the project | Cursor |
 | `.claude/skills/` in the project | Claude Code, and also VS Code with GitHub Copilot and Cursor |
 | `~/.agents/skills/`, `~/.copilot/skills/`, `~/.cursor/skills/`, `~/.claude/skills/` | The same tools, for every project |
+
+A directory in the project installs the skills for that workspace; one under your home folder installs them for every project. This repository has no installer of its own. Whichever route you use, run the post-install check from the workspace root afterwards: `python <skills>/pattern/scripts/check.py`.
 
 ### With the GitHub CLI, for any agent
 
@@ -39,13 +67,32 @@ gh skill install dermot-obrien/markdown-deck markdown-deck
 
 `gh skill` needs GitHub CLI 2.90 or later.
 
+### With git, for any agent
+
+Clone each repository at a release tag and copy its skill folder. This works with any agent; the [quick start](docs/quick-start.md#2-make-a-workspace-and-install-the-three-skills) has the same commands for PowerShell.
+
+```bash
+git clone --depth 1 --branch pattern--v0.10.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
+git clone --depth 1 --branch model--v0.8.0 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
+git clone --depth 1 --branch markdown-deck--v0.6.4 https://github.com/dermot-obrien/markdown-deck.git _src/markdown-deck
+mkdir -p .agents/skills
+cp -r _src/architecture-pattern/skills/pattern _src/diagram-model/skills/model _src/markdown-deck/skills/markdown-deck .agents/skills/
+rm -rf _src
+```
+
+Copy into `.claude/skills`, `.cursor/skills`, `.github/skills` or a home directory from the table instead of `.agents/skills` to suit your agent. Release tags are named `<skill>--v<version>`; the three above were tested together. For a user-level install, copy into `~/.agents/skills` (or your agent's own) and run the check from any workspace.
+
 ### VS Code with GitHub Copilot, or Cursor
 
 Use the commands above with `--agent github-copilot` or `--agent cursor`, or copy `skills/pattern/`, diagram-model's `skills/model/` and markdown-deck's `skills/markdown-deck/` into the project's `.agents/skills/`, which both read. Ask for a pattern or a reference architecture, or type `/pattern`.
 
+### Codex and Gemini CLI
+
+Both read `.agents/skills/` in the project. Use `gh skill install` with `--agent codex` or `--agent gemini-cli`, or the git route above.
+
 ### Claude Code, as a plugin
 
-Each repository is also a Claude Code plugin marketplace. This plugin declares `diagram-model` and `markdown-deck` `^0.6.0` as dependencies, so installing it installs all three at versions it has been tested with:
+Each repository is also a Claude Code plugin marketplace. This plugin declares `diagram-model` and `markdown-deck` as dependencies, so installing it installs all three at versions it has been tested with:
 
 ```
 /plugin marketplace add dermot-obrien/diagram-model
@@ -54,6 +101,8 @@ Each repository is also a Claude Code plugin marketplace. This plugin declares `
 /plugin install pattern@architecture-pattern
 ```
 
+Claude Code also reads skills copied into `.claude/skills/` or `~/.claude/skills/` by the git route.
+
 ### Finding the dependencies
 
 `pattern` looks for `model` and `markdown-deck` beside itself first, then in each directory on `AGENT_SKILLS_PATH` (separated as `PATH` is), then in every project and user directory in the table above, then among Claude Code plugins. Installing the three with different tools still works.
@@ -61,7 +110,7 @@ Each repository is also a Claude Code plugin marketplace. This plugin declares `
 ### Requirements
 
 - Python 3.11 or newer, and Node 18 or newer.
-- `npm install` run once in the folder where `markdown-deck` is installed. It installs its dependencies, including [Playwright](https://playwright.dev/) (markdown-deck 0.6.1 or later), which prints PDFs with Microsoft Edge or Google Chrome where installed, as on any Windows machine, so no browser download is needed. HTML decks, views and walkthroughs do not need Playwright.
+- `npm install` run once in the folder where `markdown-deck` is installed, for example `npm install --prefix .agents/skills/markdown-deck`. It installs its dependencies, including [Playwright](https://playwright.dev/) (markdown-deck 0.6.1 or later), which prints PDFs with Microsoft Edge or Google Chrome where installed, as on any Windows machine, so no browser download is needed. HTML decks, views and walkthroughs do not need Playwright.
 - draw.io desktop, optionally. Without it, views are exported by hand from draw.io and stamped.
 
 ## Dependencies between skills
@@ -70,7 +119,7 @@ The Agent Skills specification has no dependency field yet, so `SKILL.md` declar
 
 ```yaml
 metadata:
-  version: "0.10.0"
+  version: "0.10.1"
   x-skill-requires: "pkg:generic/dermot-obrien/diagram-model/model ^0.8.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
 ```
 
@@ -92,7 +141,7 @@ On Windows, set `PYTHONUTF8=1` before running `skills-ref`, which otherwise read
 
 ## Configuring it for a repository
 
-A repository binds the skills to its own layout in `.agents/skill-bindings.toml`: where new patterns go and where a composite pattern's participating patterns are found, its own template, its catalogue of building-block identifiers, its deck theme. `python <skills>/model/bin/model.py doctor --skill pattern` shows what is bound and what is missing. See `skills/pattern/SKILL.md`.
+A repository binds the skills to its own layout in `.agents/skill-bindings.toml`: where new patterns go and where a composite pattern's participating patterns are found, its own template, its tables and identifier series, its catalogue of building-block identifiers, its deck theme. `python <skills>/model/bin/model.py doctor --skill pattern` shows what is bound and what is missing. The [configuration reference](docs/configuration.md) covers every key, with a complete binding for the shipped template.
 
 ## Versions and identifiers
 

@@ -6,6 +6,18 @@ Releases of the architecture-pattern plugin. The `pattern` skill keeps its own [
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.10.1] - 2026-09-30
+
+### Added
+
+- Documentation in `docs/`: a quick start from an empty folder to a published pattern and a composite pattern, in PowerShell and bash, run end to end on Windows; concepts; everyday workflow; composing patterns; configuration, command and troubleshooting references; and the examples. The README gains a quick start, a documentation index, a git install route for any agent, and Codex and Gemini CLI install notes.
+- `pattern` 0.10.1: small fixes to the template, the scripts' help and the skill README; see its changelog.
+
+### Fixed
+
+- The README's Claude Code section no longer gives the dependency range as `^0.6.0` for both skills; `model` is `^0.8.0`, as `SKILL.md` says.
+- CONTRIBUTING said CI runs `publish.py` over the examples; it runs the model and deck commands in `.github/workflows/ci.yml`, which `docs/commands.md` now shows how to run locally.
+
 ## [0.10.0] - 2026-09-30
 
 ### Added

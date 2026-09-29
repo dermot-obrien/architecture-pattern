@@ -35,17 +35,20 @@ gh skill install dermot-obrien/markdown-deck markdown-deck
 
 ## Use
 
-Copy `assets/template.md` into a new folder as `index.md` and fill it in. Then:
+Bind the workspace in `.agents/skill-bindings.toml` (at least `[suite.pattern] outputDir`, and the tables the model reads), copy `assets/template.md` into a new folder under `outputDir` as `index.md`, fill it in, and declare `model: diagram: components.drawio` in its front matter. Then, with `<skills>` the folder the skills are installed in:
 
 ```bash
-python ../model/bin/model.py emit index.md --to drawio --out components.drawio   # once
-python ../model/bin/model.py sync index.md components.drawio                     # thereafter
-python ../model/bin/model.py validate index.md --against components.drawio
-python ../model/bin/model.py render components.drawio --out components.svg --layer Structure
-node ../markdown-deck/bin/markdown-deck.mjs build index.md --out dist --pdf
+python <skills>/model/bin/model.py emit index.md --to drawio --out components.drawio   # once
+python <skills>/model/bin/model.py sync index.md components.drawio                     # thereafter
+python <skills>/model/bin/model.py validate index.md
+python <skills>/pattern/scripts/publish.py <folder>                                     # view, walkthrough, deck, PDF
 ```
 
-Or let `scripts/publish.py <folder>` do all of it for every pattern in a folder.
+Or ask your agent for a pattern, and it follows `SKILL.md` to do all of it.
+
+## Documentation
+
+The repository's [docs](https://github.com/dermot-obrien/architecture-pattern/tree/main/docs) have a [quick start](https://github.com/dermot-obrien/architecture-pattern/blob/main/docs/quick-start.md) from an empty folder to a published pattern and a composite pattern, the [concepts](https://github.com/dermot-obrien/architecture-pattern/blob/main/docs/concepts.md), a [configuration reference](https://github.com/dermot-obrien/architecture-pattern/blob/main/docs/configuration.md) with a complete binding for the template, a [command reference](https://github.com/dermot-obrien/architecture-pattern/blob/main/docs/commands.md) and [troubleshooting](https://github.com/dermot-obrien/architecture-pattern/blob/main/docs/troubleshooting.md) for every error message.
 
 [examples/knowledge-retrieval](./examples/knowledge-retrieval) is a complete worked example with a `run.sh` that produces every output.
 

@@ -9,6 +9,7 @@ related models into one set of images and one deck per document.
     python scripts/publish.py <folder> [--recursive] [--no-pdf] [--thumbnails]
                               [--scenario-images] [--no-animate] [--no-deck]
                               [--render auto|always|never] [--no-regions] [--force] [--dry-run]
+                              [--json]
 
 Per model, written beside the document:
 
@@ -287,8 +288,9 @@ def publish(entry, theme, pdf, dry_run, thumbnails=False, scenario_images=False,
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("folder")
-    ap.add_argument("--recursive", action="store_true")
+    ap.add_argument("folder", help="the folder holding the documents to publish")
+    ap.add_argument("--recursive", action="store_true",
+                    help="also publish the documents in every folder below it")
     ap.add_argument("--no-pdf", action="store_true", help="build the HTML deck only")
     ap.add_argument("--force", action="store_true", help="publish models that fail validation")
     ap.add_argument("--dry-run", action="store_true", help="say what would be done")
@@ -305,7 +307,8 @@ def main():
                     help="render the structure without the Participating patterns layer")
     ap.add_argument("--no-deck", action="store_true",
                     help="render the views and the walkthrough only; build no deck")
-    ap.add_argument("--json", action="store_true")
+    ap.add_argument("--json", action="store_true",
+                    help="print the results as JSON on stdout instead of the report")
     a = ap.parse_args()
 
     if not os.path.isdir(a.folder):
