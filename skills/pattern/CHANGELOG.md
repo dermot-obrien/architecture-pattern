@@ -2,6 +2,19 @@
 
 # Changelog
 
+## [0.9.2] - 2026-09-30
+
+### Added
+
+- CI runs `skills-ref validate` on the skill, the reference validator of the [Agent Skills specification](https://agentskills.io/specification), pinned to a commit, and fails a `SKILL.md` over the specification's guidance of 500 lines or about 5,000 body tokens.
+- The README has an Agent Skills conformance section: what conforming means here, and how to run the same checks locally. CONTRIBUTING lists `skills-ref validate`.
+
+### Changed
+
+- The README's `metadata` example shows the current version.
+
+Nothing in the skill's behaviour changed. It already conformed: `skills-ref` reported it valid before this release, and its `SKILL.md` is 184 lines and about 3,100 body tokens.
+
 ## [0.9.1] - 2026-09-29
 
 ### Added
