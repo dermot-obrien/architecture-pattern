@@ -49,9 +49,9 @@ Or let `scripts/publish.py <folder>` do all of it for every pattern in a folder.
 
 [examples/knowledge-retrieval](./examples/knowledge-retrieval) is a complete worked example with a `run.sh` that produces every output.
 
-## Chaining patterns
+## Composing patterns
 
-A scenario step can call a scenario of another pattern through an optional Uses column, `PAT-905 S1`, or mark a child flow not yet written, `TBD <name>`. Sketch a pattern top down with TBD children and solve each as its own pattern, or assemble approved patterns into a wider one. `model chain index.md` prints the tree, `validate` checks it and its approval gate, and the walkthrough drills into each child's. [examples/chaining](./examples/chaining) calls the knowledge-retrieval example. See `SKILL.md`, step 6.
+A composite pattern's scenario steps run other patterns' flows through an optional Uses column, `PAT-905 S1`, or mark an open participating pattern, not yet written, `TBD <name>`. Sketch a composite pattern top down with open participating patterns and solve each as its own pattern, or compose approved patterns. `model composition index.md` prints the composition tree, `validate` checks it and its approval gate, and the walkthrough drills into each participating pattern's. [examples/composite](./examples/composite) runs the knowledge-retrieval example. See `SKILL.md`, step 6.
 
 ## Tying it to capabilities
 

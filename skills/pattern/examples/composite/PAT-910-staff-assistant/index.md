@@ -13,7 +13,7 @@ provenance:
 
 # PAT-910 Staff Assistant
 
-An illustrative wider-scope pattern that chains another. Answering a question is a solved problem here, so the step that does it calls the worked example PAT-900 Knowledge Retrieval rather than repeating it. Carrying out an action is not solved yet, so its step is an open child flow. The identifiers and names are invented; the tables are trimmed to what chaining reads, and the diagram a real pattern carries is left out.
+An illustrative composite pattern: its scenario steps run other patterns' flows. Answering a question is a solved problem here, so the step that does it runs the worked example PAT-900 Knowledge Retrieval, a participating pattern, rather than repeating it. Carrying out an action is not solved yet, so its step runs an open participating pattern. The identifiers and names are invented; the tables are trimmed to what composing reads, and the diagram a real pattern carries is left out.
 
 ## Context
 
@@ -23,8 +23,8 @@ A staff member asks the assistant a question, gets an answer grounded in content
 
 | Pattern | Role in this pattern |
 |---|---|
-| PAT-900 Knowledge Retrieval | Answers the question from permitted content, with citations; called by S1 step 2 |
-| TBD confirmed action | Carries out an action the staff member has confirmed; S1 step 4, not yet written |
+| PAT-900 Knowledge Retrieval | Answers the question from permitted content, with citations; run by S1 step 2 |
+| TBD confirmed action | Carries out an action the staff member has confirmed; S1 step 4, an open participating pattern, not yet written |
 
 ## Building Blocks
 
@@ -54,7 +54,7 @@ A staff member asks the assistant a question, gets an answer grounded in content
 
 ### S1 Ask, then act
 
-Step 2 is the whole of PAT-900 S1: it enters at the Model Gateway, as that scenario's first step does, and leaves at the Retrieval Service, where that scenario's last step starts. Step 4 is an open child flow.
+Step 2 is the whole of PAT-900 S1: it enters at the Model Gateway, as that scenario's first step does, and leaves at the Retrieval Service, where that scenario's last step starts. Step 4 runs an open participating pattern.
 
 | Step | Actor | Target | Action | Interface | Uses |
 |---:|---|---|---|---|---|

@@ -98,21 +98,21 @@ jobs:
           for v in components scenario-s1 scenario-s2; do python "$MODEL" stamp --check "$v.svg"; done
           # The deck builds.
           node "$DECK" build index.md --out /tmp/dist --theme default --no-pdf
-      - name: The chaining example resolves, and the approval gate holds
+      - name: The composite example resolves, and the approval gate holds
         working-directory: skills/pattern/examples
         run: |
           MODEL="$GITHUB_WORKSPACE/.deps/diagram-model/skills/model/bin/model.py"
-          DOC=chaining/PAT-910-staff-assistant/index.md
-          python "$MODEL" chain "$DOC"
+          DOC=composite/PAT-910-staff-assistant/index.md
+          python "$MODEL" composition "$DOC"
           python "$MODEL" validate "$DOC"
-          # One call resolved to PAT-900, one open TBD, nothing missing, no cycle.
-          python "$MODEL" chain "$DOC" --json > /tmp/chain.json
-          python -c "import json,sys; s=json.load(open('/tmp/chain.json'))['summary']; print(s); sys.exit(0 if (s['callouts'], s['patterns'], s['open'], s['missing'], s['cycles']) == (2, 1, 1, 0, 0) else 1)"
+          # One participation step runs PAT-900, one is open, nothing missing, no cycle.
+          python "$MODEL" composition "$DOC" --json > /tmp/composition.json
+          python -c "import json,sys; s=json.load(open('/tmp/composition.json'))['summary']; print(s); sys.exit(0 if (s['participations'], s['patterns'], s['open'], s['missing'], s['cycles']) == (2, 1, 1, 0, 0) else 1)"
           # Approved, it must fail: PAT-900 is not approved and a TBD remains.
           cp -r . /tmp/examples
           sed -i 's/^status: Draft/status: Approved/' /tmp/examples/$DOC
           if python "$MODEL" validate /tmp/examples/$DOC; then
-            echo "::error::an approved pattern passed over an unapproved child"; exit 1
+            echo "::error::an approved composite pattern passed over an unapproved participating pattern"; exit 1
           fi
 
   versions:

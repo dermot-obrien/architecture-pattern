@@ -36,8 +36,8 @@ Do not proceed on an error, and do not guess a path. Every path this skill needs
 | `template` | The repository's own template, if it declares one. Otherwise use `assets/template.md` from this skill |
 | `deckTheme` | Passed to markdown-deck |
 | `ontologySchema` | The repository's own schema, which the section structure is expected to match, if declared. Guidance only; nothing validates a pattern against it |
-| `patternsRoot` | Where a scenario step's Uses finds the pattern it calls. Unset, `outputDir` is used. `doctor` prints the root in use as `chain.patternsRoot` |
-| `approvedStatuses` | Front matter statuses the chain's approval gate counts as approved. Default Final, Approved, Active, Published |
+| `patternsRoot` | Where a participation step's Uses finds the participating pattern. Unset, `outputDir` is used. `doctor` prints the root in use as `composition.patternsRoot` |
+| `approvedStatuses` | Front matter statuses the composition's approval gate counts as approved. Default Final, Approved, Active, Published |
 
 The contract is declared in `inputs.toml` beside this file. The repository answers it in `[suite.pattern]` of its `.agents/skill-bindings.toml`.
 
@@ -100,7 +100,7 @@ Target at most about ten pages, and far less for a problem-scope pattern. Tables
 
 Copy the template into `<outputDir>/<slug>/index.md`, using the `template` binding if the repository declares one and `assets/template.md` from this skill if it does not. A repository's own template carries its identifier series, its deliverable code and its palette; the one shipped here is deliberately free of all three. Fill it in this order, which is not document order:
 
-Intent, or Context and Non-Goals for a wider scope, then Patterns Applied where published patterns cover part of the design, including every child pattern a scenario calls (see step 6), then Building Blocks, then Interfaces. Interfaces is where most of the real thinking happens and it usually sends you back to revise Building Blocks. Write each Provider and Consumer, and each Actor and Target in a scenario's steps, as the identifier followed by the name, as Building Blocks has it (`ABB-901 Retrieval Service`, `04 Identity provider`), never the bare identifier: the table is read on the page and on its deck slide, and a reader should not have to look names up. The model reads only the leading identifier. `python <skills>/pattern/scripts/name-endpoints.py <file-or-folder>` fills in names from the Building Blocks table, and `--check` reports without changing anything; `publish.py` notes any document that still needs it. Only then the diagram, then Scenarios, then the controls and decisions, which are the residue of everything above.
+Intent, or Context and Non-Goals for a wider scope, then Patterns Applied where published patterns cover part of the design, including every participating pattern a composite pattern's scenarios run (see step 6), then Building Blocks, then Interfaces. Interfaces is where most of the real thinking happens and it usually sends you back to revise Building Blocks. Write each Provider and Consumer, and each Actor and Target in a scenario's steps, as the identifier followed by the name, as Building Blocks has it (`ABB-901 Retrieval Service`, `04 Identity provider`), never the bare identifier: the table is read on the page and on its deck slide, and a reader should not have to look names up. The model reads only the leading identifier. `python <skills>/pattern/scripts/name-endpoints.py <file-or-folder>` fills in names from the Building Blocks table, and `--check` reports without changing anything; `publish.py` notes any document that still needs it. Only then the diagram, then Scenarios, then the controls and decisions, which are the residue of everything above.
 
 ### 2. Generate the diagram
 
@@ -165,37 +165,37 @@ Tag the sections an audience needs, typically six to twelve, then publish the fo
 python <skills>/pattern/scripts/publish.py <folder>
 ```
 
-It runs `model scan`, prints the chain of every pattern whose scenarios call others, and for every document that declares a diagram and passes validation it renders `<stem>.svg` beside the document, builds the animated walkthrough when the model has scenarios, then builds `dist/<name>/deck.html` and `deck.pdf` with the bound `deckTheme`. `--scenario-images` also renders one `<stem>-sN.svg` per scenario; `--no-animate` skips the walkthrough. `--render auto` (the default) renders a view only when it is missing or older than its diagram and draw.io desktop is installed, and otherwise requires it to be current; `--render never` never calls draw.io, for a build machine without it, and fails naming each view to export and stamp; `--render always` re-renders every view. `--no-deck` stops after the views and the walkthrough, for a site build that builds its own decks from them: run it with `--recursive` over the pattern folders before the site's deck build, so a deck never embeds a missing or stale view. `<name>` is the file stem, or the folder name for an `index.md`. Reference the views in the document by those names. A model that fails validation, including the chain's approval gate, is skipped unless `--force`, and the errors are listed; `--dry-run` says what would be done, `--no-pdf` stops at HTML, and `--thumbnails` opens each deck's slide index with thumbnails rather than titles. The script works on any declared model, so a folder holding a pattern and two alternative views publishes all three in one run.
+It runs `model scan`, prints the composition of every composite pattern, and for every document that declares a diagram and passes validation it renders `<stem>.svg` beside the document, builds the animated walkthrough when the model has scenarios, then builds `dist/<name>/deck.html` and `deck.pdf` with the bound `deckTheme`. `--scenario-images` also renders one `<stem>-sN.svg` per scenario; `--no-animate` skips the walkthrough. `--render auto` (the default) renders a view only when it is missing or older than its diagram and draw.io desktop is installed, and otherwise requires it to be current; `--render never` never calls draw.io, for a build machine without it, and fails naming each view to export and stamp; `--render always` re-renders every view. `--no-deck` stops after the views and the walkthrough, for a site build that builds its own decks from them: run it with `--recursive` over the pattern folders before the site's deck build, so a deck never embeds a missing or stale view. `<name>` is the file stem, or the folder name for an `index.md`. Reference the views in the document by those names. A model that fails validation, including the composition's approval gate, is skipped unless `--force`, and the errors are listed; `--dry-run` says what would be done, `--no-pdf` stops at HTML, and `--thumbnails` opens each deck's slide index with thumbnails rather than titles. The script works on any declared model, so a folder holding a pattern and two alternative views publishes all three in one run.
 
 The document keeps its detail; the deck shows a selection of it. Untagged sections stay document-only, and `deck:skip` removes detail from a slide without removing it from the document.
 
-### 6. Chain patterns
+### 6. Compose patterns
 
-A scenario step can call a scenario of another pattern: a child flow. Use it three ways:
+A composite pattern is one whose scenario steps run other patterns' flows, its participating patterns. Compose in three ways:
 
-- Top down. Sketch a high-level pattern first, with each hard part a `TBD` child flow. Solve each child as its own pattern, then replace the `TBD` with its id and scenario key.
-- Bottom up. Assemble approved patterns into a wider one, each step that one of them already solves calling it rather than repeating it.
+- Top down. Sketch the composite pattern first, with each hard part an open participating pattern, `TBD`. Solve each as its own pattern, then replace the `TBD` with its id and scenario key.
+- Bottom up. Compose approved patterns: each step that one of them already solves runs its scenario rather than repeating it.
 - Both at once, as the work finds its level.
 
-Add a `Uses` column to the scenario's step table. Its value is the child's id and scenario key, `PAT-905 S1`, with anything after the key read as prose, or `TBD <name>` for a child not yet written. Leave it empty on every other step.
+Add a `Uses` column to the scenario's step table. On a participation step its value is the participating pattern's id and scenario key, `PAT-905 S1`, with anything after the key read as prose, or `TBD <name>` for an open participating pattern, not yet written. Leave it empty on every other step.
 
 | Step | Actor | Target | Action | Interface | Uses |
 |---:|---|---|---|---|---|
 | 2 | ABB-901 Order service | ABB-901 Order service | take payment | | PAT-905 S1 payment capture |
 | 3 | ABB-901 Order service | 01 Storefront | notify the customer | | TBD notification |
 
-A Uses step is one arrow in this pattern standing for the whole child flow. Its Actor is where the child enters and its Target where it leaves; both are required, and the Interface is optional. The child's first step should start at the same box, and its last step should start or end at the Target. Boxes are the same when they share a catalogue id, or when a local box maps to it in Catalogue Mapping: a mismatch is a warning naming both boxes, so map the local box rather than renaming it. List every child in Patterns Applied.
+A participation step is one arrow in the composite pattern standing for the participating pattern's whole flow. Its Actor is where that flow enters and its Target where it leaves; both are required, and the Interface is optional. The participating scenario's first step should start at the same box, and its last step should start or end at the Target. Boxes are the same when they share a catalogue id, or when a local box maps to it in Catalogue Mapping: a mismatch is a warning naming both boxes, so map the local box rather than renaming it. List every participating pattern in Patterns Applied.
 
-A child is the folder named `<ID>-<slug>` holding `index.md` under `patternsRoot`, else `outputDir`; with neither bound, the folders above the pattern are searched. Check the chain with:
+A participating pattern is the folder named `<ID>-<slug>` holding `index.md` under `patternsRoot`, else `outputDir`; with neither bound, the folders above the composite pattern are searched. Check the composition with:
 
 ```bash
-python <model>/bin/model.py chain index.md          # the tree; --json for data
+python <model>/bin/model.py composition index.md    # the composition tree; --json for data
 python <model>/bin/model.py validate index.md       # errors, warnings and a one-line summary
 ```
 
-`validate` fails on a child or scenario that cannot be found and on a cycle, and warns on each `TBD` and on a join it cannot establish. The approval gate: once the pattern's front matter `status` is one of `approvedStatuses`, every child at any depth must be approved too and no `TBD` may remain. Approve children first.
+`validate` fails on a participating pattern or scenario that cannot be found and on a cycle, and warns on each open participating pattern and on a join it cannot establish. The approval gate: once the composite pattern's front matter `status` is one of `approvedStatuses`, every participating pattern at any depth must be approved too and no `TBD` may remain. Approve the participating patterns first.
 
-In the diagram, the step's arrow is drawn dash-dotted and labelled with the call. In the walkthrough, it carries a drill-in badge that opens the child's `scenarios.html` at that scenario, with a Back link to the step. Publish the children with the parent (`publish.py --recursive` over their common folder) so the links resolve.
+In the diagram, a participation step's arrow is drawn dash-dotted and labelled with the scenario it runs. In the walkthrough, it carries a drill-in badge that opens the participating pattern's `scenarios.html` at that scenario, with a link back to the composite pattern's step. Publish the participating patterns with the composite pattern (`publish.py --recursive` over their common folder) so the links resolve.
 
 ## Rules that are easy to get wrong
 
@@ -211,4 +211,4 @@ Identifiers are never hyperlinked in body text. Write the plain identifier and i
 
 ## Reporting back
 
-Say which of the artefacts you produced (document, diagram, walkthrough, deck), give the counts and the derived abstraction from the validator, the capabilities the pattern `realises` if any, the chain summary and any open `TBD` child flows if it calls other patterns, name anything that failed and why, and give the paths. Never report a render or a PDF as successful without checking the file exists and is non-empty.
+Say which of the artefacts you produced (document, diagram, walkthrough, deck), give the counts and the derived abstraction from the validator, the capabilities the pattern `realises` if any, the composition summary and any open participating patterns if it is a composite pattern, name anything that failed and why, and give the paths. Never report a render or a PDF as successful without checking the file exists and is non-empty.

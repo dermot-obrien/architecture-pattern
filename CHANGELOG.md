@@ -10,8 +10,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- `pattern` 0.10.0: chaining patterns through a scenario step's Uses column, the chain report in `publish.py`, the patterns root in `check.py`, `patternsRoot` and `approvedStatuses` bindings, and `examples/chaining`.
-- CI tests against diagram-model's branch of the same name when one exists, else its main, so a change made in both is tested together; it runs the chaining example and checks the approval gate fails an approved pattern over an unapproved child.
+- `pattern` 0.10.0: composite patterns, whose scenario steps run participating patterns through a Uses column, the composition report in `publish.py`, the patterns root in `check.py`, `patternsRoot` and `approvedStatuses` bindings, and `examples/composite`.
+- CI tests against diagram-model's branch of the same name when one exists, else its main, so a change made in both is tested together; it runs the composite example and checks the approval gate fails an approved composite pattern over an unapproved participating pattern.
 
 ### Changed
 

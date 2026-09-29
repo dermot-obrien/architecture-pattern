@@ -32,9 +32,10 @@ for a build machine without it; --render always re-renders every view.
 fails validation is not published unless --force, because a deck built from a document
 and diagram that disagree shows one of them wrongly.
 
-A pattern whose scenario steps call other patterns (a Uses column) has its chain printed
-with its notes, from `model chain`. The chain's errors, the approval gate among them,
-fail validation like any other, and are listed in full when the pattern is skipped.
+A composite pattern, whose scenario steps run other patterns (a Uses column), has its
+composition printed with its notes, from `model composition`. The composition's errors,
+the approval gate among them, fail validation like any other, and are listed in full
+when the pattern is skipped.
 
 Exit codes: 0 all published, 1 a model failed or was skipped, 2 usage, 3 missing tool.
 """
@@ -149,19 +150,23 @@ def current(image):
     return run([sys.executable, MODEL, "stamp", "--check", image]).returncode == 0
 
 
-def chain_report(doc):
-    """(lines, summary) for the chain of patterns a document's scenarios call.
+# The rules model reports for a composite pattern, the approval gate among them.
+COMPOSITION_RULES = ("uses_", "participant_", "composition_")
 
-    ([], None) when its scenarios call nothing, or the model skill predates chaining. The
-    chain's own findings, the approval gate among them, are in `model scan`'s findings."""
-    r = run([sys.executable, MODEL, "chain", doc, "--json"])
+
+def composition_report(doc):
+    """(lines, summary) for the participating patterns a composite pattern runs.
+
+    ([], None) when the document runs none, or the model skill predates composing. The
+    composition's own findings are in `model scan`'s findings."""
+    r = run([sys.executable, MODEL, "composition", doc, "--json"])
     try:
         summary = json.loads(r.stdout).get("summary") or {}
     except ValueError:
         return [], None
-    if not summary.get("callouts"):
+    if not summary.get("participations"):
         return [], None
-    text = run([sys.executable, MODEL, "chain", doc]).stdout
+    text = run([sys.executable, MODEL, "composition", doc]).stdout
     return [ln[2:] if ln.startswith("  ") else ln for ln in text.splitlines() if ln.strip()], summary
 
 
@@ -308,25 +313,25 @@ def main():
     results = []
     for e in scanned["models"]:
         name = os.path.relpath(e["doc"], a.folder)
-        # The chain below the pattern, printed with its notes; its errors, the approval
-        # gate among them, are listed in full, since a skipped parent is fixed there.
-        chain_lines, chain_summary = chain_report(e["doc"])
-        chain_notes = [f"chain  {ln}" for ln in chain_lines]
-        extra = {"chain": chain_summary} if chain_summary else {}
+        # A composite pattern's composition, printed with its notes; its errors, the
+        # approval gate among them, are listed in full, since it is fixed there.
+        comp_lines, comp_summary = composition_report(e["doc"])
+        comp_notes = [f"composition  {ln}" for ln in comp_lines]
+        extra = {"composition": comp_summary} if comp_summary else {}
         if e["result"] == "error" and not a.force:
-            chain_errs = [f"{f['where']}: {f['message']}" for f in e["findings"]
-                          if f["severity"] == "error" and f["rule"].startswith("chain_")]
+            comp_errs = [f"{f['where']}: {f['message']}" for f in e["findings"]
+                         if f["severity"] == "error" and f["rule"].startswith(COMPOSITION_RULES)]
             errs = [f["message"] for f in e["findings"]
-                    if f["severity"] == "error" and not f["rule"].startswith("chain_")]
+                    if f["severity"] == "error" and not f["rule"].startswith(COMPOSITION_RULES)]
             results.append({"doc": name, "status": "skipped",
                             "notes": ["fails validation; fix it or pass --force"]
-                                     + chain_errs + errs[:5] + chain_notes, **extra})
+                                     + comp_errs + errs[:5] + comp_notes, **extra})
             continue
         ok, notes = publish(e, theme, not a.no_pdf, a.dry_run, a.thumbnails,
                             a.scenario_images, not a.no_animate, not a.no_deck,
                             a.render, has_drawio)
         results.append({"doc": name, "status": "ok" if ok else "failed",
-                        "notes": chain_notes + notes, **extra})
+                        "notes": comp_notes + notes, **extra})
 
     if a.json:
         print(json.dumps({"folder": a.folder, "theme": theme, "results": results,

@@ -9,7 +9,7 @@ Run from the workspace root, with SKILL_DIR set to the installed skill's directo
 Checks that the two skills this one needs are installed where an agent would find them,
 `model` and `markdown-deck`, then runs `model doctor --skill pattern`, which checks the
 workspace's [suite.pattern] bindings against inputs.toml, and reports the patterns root
-chaining searches (model 0.8.0 or later). draw.io desktop is optional:
+composing searches (model 0.8.0 or later). draw.io desktop is optional:
 without it, views are exported by hand and stamped, so its absence is a warning.
 
 Exit 0: correct (warnings may be printed). Exit 1: problems, one line each.
@@ -66,21 +66,22 @@ if "model" in found:
     if r.returncode != 0:
         problems.append("model doctor --skill pattern reported the errors above. Fix [suite.pattern] "
                         "in .agents/skill-bindings.toml.")
-    # Chaining: where a scenario step's Uses finds the pattern it calls. model 0.8.0 reports
-    # it; an older model cannot resolve a chain at all.
+    # Composing: where a participation step's Uses finds the participating pattern. model
+    # 0.8.0 reports it; an older model cannot resolve a composition at all.
     j = subprocess.run([sys.executable, found["model"], "doctor", "--skill", "pattern", "--json"],
                        capture_output=True, text=True, env=env, timeout=60)
     try:
-        chain = json.loads(j.stdout).get("chain")
+        composition = json.loads(j.stdout).get("composition")
     except ValueError:
-        chain = None
-    if not chain:
-        problems.append("the model skill installed is older than 0.8.0, so pattern chaining (the "
+        composition = None
+    if not composition:
+        problems.append("the model skill installed is older than 0.8.0, so composite patterns (the "
                         "Uses column) cannot be checked. Update it from "
                         "https://github.com/dermot-obrien/diagram-model.")
     else:
-        print(f"patterns root: {chain.get('patternsRoot') or '(unbound)'} [{chain.get('from')}]; "
-              f"approved statuses: {', '.join(chain.get('approvedStatuses') or [])}")
+        print(f"patterns root: {composition.get('patternsRoot') or '(unbound)'} "
+              f"[{composition.get('from')}]; approved statuses: "
+              f"{', '.join(composition.get('approvedStatuses') or [])}")
     d = subprocess.run([sys.executable, found["model"], "drawio"], capture_output=True, text=True,
                        timeout=60)
     if d.returncode != 0:

@@ -194,8 +194,8 @@ Embed the exported views under ## Diagram and in each scenario:
 WIDER SCOPE. OPTIONAL FACET, expected wherever a published pattern covers part of the
 design. The narrower patterns this pattern composes. Use plain PAT-NNN identifiers; do not
 restate each pattern's body, summarise its role here. A conceptual pattern drawn before
-its narrower patterns exist may say so in one line. List here every child pattern a
-scenario step calls through its Uses column.
+its narrower patterns exist may say so in one line. A composite pattern lists here every
+participating pattern its scenarios run through their Uses column.
 -->
 
 | Pattern | Role in this pattern |
@@ -281,18 +281,20 @@ Step through them in the [animated scenario walkthrough](./scenarios.html): each
 <!-- One sentence on what this scenario proves and which quality attribute it exercises. -->
 
 <!--
-Uses is OPTIONAL. Delete the column if no step calls another pattern. A step whose Uses
-names another pattern's id and scenario key, PAT-NNN S1, stands for that whole child flow:
-its Actor is where the child enters, its Target where it leaves, both required, and its
-Interface is optional. Write TBD and a name for a child flow not yet written; it is
+Uses is OPTIONAL. Delete the column unless this is a composite pattern, one whose steps
+run other patterns' flows. A participation step's Uses names the participating pattern's
+id and scenario key, PAT-NNN S1, and stands for that pattern's whole flow: its Actor is
+where the flow enters, its Target where it leaves, both required, and its Interface is
+optional. Write TBD and a name for an open participating pattern, not yet written; it is
 reported as open, and an approved pattern cannot keep one. Leave Uses empty on every other
-step. Check the chain with model chain index.md, and list each child in Patterns Applied.
+step. Check the composition with model composition index.md, and list each participating
+pattern in Patterns Applied.
 -->
 
 | Step | Actor | Target | Action | Interface | Uses |
 |---:|---|---|---|---|---|
 | 1 | COMP-NNN Official Name | 07 Local role name | What happens | IF-01 | |
-| 2 | 07 Local role name | COMP-NNN Official Name | What the child flow achieves | | PAT-NNN S1 |
+| 2 | 07 Local role name | COMP-NNN Official Name | What the participating pattern's flow achieves | | PAT-NNN S1 |
 
 <!-- deck:skip -->
 <!--

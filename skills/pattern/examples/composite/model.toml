@@ -1,8 +1,8 @@
 bindingsVersion = "1.0"
 
-# Contract for the chaining example: the pattern template's tables, the ABB and IF
-# series, and plain-number local ids. patterns_root is where a Uses cell's pattern is
-# looked for: here the examples folder, which holds knowledge-retrieval, PAT-900.
+# Contract for the composite example: the pattern template's tables, the ABB and IF
+# series, and plain-number local ids. patterns_root is where a Uses cell's participating
+# pattern is looked for: here the examples folder, which holds knowledge-retrieval, PAT-900.
 
 [model]
 node_id_attrs = ["abb_id"]
