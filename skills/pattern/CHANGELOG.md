@@ -2,6 +2,12 @@
 
 # Changelog
 
+## [0.10.3] - 2026-09-30
+
+### Fixed
+
+- publish.py runs on Python 3.11 again. Its summary line reused the f-string's own quote inside a replacement field, which only Python 3.12 accepts, so on 3.11 the post-install check stopped with `SyntaxError: unterminated string literal` before checking anything.
+
 ## [0.10.2] - 2026-09-30
 
 ### Fixed

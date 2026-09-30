@@ -12,8 +12,8 @@
     {
       "name": "pattern",
       "path": "skills/pattern",
-      "version": "0.10.2",
-      "purl": "pkg:generic/dermot-obrien/architecture-pattern/pattern@0.10.2",
+      "version": "0.10.3",
+      "purl": "pkg:generic/dermot-obrien/architecture-pattern/pattern@0.10.3",
       "requires": [
         { "purl": "pkg:generic/dermot-obrien/diagram-model/model", "range": "^0.8.2" },
         { "purl": "pkg:generic/dermot-obrien/markdown-deck/markdown-deck", "range": "^0.6.0" }

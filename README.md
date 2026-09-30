@@ -119,7 +119,7 @@ The Agent Skills specification has no dependency field yet, so `SKILL.md` declar
 
 ```yaml
 metadata:
-  version: "0.10.2"
+  version: "0.10.3"
   x-skill-requires: "pkg:generic/dermot-obrien/diagram-model/model ^0.8.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
 ```
 
