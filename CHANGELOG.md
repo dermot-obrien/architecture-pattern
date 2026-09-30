@@ -6,6 +6,12 @@ Releases of the architecture-pattern plugin. The `pattern` skill keeps its own [
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.10.3] - 2026-09-30
+
+### Fixed
+
+- `pattern` 0.10.3: publish.py, and so the post-install check, runs on Python 3.11 again, as the requirements say; see its changelog.
+
 ## [0.10.2] - 2026-09-30
 
 ### Fixed

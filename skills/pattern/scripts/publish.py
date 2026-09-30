@@ -388,7 +388,9 @@ def main():
             print(f"  {res['status']:<8} {res['doc']}")
             for n in res["notes"]:
                 print(f"           {n}")
-        print(f"  {len(results)} model(s), theme '{theme or "markdown-deck's own"}'"
+        # Not inlined: reusing the f-string's own quote inside it needs Python 3.12.
+        shown = theme or "markdown-deck's own"
+        print(f"  {len(results)} model(s), theme '{shown}'"
               + (", dry run" if a.dry_run else ""))
     return 0 if all(r["status"] == "ok" for r in results) else 1
 
