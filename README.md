@@ -79,7 +79,7 @@ gh skill install dermot-obrien/markdown-deck markdown-deck
 Clone each repository at a release tag and copy its skill folder. This works with any agent; the [quick start](docs/quick-start.md#2-make-a-workspace-and-install-the-three-skills) has the same commands for PowerShell.
 
 ```bash
-git clone --depth 1 --branch use-case--v0.1.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
+git clone --depth 1 --branch use-case--v0.2.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
 git clone --depth 1 --branch model--v0.8.2 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
 git clone --depth 1 --branch markdown-deck--v0.6.8 https://github.com/dermot-obrien/markdown-deck.git _src/markdown-deck
 mkdir -p .agents/skills
@@ -87,7 +87,7 @@ cp -r _src/architecture-pattern/skills/pattern _src/architecture-pattern/skills/
 rm -rf _src
 ```
 
-Copy into `.claude/skills`, `.cursor/skills`, `.github/skills` or a home directory from the table instead of `.agents/skills` to suit your agent. Release tags are named `<skill>--v<version>`; the `use-case--v0.1.0` tag also carries `pattern` 0.10.3, and the three above were tested together. Leave out `use-case` if you do not write use cases. For a user-level install, copy into `~/.agents/skills` (or your agent's own) and run the check from any workspace.
+Copy into `.claude/skills`, `.cursor/skills`, `.github/skills` or a home directory from the table instead of `.agents/skills` to suit your agent. Release tags are named `<skill>--v<version>`; the `use-case--v0.2.0` tag also carries `pattern` 0.10.3, and the three above were tested together. Leave out `use-case` if you do not write use cases. For a user-level install, copy into `~/.agents/skills` (or your agent's own) and run the check from any workspace.
 
 ### VS Code with GitHub Copilot, or Cursor
 
@@ -176,7 +176,7 @@ A repository binds the skills to its own layout in `.agents/skill-bindings.toml`
 
 ## Origin
 
-`pattern` was developed as a skill of [AI-Assisted Architecture](https://github.com/dermot-obrien/ai-assisted-architecture), by the same author, and was extracted into this repository on 2026-09-29 at version 0.7.1 so it can be used without that framework. [NOTICE](./NOTICE) records the exact source commit; the history before extraction is the history of `skills/pattern` there. `use-case` was written in this repository, split from `pattern` before either released it, and first released as 0.1.0 on 2026-10-02; its own NOTICE says so.
+`pattern` was developed as a skill of [AI-Assisted Architecture](https://github.com/dermot-obrien/ai-assisted-architecture), by the same author, and was extracted into this repository on 2026-09-29 at version 0.7.1 so it can be used without that framework. [NOTICE](./NOTICE) records the exact source commit; the history before extraction is the history of `skills/pattern` there. `use-case` was written in this repository, split from `pattern` before either released it, and first released as 0.2.0 on 2026-10-02; its own NOTICE says so.
 
 ## Contributing
 

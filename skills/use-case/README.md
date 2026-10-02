@@ -4,7 +4,7 @@
 
 An agent skill for authoring a use case as one Markdown document that is also the model and also the deck. A use case says what a solution does for someone and what it needs, before anyone designs how it is built; a pattern, from the `pattern` skill beside this one, says how it is built.
 
-The document's Participants and Interactions tables generate the draw.io diagram, its main flow generates an animated walkthrough, and its tagged sections generate HTML slides and a PDF. Both are checked back against the document.
+The document's Participants and Interactions tables generate the draw.io diagram, its scenarios generate an animated walkthrough, and its tagged sections generate HTML slides and a PDF. Both are checked back against the document.
 
 ## Requires
 

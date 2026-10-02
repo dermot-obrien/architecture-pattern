@@ -6,6 +6,26 @@ A use case says what a solution does for someone and what it needs, before anyon
 
 Write the use case first when the question is whether to build something. Write the pattern first when the question is how.
 
+## Use cases and scenarios
+
+The skill follows UML and the Unified Process. A use case is a set of behaviours that gives an actor an observable result of value. A scenario is one path through it: S1 is the main success scenario, and S2 onwards are alternative or extension scenarios. A use case has scenarios, never the other way round. How much of the template is filled in is formality, in Cockburn's sense of brief, casual or fully dressed, and is separate from whether the use case is endorsed.
+
+Every term, with its definition and source (the UML specification, Jacobson, Booch and Rumbaugh, Kruchten, Cockburn, and Use-Case 2.0), is in [the skill's terms reference](../skills/use-case/references/terms.md).
+
+## Local and endorsed use cases
+
+A use case starts local to the container that needs it, such as an epic or a project: a folder whose name begins with the container's identifier. It lives in the container's `use-cases` folder and takes an identifier scoped to the container, `EP-12-UC1` by default. Nobody outside the container relies on it.
+
+When the organisation endorses it, it takes the next identifier from the registered series, `UC-007` say, moves to `outputDir`, records its local identifier in `former_ids`, and the container links to it. Ask your agent to endorse it, and it does each step; [SKILL.md](../skills/use-case/SKILL.md) lists them.
+
+| Binding | Default | What it sets |
+|---|---|---|
+| `outputDir` | Required | Where endorsed use cases live |
+| `idSeries` | `UC` | The registered series |
+| `register` | None | A CSV of endorsed use cases, read for the next number and given a row on endorsement. A `slug` column, if it has one, names the endorsed folder |
+| `localDir` | `use-cases` | The folder inside a container for its local use cases |
+| `localIdFormat` | `{container}-UC{n}` | How a local identifier is formed |
+
 ## What the skill needs
 
 | Skill | Why | Repository |
@@ -22,7 +42,7 @@ Add a `[suite.use-case]` section to `.agents/skill-bindings.toml`:
 
 ```toml
 [suite.use-case]
-outputDir = "../use-cases"     # where new use case folders go, relative to this file
+outputDir = "../use-cases"     # where endorsed use cases go, relative to this file
 idSeries  = "UC"               # optional; UC is the default
 # template = "templates/use-case.md"   # optional; your own template instead of the skill's
 ```
@@ -39,8 +59,8 @@ python .agents/skills/use-case/scripts/check.py
 
 Ask your agent for a use case, or by hand:
 
-1. Copy `skills/use-case/assets/template.md` to `<outputDir>/UC-001-<slug>/index.md`.
-2. Fill in the one sentence, Participants, Interactions and S1 first. The template's comments say what goes in each section, and in what order.
+1. Copy `skills/use-case/assets/template.md` into the container, as `<container>/use-cases/<container id>-UC1-<slug>/index.md`, and replace `<ID>` with the identifier.
+2. Fill in the one sentence, Participants, Interactions and S1, the main success scenario, first. The template's comments say what goes in each section, and in what order.
 3. Generate the diagram once, arrange it in draw.io, and from then on keep it in step with `sync`:
 
    ```bash
