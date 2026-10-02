@@ -93,7 +93,7 @@ jobs:
             echo "::error::the check passed with outputDir unbound"; exit 1
           fi
           printf 'namespace,name,self,base_url,url_template,manifest,owner,notes\nws,Workspace,yes,,,,,\n' > /tmp/ws/namespaces.csv
-          printf '[suite.pattern]\noutputDir = "../patterns"\n\n[suite.use-case]\noutputDir = "../use-cases"\n\n[suite.cross-reference]\nnamespaces = "namespaces.csv"\n' > /tmp/ws/.agents/skill-bindings.toml
+          printf '[suite.pattern]\noutputDir = "../patterns"\n\n[suite.use-case]\noutputDir = "../use-cases"\n\n[suite.cross-reference]\nnamespaces = "../namespaces.csv"\n' > /tmp/ws/.agents/skill-bindings.toml
           node scripts/validate-bundle.mjs --run-checks /tmp/ws --skills skills .
       - name: The worked example agrees with itself, without draw.io
         working-directory: skills/pattern/examples/knowledge-retrieval

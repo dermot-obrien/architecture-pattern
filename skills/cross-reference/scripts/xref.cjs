@@ -6,7 +6,8 @@
 const HELP = `cross-reference: check and resolve cross-catalogue identifier references (ops:ABB-024).
 
 Run from the workspace root. Paths come from [suite.cross-reference] in
-.agents/skill-bindings.toml; a flag overrides its binding.
+.agents/skill-bindings.toml, relative to that file; a flag overrides its binding, relative
+to the working directory.
 
   node xref.cjs validate             check the registers; exit 1 if any row is skipped
   node xref.cjs list                 the registered namespaces and identifiers
@@ -26,7 +27,7 @@ Exit 0: clean. Exit 1: problems. Exit 2: usage or configuration error.`;
 const fs = require('fs');
 const path = require('path');
 const {loadRegisters, referenceRegex} = require('./lib/registers.cjs');
-const {readBindings, loadLocalMap, registerPaths, BINDINGS} = require('./lib/config.cjs');
+const {readBindings, loadLocalMap, registerPaths, bindingPath, BINDINGS} = require('./lib/config.cjs');
 
 const DEFAULT_SKIP = ['node_modules', 'build', 'dist', '.docusaurus'];
 
@@ -43,10 +44,11 @@ function parseArgs(argv) {
 
 function configure(flags) {
   const root = path.resolve(flags.root || process.cwd());
-  const b = {...readBindings(root, flags.bindings || BINDINGS)};
+  const b = readBindings(root, flags.bindings || BINDINGS);
+  // A flag is relative to the working directory, so make it absolute before it meets base.
   for (const [flag, key] of [['namespaces', 'namespaces'], ['external', 'external'], ['schemes', 'schemes'],
     ['local-manifest', 'localManifest'], ['local-map', 'localMap']]) {
-    if (flags[flag]) b[key] = flags[flag];
+    if (flags[flag]) b[key] = path.resolve(flags[flag]);
   }
   if (!b.namespaces) {
     const e = new Error(`no namespace register: bind namespaces in [suite.cross-reference] of ${flags.bindings || BINDINGS}, or pass --namespaces`);
@@ -79,7 +81,7 @@ function collectRefs(root, bindings, regs) {
   const refs = new Map();
   if (!re) return refs;
   const skip = new Set([...DEFAULT_SKIP, ...(bindings.skip || [])]);
-  const dirs = (bindings.scan && bindings.scan.length ? bindings.scan : ['.']).map((d) => path.resolve(root, d));
+  const dirs = bindings.scan && bindings.scan.length ? bindings.scan.map((d) => bindingPath(root, bindings, d)) : [root];
   for (const dir of dirs) {
     if (!fs.existsSync(dir)) continue;
     for (const file of walk(dir, skip)) {

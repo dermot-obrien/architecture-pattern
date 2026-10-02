@@ -8,6 +8,10 @@
  *
  * Reads only the subset of TOML a bindings table needs (key = "string", key = true,
  * key = ["a", "b"]), so the skill needs no TOML parser.
+ *
+ * A path in a bindings file is relative to the bindings file, as for every other skill, so
+ * a path to the repository root's registers folder is "../registers/...". A path given on
+ * the command line is relative to the working directory instead.
  */
 
 const fs = require('fs');
@@ -27,11 +31,15 @@ function parseValue(raw) {
   return v.replace(/\s+#.*$/, '');
 }
 
-/** The [suite.cross-reference] table of a bindings file, or {} when absent. */
+/**
+ * The [suite.cross-reference] table of a bindings file, or {} when absent. The returned
+ * object's non-enumerable `base` is the directory its paths are relative to.
+ */
 function readBindings(root, file = BINDINGS) {
   const p = path.resolve(root, file);
-  if (!fs.existsSync(p)) return {};
   const out = {};
+  Object.defineProperty(out, 'base', {value: path.dirname(p), writable: true});
+  if (!fs.existsSync(p)) return out;
   let inTable = false;
   for (const line of fs.readFileSync(p, 'utf-8').split(/\r?\n/)) {
     const t = line.trim();
@@ -63,12 +71,13 @@ function toMap(value) {
  * function with the map builder attached. An empty Map when neither is bound.
  */
 function loadLocalMap(root, bindings) {
+  const base = bindings.base || root;
   if (bindings.localManifest) {
-    const p = path.resolve(root, bindings.localManifest);
+    const p = path.resolve(base, bindings.localManifest);
     return toMap(JSON.parse(fs.readFileSync(p, 'utf-8')));
   }
   if (bindings.localMap) {
-    const mod = require(path.resolve(root, bindings.localMap));
+    const mod = require(path.resolve(base, bindings.localMap));
     const name = bindings.localMapExport;
     const fn = name ? mod[name] : (mod.buildLinkMap || mod.localMap || mod.default || (typeof mod === 'function' ? mod : null));
     if (typeof fn !== 'function') throw new Error(`${bindings.localMap} exports no function${name ? ` named ${name}` : ''}`);
@@ -77,10 +86,15 @@ function loadLocalMap(root, bindings) {
   return new Map();
 }
 
-/** Register paths from bindings, resolved against the workspace root. */
+/** Register paths from bindings, resolved against the bindings file's directory. */
 function registerPaths(root, bindings) {
-  const abs = (p) => (p ? path.resolve(root, p) : undefined);
+  const abs = (p) => (p ? path.resolve(bindings.base || root, p) : undefined);
   return {namespaces: abs(bindings.namespaces), external: abs(bindings.external), schemes: abs(bindings.schemes)};
 }
 
-module.exports = {readBindings, loadLocalMap, registerPaths, toMap, SUITE, BINDINGS};
+/** A path from bindings, resolved against the bindings file's directory. */
+function bindingPath(root, bindings, p) {
+  return path.resolve(bindings.base || root, p);
+}
+
+module.exports = {readBindings, loadLocalMap, registerPaths, bindingPath, toMap, SUITE, BINDINGS};

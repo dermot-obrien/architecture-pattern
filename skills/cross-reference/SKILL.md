@@ -4,7 +4,7 @@ description: Refer to another catalogue's architecture identifiers, such as its 
 license: CC-BY-4.0 AND Apache-2.0. Content under CC BY 4.0, code under Apache-2.0; see LICENSE and NOTICE.
 compatibility: Node 18+. No other skills and no npm packages. The Docusaurus plugins work with Docusaurus 3; the registers, CLI and check work with any static site generator or none.
 metadata:
-  version: "0.1.0"
+  version: "0.1.1"
   homepage: https://github.com/dermot-obrien/architecture-pattern
 ---
 
@@ -31,7 +31,7 @@ Run the post-install check from the workspace root, and stop on a problem:
 node <skills>/cross-reference/scripts/check.cjs
 ```
 
-It reads `[suite.cross-reference]` in `.agents/skill-bindings.toml`, the contract in `inputs.toml` beside this file:
+It reads `[suite.cross-reference]` in `.agents/skill-bindings.toml`, the contract in `inputs.toml` beside this file. Paths there are relative to the bindings file, so a registers folder at the workspace root is `../registers`:
 
 | Binding | Used for |
 |---|---|

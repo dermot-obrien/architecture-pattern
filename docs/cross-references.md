@@ -25,12 +25,14 @@ gh skill install dermot-obrien/architecture-pattern cross-reference
 
 ```toml
 [suite.cross-reference]
-namespaces    = "registers/identifier-namespaces.csv"   # required
-external      = "registers/external-identifiers.csv"
-schemes       = "registers/identifier-schemes.csv"      # a CSV with a prefix column
-localManifest = "registers/local-ids.json"              # or localMap = "src/id-map.js"
-scan          = ["docs"]                                 # default: the whole workspace
+namespaces    = "../registers/identifier-namespaces.csv"   # required
+external      = "../registers/external-identifiers.csv"
+schemes       = "../registers/identifier-schemes.csv"      # a CSV with a prefix column
+localManifest = "../registers/local-ids.json"              # or localMap = "../src/id-map.js"
+scan          = ["../docs"]                                 # default: the whole workspace
 ```
+
+Paths are relative to the bindings file, as for the other skills.
 
 `localManifest` or `localMap` tells the skill which identifiers your own catalogue publishes and where. A built site's `id/index.json` is a valid manifest. A module given as `localMap` exports a function returning a Map or an object of identifier to page.
 

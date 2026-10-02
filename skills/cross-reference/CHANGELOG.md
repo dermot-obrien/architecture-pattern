@@ -2,6 +2,12 @@
 
 # Changelog
 
+## [0.1.1] - 2026-10-03
+
+### Fixed
+
+- Paths in `[suite.cross-reference]` are relative to the bindings file, as every other skill's are, not to the workspace root. A workspace binding `namespaces = "registers/..."` must now say `"../registers/..."`. Command-line flags stay relative to the working directory.
+
 ## [0.1.0] - 2026-10-03
 
 ### Added

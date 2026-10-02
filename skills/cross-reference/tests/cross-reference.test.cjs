@@ -78,8 +78,9 @@ test('resolution order', () => {
 
 test('bindings and the local map load from the workspace', () => {
   const b = readBindings(EXAMPLE);
-  assert.equal(b.namespaces, 'registers/identifier-namespaces.csv');
-  assert.deepEqual(b.scan, ['docs']);
+  assert.equal(b.namespaces, '../registers/identifier-namespaces.csv');
+  assert.equal(b.base, path.join(EXAMPLE, '.agents'));
+  assert.deepEqual(b.scan, ['../docs']);
   assert.equal(loadLocalMap(EXAMPLE, b).get('PAT-001'), 'patterns/pat-001/');
 });
 
@@ -154,7 +155,7 @@ test('check ignores code and reports what cannot resolve', async () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'xref-docs-'));
   fs.writeFileSync(path.join(dir, 'p.md'), 'ex:BB-404 and lab:BB-099 and lab:BB-007\n');
   const bad = configure({root: EXAMPLE});
-  bad.bindings = {...bad.bindings, scan: [dir]};
+  bad.bindings.scan = [dir];
   const out = [];
   assert.equal(await check(bad, {offline: true, log: (l) => out.push(l)}), 2);
   assert.match(out.join('\n'), /ex:BB-404 is not an identifier this catalogue publishes/);
