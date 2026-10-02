@@ -22,7 +22,7 @@ When the organisation endorses it, it takes the next identifier from the registe
 |---|---|---|
 | `outputDir` | Required | Where endorsed use cases live |
 | `idSeries` | `UC` | The registered series |
-| `register` | None | A CSV of endorsed use cases, read for the next number and given a row on endorsement |
+| `register` | None | A CSV of endorsed use cases, read for the next number and given a row on endorsement. A `slug` column, if it has one, names the endorsed folder |
 | `localDir` | `use-cases` | The folder inside a container for its local use cases |
 | `localIdFormat` | `{container}-UC{n}` | How a local identifier is formed |
 
