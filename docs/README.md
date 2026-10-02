@@ -2,7 +2,7 @@
 
 # Documentation
 
-Documentation for the `pattern` skill. Start with the quick start; the rest is reference.
+Documentation for the `pattern` skill, and the `use-case` skill that publishes with it. Start with the quick start; the rest is reference.
 
 | Page | For |
 |---|---|
@@ -14,6 +14,7 @@ Documentation for the `pattern` skill. Start with the quick start; the rest is r
 | [Commands](commands.md) | Every script and flag in this repository, and the `model` and `markdown-deck` commands a pattern uses |
 | [Troubleshooting](troubleshooting.md) | Each error and warning message, and its fix |
 | [Examples](examples.md) | The worked examples and what each shows |
+| [Use cases](use-cases.md) | The `use-case` skill: what it needs, binding it, writing a use case, adapting the template, its worked example |
 
 The skill itself, what an agent reads, is [skills/pattern/SKILL.md](../skills/pattern/SKILL.md), with detail in [references/compose.md](../skills/pattern/references/compose.md) and [references/links.md](../skills/pattern/references/links.md).
 

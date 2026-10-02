@@ -75,11 +75,11 @@ jobs:
         env:
           AGENT_SKILLS_PATH: ${{ github.workspace }}/skills:${{ github.workspace }}/.deps/diagram-model/skills:${{ github.workspace }}/.deps/markdown-deck/skills
         run: |
-          mkdir -p /tmp/ws/.agents /tmp/ws/patterns
+          mkdir -p /tmp/ws/.agents /tmp/ws/patterns /tmp/ws/use-cases
           if node scripts/validate-bundle.mjs --run-checks /tmp/ws --skills skills .; then
             echo "::error::the check passed with outputDir unbound"; exit 1
           fi
-          printf '[suite.pattern]\noutputDir = "../patterns"\n' > /tmp/ws/.agents/skill-bindings.toml
+          printf '[suite.pattern]\noutputDir = "../patterns"\n\n[suite.use-case]\noutputDir = "../use-cases"\n' > /tmp/ws/.agents/skill-bindings.toml
           node scripts/validate-bundle.mjs --run-checks /tmp/ws --skills skills .
       - name: The worked example agrees with itself, without draw.io
         working-directory: skills/pattern/examples/knowledge-retrieval
@@ -99,6 +99,20 @@ jobs:
           # The walkthrough builds over the committed view, and the deck builds.
           python "$MODEL" animate index.md
           node "$DECK" build index.md --out /tmp/dist --theme default --no-pdf
+      - name: The use case example agrees with itself, without draw.io
+        working-directory: skills/use-case/examples/uc-900
+        run: |
+          MODEL="$GITHUB_WORKSPACE/.deps/diagram-model/skills/model/bin/model.py"
+          DECK="$GITHUB_WORKSPACE/.deps/markdown-deck/skills/markdown-deck/bin/markdown-deck.mjs"
+          python "$MODEL" extract index.md --format json --out /tmp/uc-model.json
+          python -c "import json,sys; sys.exit(0 if json.load(open('/tmp/uc-model.json')) == json.load(open('model.json')) else 1)"
+          python "$MODEL" validate index.md --against components.drawio
+          cp components.drawio /tmp/uc-before.drawio
+          python "$MODEL" sync index.md components.drawio
+          cmp components.drawio /tmp/uc-before.drawio
+          python "$MODEL" stamp --check components.svg
+          python "$MODEL" animate index.md
+          node "$DECK" build index.md --out /tmp/uc-dist --theme default --no-pdf
       - name: publish.py publishes the examples from above their binding files
         working-directory: skills/pattern
         env:
@@ -106,6 +120,9 @@ jobs:
         run: |
           python scripts/publish.py examples --recursive --no-deck --render never --json > /tmp/publish.json
           python -c "import json,sys; r=json.load(open('/tmp/publish.json'))['results']; print(r); sys.exit(0 if r and all(x['status'] == 'ok' for x in r) else 1)"
+          # The use-case skill publishes with this same publish.py.
+          python scripts/publish.py ../use-case/examples --recursive --no-deck --render never --json > /tmp/publish-uc.json
+          python -c "import json,sys; r=json.load(open('/tmp/publish-uc.json'))['results']; print(r); sys.exit(0 if r and all(x['status'] == 'ok' for x in r) else 1)"
       - name: The composite example resolves, and the approval gate holds
         working-directory: skills/pattern/examples
         run: |

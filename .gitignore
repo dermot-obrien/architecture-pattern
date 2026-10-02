@@ -20,3 +20,4 @@ dist/
 
 # Built by run.sh and publish.py from the committed view
 skills/pattern/examples/**/scenarios.html
+skills/use-case/examples/**/scenarios.html

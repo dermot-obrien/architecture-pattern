@@ -1,0 +1,33 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# What this skill needs from the repository it is installed into, and nothing about
+# where any of it lives. The consuming repository answers in [suite.use-case]
+# of its .agents/skill-bindings.toml.
+#
+# Checked by:  python <skills>/model/bin/model.py doctor --skill use-case
+#
+# This skill ships no runtime of its own. It borrows the model skill's resolver and the
+# pattern skill's publish.py, which is why both are declared dependencies.
+
+[inputs]
+short_description = "Bindings required to author a use case in this repository"
+
+[inputs.options.outputDir]
+type = "dir"
+required = true
+description = "Directory new use case folders are created in"
+
+[inputs.options.template]
+type = "file"
+required = false
+description = """The repository's own use case template, used instead of the generic
+assets/template.md this skill ships. A house template carries the repository's own
+dependency table, such as products and maturity levels, in place of the generic
+Dependencies table."""
+
+[inputs.options.idSeries]
+type = "str"
+required = false
+default = "UC"
+description = "Identifier prefix for new use cases, e.g. UC gives UC-001"
+

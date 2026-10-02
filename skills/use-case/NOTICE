@@ -1,0 +1,13 @@
+architecture-pattern: use-case skill
+Copyright 2026 Dermot O'Brien
+
+This product is licensed under CC BY 4.0 (content) and Apache-2.0 (code).
+See LICENSE and the texts in LICENSES/.
+
+Origin
+------
+
+The skill was split from the pattern
+skill of this repository before either released it, and first released as
+use-case 0.1.0. It reuses the pattern skill's publish.py and the model and
+markdown-deck skills rather than shipping tools of its own.
