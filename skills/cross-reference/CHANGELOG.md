@@ -2,6 +2,13 @@
 
 # Changelog
 
+## [0.2.0] - 2026-10-03
+
+### Added
+
+- `remark-xref`: `localUrlFor(id, file)` is given the page being built, and may return `{url, title}`, so a catalogue can link its own identifiers to Markdown files relative to the page, which Docusaurus resolves and checks, with the target's title as the tooltip.
+- `id-routes`: `localMap` is called with `{routes}`, each doc's source file mapped to its permalink, collected in `allContentLoaded`, so redirects can follow the docs plugin's own routes. A permalink that starts with the site's `baseUrl` is accepted.
+
 ## [0.1.1] - 2026-10-03
 
 ### Fixed

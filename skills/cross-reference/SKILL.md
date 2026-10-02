@@ -4,7 +4,7 @@ description: Refer to another catalogue's architecture identifiers, such as its 
 license: CC-BY-4.0 AND Apache-2.0. Content under CC BY 4.0, code under Apache-2.0; see LICENSE and NOTICE.
 compatibility: Node 18+. No other skills and no npm packages. The Docusaurus plugins work with Docusaurus 3; the registers, CLI and check work with any static site generator or none.
 metadata:
-  version: "0.1.1"
+  version: "0.2.0"
   homepage: https://github.com/dermot-obrien/architecture-pattern
 ---
 
@@ -83,6 +83,8 @@ plugins: [[require.resolve(`./${skill}/id-routes.cjs`), {
   namespaces: 'registers/identifier-namespaces.csv',
 }]],
 ```
+
+`localUrlFor(id, file)` also gets the page being built, so it can return a Markdown file path relative to that page, which Docusaurus resolves and checks, or `{url, title}` for a tooltip. `localMap` is called with `{routes}`, each doc's source file to its permalink, so a catalogue that knows each identifier's file can follow the docs plugin's own routes.
 
 Put `remark-xref` before any plugin that links bare identifiers. A reference that can't resolve stays plain text with a build warning, so it never breaks the build's link check.
 
