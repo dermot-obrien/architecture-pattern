@@ -15,7 +15,8 @@ short_description = "Bindings required to author a use case in this repository"
 [inputs.options.outputDir]
 type = "dir"
 required = true
-description = "Directory new use case folders are created in"
+description = """Directory endorsed use cases live in, each with a registered identifier from
+idSeries. A local use case lives in its container instead; see localDir."""
 
 [inputs.options.template]
 type = "file"
@@ -31,3 +32,25 @@ required = false
 default = "UC"
 description = "Identifier prefix for new use cases, e.g. UC gives UC-001"
 
+[inputs.options.register]
+type = "file"
+required = false
+description = """The register of endorsed use cases, a CSV whose first column is the identifier.
+Read for the next free number when a use case is endorsed, and given a row then. Unset,
+the next number is the highest found under outputDir plus one."""
+
+[inputs.options.localDir]
+type = "str"
+required = false
+default = "use-cases"
+description = """Folder, inside a container such as an epic or a project, that holds the
+container's local use cases. A container is a folder whose name begins with its own
+identifier, such as EP-12-checkout-rebuild."""
+
+[inputs.options.localIdFormat]
+type = "str"
+required = false
+default = "{container}-UC{n}"
+description = """Identifier of a local use case. {container} is the container's identifier,
+taken from the start of its folder name, and {n} the next free number in that container,
+with no leading zeros."""

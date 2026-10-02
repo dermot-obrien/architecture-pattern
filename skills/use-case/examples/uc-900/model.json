@@ -101,7 +101,7 @@
   "scenarios": [
     {
       "key": "S1",
-      "name": "Main flow",
+      "name": "Main success scenario",
       "steps": [
         {
           "step": 1,

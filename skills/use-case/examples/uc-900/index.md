@@ -72,7 +72,7 @@ Step through the flows in the [animated walkthrough](./scenarios.html).
 
 <!-- deck:html src="./scenarios.html" title="The flow" header="true" -->
 
-### S1 Main flow
+### S1 Main success scenario
 
 | Step | Actor | Target | Action | Interface |
 |---|---|---|---|---|

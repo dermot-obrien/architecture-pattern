@@ -5,6 +5,7 @@ version: "0.1"
 last_modified: 2026-10-01
 author: "<your name>"
 realised_by: []            # optional: the patterns that design it, PAT-NNN
+former_ids: []             # on endorsement: the local id it had, such as EP-12-UC1
 model:
   diagram: components.drawio
 provenance:
@@ -12,21 +13,25 @@ provenance:
   review_state: ai-raw
 ---
 
-# UC-NNN Use Case Name
+# <ID> Use case name
 
 <!--
 HOW TO USE THIS TEMPLATE
 - A use case says what a solution does for someone and what it needs, before anyone designs
   how it is built. A pattern says how it is built. A use case names the patterns that
   realise it in realised_by; a pattern can name the use cases it serves.
-- Copy this file to <outputDir>/UC-NNN-<slug>/index.md. The identifier series comes from
-  the idSeries binding of [suite.use-case] (UC by default).
+- A use case starts local to the container that needs it, such as an epic: copy this file
+  to <container>/<localDir>/<ID>-<slug>/index.md, where <ID> is localIdFormat (by default
+  {container}-UC{n}, such as EP-12-UC1). Only an endorsed use case takes a registered id
+  from idSeries (UC by default) and lives under outputDir. Replace <ID> throughout.
+- A use case has scenarios. S1 is the main success scenario; S2 onwards are alternative
+  or extension scenarios, each one path through the use case (UML, Unified Process).
 - The page is also the model and the deck, as a pattern is. The Participants, Interactions
   and Scenarios tables generate the diagram and the animated walkthrough; the deck: tags
   build the deck. The repository's binding file must map the Participants and Interactions
   sections (the use-case skill's SKILL.md has the snippet). Publish with the pattern skill's
   publish.py, exactly as a pattern.
-- Fill it in this order: the one sentence, Participants, Interactions, the main flow, then
+- Fill it in this order: the one sentence, Participants, Interactions, the main success scenario, then
   what it returns, scope, data, dependencies and measures. Risks and decisions are the
   residue of the rest.
 - Keep it to two or three pages. Tables carry the volume.
@@ -37,7 +42,7 @@ HOW TO USE THIS TEMPLATE
 
 | Field | Value |
 |---|---|
-| Use case | UC-NNN |
+| Use case | <ID> |
 | Consumer | Who uses it |
 | Owner | Who answers for the outcome |
 | Outcome | What it is for, and how it will be recognised |
@@ -61,7 +66,7 @@ HOW TO USE THIS TEMPLATE
 
 ## Diagram
 
-<!-- The view model render writes from the two tables below: ![UC-NNN participants and interactions](./components.svg) -->
+<!-- The view model render writes from the two tables below: ![<ID> participants and interactions](./components.svg) -->
 
 ## Participants
 
@@ -92,15 +97,16 @@ arrow's label, so keep it to a few words. The data and systems tables refer to t
 ## Scenarios
 
 <!--
-S1 is the main flow: five to eight steps, each a real interaction. Add S2 only for a
-materially different path, such as setting the solution up. Branches and failures belong
+S1 is the main success scenario: five to eight steps, each a real interaction. Add S2
+only for a materially different path, such as an extension that changes who acts, or
+setting the solution up. Branches and failures belong
 in a sequence diagram; say so in one line under the flow. Link the walkthrough that
 model animate writes: Step through the flows in the [animated walkthrough](./scenarios.html).
 -->
 
 <!-- deck:html src="./scenarios.html" title="The flow" header="true" -->
 
-### S1 Main flow
+### S1 Main success scenario
 
 | Step | Actor | Target | Action | Interface |
 |---|---|---|---|---|

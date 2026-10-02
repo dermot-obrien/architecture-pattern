@@ -9,5 +9,5 @@ Origin
 
 The skill was split from the pattern
 skill of this repository before either released it, and first released as
-use-case 0.1.0. It reuses the pattern skill's publish.py and the model and
+use-case 0.2.0. It reuses the pattern skill's publish.py and the model and
 markdown-deck skills rather than shipping tools of its own.

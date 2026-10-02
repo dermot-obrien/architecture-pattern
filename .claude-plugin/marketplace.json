@@ -54,7 +54,7 @@
       "source": "./",
       "strict": false,
       "description": "Author a use case as one Markdown document that is also the model and the deck: what a solution does for someone and what it needs, before anyone designs how it is built. Its participants and interactions generate the draw.io diagram and an animated walkthrough of the main flow, and its tagged sections publish as HTML slides and a PDF.",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "author": {
         "name": "Dermot O'Brien",
         "url": "https://github.com/dermot-obrien"
