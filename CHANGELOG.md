@@ -6,6 +6,14 @@ Releases of the architecture-pattern plugin. Each skill keeps its own changelog 
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [cross-reference 0.1.0] - 2026-10-03
+
+### Added
+
+- The `cross-reference` skill 0.1.0: references to another catalogue's identifiers as `code:ID`, a namespace register of short codes and an identifier register for single foreign identifiers, a CLI to validate, list, resolve and check references, and Docusaurus plugins for links, stable `id/<ID>/` addresses and the `id/index.json` manifest. It needs only Node and depends on no other skill. It has its own [changelog](skills/cross-reference/CHANGELOG.md), version and release tag, `cross-reference--v<version>`.
+- `bundle.json` and `.claude-plugin/marketplace.json` list it, with its post-install check. CI runs its tests and its worked example, and binds it in the post-install check workspace.
+- [docs/cross-references.md](docs/cross-references.md).
+
 ## [use-case 0.2.0] - 2026-10-02
 
 ### Added

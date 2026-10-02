@@ -23,6 +23,19 @@ jobs:
         run: node scripts/validate-skills.mjs skills
       - name: Validate bundle.json against the bundle schema and the skills
         run: node scripts/validate-bundle.mjs .
+      # cross-reference needs nothing but Node, so its tests and example run here.
+      - name: cross-reference tests
+        run: node --test skills/cross-reference/tests/*.test.cjs
+      - name: cross-reference worked example
+        working-directory: skills/cross-reference/examples/catalogue
+        run: |
+          node ../../scripts/check.cjs
+          node ../../scripts/xref.cjs validate
+          node ../../scripts/xref.cjs check --offline
+          # lab:BB-099 has no site and no row, so it must not resolve.
+          if node ../../scripts/xref.cjs resolve lab:BB-099; then
+            echo "::error::an unregistered identifier in a namespace with no site resolved"; exit 1
+          fi
 
   example:
     name: Worked example against diagram-model and markdown-deck
@@ -79,7 +92,8 @@ jobs:
           if node scripts/validate-bundle.mjs --run-checks /tmp/ws --skills skills .; then
             echo "::error::the check passed with outputDir unbound"; exit 1
           fi
-          printf '[suite.pattern]\noutputDir = "../patterns"\n\n[suite.use-case]\noutputDir = "../use-cases"\n' > /tmp/ws/.agents/skill-bindings.toml
+          printf 'namespace,name,self,base_url,url_template,manifest,owner,notes\nws,Workspace,yes,,,,,\n' > /tmp/ws/namespaces.csv
+          printf '[suite.pattern]\noutputDir = "../patterns"\n\n[suite.use-case]\noutputDir = "../use-cases"\n\n[suite.cross-reference]\nnamespaces = "namespaces.csv"\n' > /tmp/ws/.agents/skill-bindings.toml
           node scripts/validate-bundle.mjs --run-checks /tmp/ws --skills skills .
       - name: The worked example agrees with itself, without draw.io
         working-directory: skills/pattern/examples/knowledge-retrieval

@@ -1,0 +1,4 @@
+namespace,name,self,base_url,url_template,manifest,owner,notes
+ex,Example Catalogue,yes,https://example.org/catalogue/,,id/index.json,Example architecture team,This catalogue.
+ops,Operations Platform,no,https://ops.example.org/architecture/,,id/index.json,Operations platform team,Publishes id routes and a manifest.
+lab,Lab Notes,no,,,,Research team,No published site: only identifiers in the identifier register link.

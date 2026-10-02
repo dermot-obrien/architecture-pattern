@@ -39,6 +39,18 @@
         "runtime": "python",
         "description": "pattern, model and markdown-deck are installed, and model doctor --skill use-case passes on the [suite.use-case] bindings"
       }
+    },
+    {
+      "name": "cross-reference",
+      "path": "skills/cross-reference",
+      "version": "0.1.0",
+      "purl": "pkg:generic/dermot-obrien/architecture-pattern/cross-reference@0.1.0",
+      "requires": [],
+      "check": {
+        "command": ["node", "scripts/check.cjs"],
+        "runtime": "node",
+        "description": "[suite.cross-reference] binds the namespace register, every register row passes the rules, and the catalogue's identifier map loads"
+      }
     }
   ],
   "adapters": {

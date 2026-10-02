@@ -1,0 +1,60 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# What this skill needs from the repository it is installed into, and nothing about
+# where any of it lives. The consuming repository answers in [suite.cross-reference]
+# of its .agents/skill-bindings.toml.
+#
+# Checked by:  node <skills>/cross-reference/scripts/check.cjs
+
+[inputs]
+short_description = "Registers and identifier map for cross-catalogue references"
+
+[inputs.options.namespaces]
+type = "file"
+required = true
+description = """The namespace register: one row per catalogue, with its short code, whether
+it is this catalogue (self = yes), its site's base_url, and optionally a url_template and
+the path of its identifier manifest. Columns: namespace, name, self, base_url,
+url_template, manifest, owner, notes."""
+
+[inputs.options.external]
+type = "file"
+required = false
+description = """The identifier register: one row per identifier in another catalogue whose
+page can't be built from its namespace, with its exact URL. Columns: namespace, id, name,
+repository, url, notes."""
+
+[inputs.options.schemes]
+type = "file"
+required = false
+description = """A CSV with a prefix column listing this catalogue's identifier prefixes
+(ABB, PAT and so on). A namespace code may not equal one of them."""
+
+[inputs.options.localManifest]
+type = "file"
+required = false
+description = """This catalogue's identifiers and their pages, as JSON: {"ids": {"ABB-024":
+"abbs/abb-024/"}}. A built site's id/index.json is one. Set this or localMap."""
+
+[inputs.options.localMap]
+type = "file"
+required = false
+description = """A CommonJS module exporting a function that returns this catalogue's
+identifiers and their pages, as a Map or an object. The function is its export named
+localMapExport, or else buildLinkMap, localMap or default, or else the module itself."""
+
+[inputs.options.localMapExport]
+type = "str"
+required = false
+description = "The name of the function localMap exports, when it is not one of the defaults."
+
+[inputs.options.scan]
+type = "list"
+required = false
+description = "Directories check scans for Markdown, relative to the workspace root. Default: the whole workspace."
+
+[inputs.options.skip]
+type = "list"
+required = false
+description = """Directory names check never enters, beside node_modules, build, dist,
+.docusaurus and any name starting with a dot."""

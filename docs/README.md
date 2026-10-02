@@ -15,6 +15,7 @@ Documentation for the `pattern` skill, and the `use-case` skill that publishes w
 | [Troubleshooting](troubleshooting.md) | Each error and warning message, and its fix |
 | [Examples](examples.md) | The worked examples and what each shows |
 | [Use cases](use-cases.md) | The `use-case` skill: what it needs, binding it, writing a use case, adapting the template, its worked example |
+| [Cross-references](cross-references.md) | The `cross-reference` skill: referring to another catalogue's identifiers, the registers, checks, and the Docusaurus plugins |
 
 The skill itself, what an agent reads, is [skills/pattern/SKILL.md](../skills/pattern/SKILL.md), with detail in [references/compose.md](../skills/pattern/references/compose.md) and [references/links.md](../skills/pattern/references/links.md).
 

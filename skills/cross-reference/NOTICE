@@ -1,0 +1,11 @@
+architecture-pattern: cross-reference skill
+Copyright 2026 Dermot O'Brien
+
+This product is licensed under CC BY 4.0 (content) and Apache-2.0 (code).
+See LICENSE and the texts in LICENSES/.
+
+Origin
+------
+
+Written for this repository and first released as cross-reference 0.1.0.
+It ships its own runtime and depends on no other skill.
