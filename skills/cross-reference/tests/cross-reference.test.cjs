@@ -13,7 +13,8 @@ const path = require('path');
 const {loadRegisters} = require('../scripts/lib/registers.cjs');
 const {readBindings, loadLocalMap} = require('../scripts/lib/config.cjs');
 const remarkXref = require('../scripts/docusaurus/remark-xref.cjs');
-const {writeIdRoutes, pagePath} = require('../scripts/docusaurus/id-routes.cjs');
+const idRoutesPlugin = require('../scripts/docusaurus/id-routes.cjs');
+const {writeIdRoutes, pagePath, docRoutes} = idRoutesPlugin;
 const {check, configure, stripCode} = require('../scripts/xref.cjs');
 
 const EXAMPLE = path.join(__dirname, '..', 'examples', 'catalogue');
@@ -145,6 +146,45 @@ test('id routes write redirects and the manifest', () => {
   assert.equal(manifest.namespace, 'ex');
   assert.match(fs.readFileSync(path.join(outDir, 'id', 'bb-001', 'index.html'), 'utf8'), /url=\/catalogue\/blocks\/bb-001\//);
   assert.equal(pagePath('/'), '');
+});
+
+test('a file-aware local resolver gets the page and may set the tooltip', () => {
+  const seen = [];
+  const plugin = remarkXref({
+    root: EXAMPLE,
+    namespaces: 'registers/identifier-namespaces.csv',
+    localUrlFor: (id, file) => { seen.push(file.path); return {url: `../blocks/${id}.md`, title: 'Intake gateway'}; },
+    onWarn: () => {},
+  });
+  const tree = para({type: 'text', value: 'See ex:BB-001.'});
+  plugin(tree, {path: 'docs/page.md'});
+  const link = tree.children[0].children[1];
+  assert.equal(link.url, '../blocks/BB-001.md');
+  assert.equal(link.title, 'Intake gateway');
+  assert.deepEqual(seen, ['docs/page.md']);
+});
+
+test('id routes follow the docs plugin routes when localMap asks for them', async () => {
+  const allContent = {'docusaurus-plugin-content-docs': {default: {loadedVersions: [{docs: [
+    {source: '@site/blocks/bb-001.md', permalink: '/catalogue/blocks/intake/'},
+  ]}]}}};
+  assert.equal(docRoutes(allContent).get('blocks/bb-001.md'), '/catalogue/blocks/intake/');
+  const outDir = fs.mkdtempSync(path.join(os.tmpdir(), 'xref-routes-'));
+  const plugin = idRoutesPlugin(
+    {siteConfig: {baseUrl: '/catalogue/', url: 'https://example.org', title: 'x'}, siteDir: EXAMPLE},
+    {localMap: ({routes}) => new Map([['BB-001', routes.get('blocks/bb-001.md')]])},
+  );
+  const log = console.log;
+  console.log = () => {};
+  try {
+    await plugin.allContentLoaded({allContent});
+    await plugin.postBuild({outDir});
+  } finally {
+    console.log = log;
+  }
+  const manifest = JSON.parse(fs.readFileSync(path.join(outDir, 'id', 'index.json'), 'utf8'));
+  assert.deepEqual(manifest.ids, {'BB-001': 'blocks/intake/'});
+  assert.match(fs.readFileSync(path.join(outDir, 'id', 'BB-001', 'index.html'), 'utf8'), /url=\/catalogue\/blocks\/intake\//);
 });
 
 test('check ignores code and reports what cannot resolve', async () => {

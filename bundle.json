@@ -43,8 +43,8 @@
     {
       "name": "cross-reference",
       "path": "skills/cross-reference",
-      "version": "0.1.1",
-      "purl": "pkg:generic/dermot-obrien/architecture-pattern/cross-reference@0.1.1",
+      "version": "0.2.0",
+      "purl": "pkg:generic/dermot-obrien/architecture-pattern/cross-reference@0.2.0",
       "requires": [],
       "check": {
         "command": ["node", "scripts/check.cjs"],

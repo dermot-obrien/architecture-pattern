@@ -24,6 +24,10 @@
  *     localUrlFor: (id) => '/abbs/abb-024',                // or localMap: () => Map of id -> path
  *   }]]
  *
+ * localUrlFor(id, file) is also given the vfile being built, so it can return a Markdown
+ * file path relative to that page, which Docusaurus then resolves and checks like any other
+ * file link. It may return {url, title} to set the link's tooltip.
+ *
  * Paths are relative to `root`, by default the working directory. Put it before any
  * plugin that links bare identifiers, which then leaves the new links alone.
  */
@@ -60,7 +64,7 @@ function remarkXref(options = {}) {
   }
 
   function resolve(ns, id, file) {
-    const r = regs.resolve(ns, id, localUrlFor);
+    const r = regs.resolve(ns, id, localUrlFor && ((i) => localUrlFor(i, file)));
     if (r.problem) warn(`${r.problem}${file && file.path ? ` (in ${file.path})` : ''}; left unlinked`);
     return r;
   }

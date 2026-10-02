@@ -137,15 +137,17 @@ function loadRegisters({namespaces, external, schemes, prefixes = []} = {}) {
   }
 
   /**
-   * Resolve a reference. localUrlFor(id) gives this catalogue's own page for an identifier,
-   * or null. Returns {url, title, problem}: url null and problem set when it can't resolve.
+   * Resolve a reference. localUrlFor(id) gives this catalogue's own page for an identifier:
+   * a URL, or {url, title}, or null. Returns {url, title, problem}: url null and problem set
+   * when it can't resolve.
    */
   function resolve(namespace, id, localUrlFor) {
     const ns = nsMap.get(namespace);
     if (!ns) return {url: null, title: null, problem: `${namespace} is not a registered namespace`};
     if (ns.self) {
-      const url = localUrlFor ? localUrlFor(id) : null;
-      return url ? {url, title: null, problem: null}
+      const found = localUrlFor ? localUrlFor(id) : null;
+      const url = found && typeof found === 'object' ? found.url : found;
+      return url ? {url, title: (found && found.title) || null, problem: null}
         : {url: null, title: null, problem: `${namespace}:${id} is not an identifier this catalogue publishes`};
     }
     const url = externalUrl(namespace, id);
