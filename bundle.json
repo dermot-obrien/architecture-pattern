@@ -2,7 +2,7 @@
   "$schema": "pkg:generic/dermot-obrien/ai-assisted-work/bundle-schema@1.0.0",
   "name": "architecture-pattern",
   "owner": "dermot-obrien",
-  "description": "Author an architecture pattern as one Markdown document that is also the model and also the deck, at any scope from one recurring problem to a whole domain.",
+  "description": "Author an architecture pattern, or the use case it serves, as one Markdown document that is also the model and also the deck, at any scope from one recurring problem to a whole domain.",
   "license": "CC-BY-4.0 AND Apache-2.0",
   "homepage": "https://github.com/dermot-obrien/architecture-pattern",
   "derived_from": [
@@ -22,6 +22,22 @@
         "command": ["python", "scripts/check.py"],
         "runtime": "python",
         "description": "model and markdown-deck are installed, and model doctor --skill pattern passes on the [suite.pattern] bindings"
+      }
+    },
+    {
+      "name": "use-case",
+      "path": "skills/use-case",
+      "version": "0.1.0",
+      "purl": "pkg:generic/dermot-obrien/architecture-pattern/use-case@0.1.0",
+      "requires": [
+        { "purl": "pkg:generic/dermot-obrien/architecture-pattern/pattern", "range": "^0.10.3" },
+        { "purl": "pkg:generic/dermot-obrien/diagram-model/model", "range": "^0.8.2" },
+        { "purl": "pkg:generic/dermot-obrien/markdown-deck/markdown-deck", "range": "^0.6.0" }
+      ],
+      "check": {
+        "command": ["python", "scripts/check.py"],
+        "runtime": "python",
+        "description": "pattern, model and markdown-deck are installed, and model doctor --skill use-case passes on the [suite.use-case] bindings"
       }
     }
   ],

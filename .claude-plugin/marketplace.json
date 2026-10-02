@@ -48,6 +48,47 @@
           "marketplace": "markdown-deck"
         }
       ]
+    },
+    {
+      "name": "use-case",
+      "source": "./",
+      "strict": false,
+      "description": "Author a use case as one Markdown document that is also the model and the deck: what a solution does for someone and what it needs, before anyone designs how it is built. Its participants and interactions generate the draw.io diagram and an animated walkthrough of the main flow, and its tagged sections publish as HTML slides and a PDF.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Dermot O'Brien",
+        "url": "https://github.com/dermot-obrien"
+      },
+      "homepage": "https://github.com/dermot-obrien/architecture-pattern",
+      "repository": "https://github.com/dermot-obrien/architecture-pattern",
+      "license": "CC-BY-4.0 AND Apache-2.0",
+      "keywords": [
+        "architecture",
+        "use-case",
+        "requirements",
+        "drawio",
+        "agent-skill"
+      ],
+      "category": "documentation",
+      "skills": [
+        "./skills/use-case"
+      ],
+      "dependencies": [
+        {
+          "name": "pattern",
+          "version": "^0.10.3"
+        },
+        {
+          "name": "model",
+          "version": "^0.8.2",
+          "marketplace": "diagram-model"
+        },
+        {
+          "name": "markdown-deck",
+          "version": "^0.6.0",
+          "marketplace": "markdown-deck"
+        }
+      ]
     }
   ]
 }

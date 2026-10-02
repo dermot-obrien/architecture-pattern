@@ -6,7 +6,12 @@ Author an architecture pattern, at any scope from one recurring problem to a who
 
 The document's tables generate the draw.io diagram and its numbered scenario overlays, and are validated against it, so a diagram that drifts is caught rather than believed. The document's tagged sections publish as HTML slides and a PDF.
 
-This repository ships the `pattern` [Agent Skill](https://agentskills.io/specification), usable in VS Code with GitHub Copilot, Cursor, Claude Code, Codex, Gemini CLI and any other agent that reads the format. Nothing in it assumes a particular agent or IDE.
+This repository ships two [Agent Skills](https://agentskills.io/specification), usable in VS Code with GitHub Copilot, Cursor, Claude Code, Codex, Gemini CLI and any other agent that reads the format. Nothing in them assumes a particular agent, IDE or organisation.
+
+| Skill | What it writes |
+|---|---|
+| `pattern` | An architecture pattern: how a solution is built |
+| `use-case` | A use case: what a solution does for someone and what it needs, before anyone designs how it is built. It publishes with `pattern`'s tools; see [use cases](docs/use-cases.md) |
 
 `pattern` is composition. It depends on two skills that are useful on their own and live in their own repositories:
 
@@ -40,10 +45,11 @@ Or ask your agent for a pattern and it does the same. The [quick start](docs/qui
 | [Commands](docs/commands.md) | Every script and flag, and the `model` and `markdown-deck` commands a pattern uses |
 | [Troubleshooting](docs/troubleshooting.md) | Each error and warning message, and its fix |
 | [Examples](docs/examples.md) | The worked examples and what each shows |
+| [Use cases](docs/use-cases.md) | The `use-case` skill: binding it, writing a use case, adapting the template |
 
 ## Install
 
-Install all three skills wherever your agent reads skills. They need not be in the same directory.
+Install all three skills wherever your agent reads skills, and `use-case` beside them if you write use cases. They need not be in the same directory.
 
 | Directory | Read by |
 |---|---|
@@ -53,12 +59,13 @@ Install all three skills wherever your agent reads skills. They need not be in t
 | `.claude/skills/` in the project | Claude Code, and also VS Code with GitHub Copilot and Cursor |
 | `~/.agents/skills/`, `~/.copilot/skills/`, `~/.cursor/skills/`, `~/.claude/skills/` | The same tools, for every project |
 
-A directory in the project installs the skills for that workspace; one under your home folder installs them for every project. This repository has no installer of its own. Whichever route you use, run the post-install check from the workspace root afterwards: `python <skills>/pattern/scripts/check.py`.
+A directory in the project installs the skills for that workspace; one under your home folder installs them for every project. This repository has no installer of its own. Whichever route you use, run the post-install check from the workspace root afterwards: `python <skills>/pattern/scripts/check.py`, and `python <skills>/use-case/scripts/check.py` for `use-case`.
 
 ### With the GitHub CLI, for any agent
 
 ```bash
 gh skill install dermot-obrien/architecture-pattern pattern
+gh skill install dermot-obrien/architecture-pattern use-case   # optional
 gh skill install dermot-obrien/diagram-model model
 gh skill install dermot-obrien/markdown-deck markdown-deck
 # --agent github-copilot|cursor|claude-code|codex|gemini-cli|... chooses the host
@@ -72,15 +79,15 @@ gh skill install dermot-obrien/markdown-deck markdown-deck
 Clone each repository at a release tag and copy its skill folder. This works with any agent; the [quick start](docs/quick-start.md#2-make-a-workspace-and-install-the-three-skills) has the same commands for PowerShell.
 
 ```bash
-git clone --depth 1 --branch pattern--v0.10.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
-git clone --depth 1 --branch model--v0.8.0 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
-git clone --depth 1 --branch markdown-deck--v0.6.4 https://github.com/dermot-obrien/markdown-deck.git _src/markdown-deck
+git clone --depth 1 --branch use-case--v0.1.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
+git clone --depth 1 --branch model--v0.8.2 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
+git clone --depth 1 --branch markdown-deck--v0.6.8 https://github.com/dermot-obrien/markdown-deck.git _src/markdown-deck
 mkdir -p .agents/skills
-cp -r _src/architecture-pattern/skills/pattern _src/diagram-model/skills/model _src/markdown-deck/skills/markdown-deck .agents/skills/
+cp -r _src/architecture-pattern/skills/pattern _src/architecture-pattern/skills/use-case _src/diagram-model/skills/model _src/markdown-deck/skills/markdown-deck .agents/skills/
 rm -rf _src
 ```
 
-Copy into `.claude/skills`, `.cursor/skills`, `.github/skills` or a home directory from the table instead of `.agents/skills` to suit your agent. Release tags are named `<skill>--v<version>`; the three above were tested together. For a user-level install, copy into `~/.agents/skills` (or your agent's own) and run the check from any workspace.
+Copy into `.claude/skills`, `.cursor/skills`, `.github/skills` or a home directory from the table instead of `.agents/skills` to suit your agent. Release tags are named `<skill>--v<version>`; the `use-case--v0.1.0` tag also carries `pattern` 0.10.3, and the three above were tested together. Leave out `use-case` if you do not write use cases. For a user-level install, copy into `~/.agents/skills` (or your agent's own) and run the check from any workspace.
 
 ### VS Code with GitHub Copilot, or Cursor
 
@@ -99,6 +106,7 @@ Each repository is also a Claude Code plugin marketplace. This plugin declares `
 /plugin marketplace add dermot-obrien/markdown-deck
 /plugin marketplace add dermot-obrien/architecture-pattern
 /plugin install pattern@architecture-pattern
+/plugin install use-case@architecture-pattern   # optional; declares pattern as a dependency
 ```
 
 Claude Code also reads skills copied into `.claude/skills/` or `~/.claude/skills/` by the git route.
@@ -112,6 +120,25 @@ Claude Code also reads skills copied into `.claude/skills/` or `~/.claude/skills
 - Python 3.11 or newer, and Node 18 or newer.
 - `npm install` run once in the folder where `markdown-deck` is installed, for example `npm install --prefix .agents/skills/markdown-deck`. It installs its dependencies, including [Playwright](https://playwright.dev/) (markdown-deck 0.6.1 or later), which prints PDFs with Microsoft Edge or Google Chrome where installed, as on any Windows machine, so no browser download is needed. HTML decks, views and walkthroughs do not need Playwright.
 - draw.io desktop, optionally. Without it, views are exported by hand from draw.io and stamped.
+
+## Updating, and reinstalling after the source changes
+
+An installed skill is a copy. Pulling this repository, or a newer release appearing, changes nothing in a workspace until the skills are installed again. Reinstall all of them together, because `use-case` needs the `pattern` from the same release, and `pattern` needs `model` and `markdown-deck` at the versions its `SKILL.md` names.
+
+| How you installed | To update |
+|---|---|
+| GitHub CLI | Run the same `gh skill install` commands again |
+| git | Fetch the newer tags (or `git pull` a clone you keep), delete each installed skill folder, copy it again from the clone, as in [With git](#with-git-for-any-agent). Deleting first matters: copying over the top leaves files a release removed |
+| Claude Code plugin | `/plugin marketplace update architecture-pattern`, and the same for `diagram-model` and `markdown-deck`, then reinstall the plugins |
+| A workspace installer that pins each source to a commit | Move the pin to the new commit, run the installer, and commit the pin with whatever the update changes |
+
+Then, every time:
+
+1. `npm install` again in the installed `markdown-deck` folder if `markdown-deck` changed.
+2. Run each post-install check from the workspace root, `python <skills>/pattern/scripts/check.py` and `python <skills>/use-case/scripts/check.py`. Both must end `ok`. A new release can add a required binding, which the check names.
+3. Republish a pattern or use case you rely on, `publish.py <folder>`, to see that it still builds.
+
+Never edit an installed copy: the next install overwrites it. Keep your own configuration in `.agents/skill-bindings.toml`, your own template and your own theme, which an update never touches, and give changes to the skills back here (see [CONTRIBUTING](CONTRIBUTING.md#open-source-and-giving-improvements-back)).
 
 ## Dependencies between skills
 
@@ -145,11 +172,11 @@ A repository binds the skills to its own layout in `.agents/skill-bindings.toml`
 
 ## Versions and identifiers
 
-`pattern` is identified by the Package URL `pkg:generic/dermot-obrien/architecture-pattern/pattern`, which names no host, so a mirror or a move changes where it is fetched from but not what it is called. It has its own Semantic Version in `SKILL.md` (`metadata.version`), and each release is tagged `pattern--v<version>`. Its requirements name the skills it needs the same way, with a range. This follows DD-11 of [AI-Assisted Work](https://github.com/dermot-obrien/ai-assisted-work/blob/main/docs/about/design-decisions.md).
+`pattern` is identified by the Package URL `pkg:generic/dermot-obrien/architecture-pattern/pattern`, which names no host, so a mirror or a move changes where it is fetched from but not what it is called. It has its own Semantic Version in `SKILL.md` (`metadata.version`), and each release is tagged `pattern--v<version>`. Its requirements name the skills it needs the same way, with a range. `use-case` is `pkg:generic/dermot-obrien/architecture-pattern/use-case`, versioned and tagged the same way (`use-case--v<version>`), and requires `pattern` by range like any other skill. This follows DD-11 of [AI-Assisted Work](https://github.com/dermot-obrien/ai-assisted-work/blob/main/docs/about/design-decisions.md).
 
 ## Origin
 
-`pattern` was developed as a skill of [AI-Assisted Architecture](https://github.com/dermot-obrien/ai-assisted-architecture), by the same author, and was extracted into this repository on 2026-09-29 at version 0.7.1 so it can be used without that framework. [NOTICE](./NOTICE) records the exact source commit; the history before extraction is the history of `skills/pattern` there.
+`pattern` was developed as a skill of [AI-Assisted Architecture](https://github.com/dermot-obrien/ai-assisted-architecture), by the same author, and was extracted into this repository on 2026-09-29 at version 0.7.1 so it can be used without that framework. [NOTICE](./NOTICE) records the exact source commit; the history before extraction is the history of `skills/pattern` there. `use-case` was written in this repository, split from `pattern` before either released it, and first released as 0.1.0 on 2026-10-02; its own NOTICE says so.
 
 ## Contributing
 

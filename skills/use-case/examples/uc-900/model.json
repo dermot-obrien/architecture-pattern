@@ -1,0 +1,202 @@
+{
+  "name": "UC-900 Map a business use case to an industry reference model",
+  "version": "0.1",
+  "source": "index.md",
+  "nodes": [
+    {
+      "id": "01",
+      "label": "Architect",
+      "group": "actor",
+      "attrs": {
+        "role_in_this_use_case": "Pastes the use case, corrects the steps, reviews the answer"
+      }
+    },
+    {
+      "id": "02",
+      "label": "Use-case chat",
+      "group": "solution",
+      "attrs": {
+        "role_in_this_use_case": "Splits the use case into steps and assembles the answer through read-only tools"
+      }
+    },
+    {
+      "id": "03",
+      "label": "Reference model graph",
+      "group": "solution",
+      "attrs": {
+        "role_in_this_use_case": "Service domains, operations and business objects in a graph database, with definition embeddings"
+      }
+    },
+    {
+      "id": "04",
+      "label": "Reference model APIs",
+      "group": "external",
+      "attrs": {
+        "role_in_this_use_case": "Published OpenAPI files under an open licence"
+      }
+    },
+    {
+      "id": "05",
+      "label": "Ontology distiller",
+      "group": "solution",
+      "attrs": {
+        "role_in_this_use_case": "Turns the API files into OWL with provenance"
+      }
+    },
+    {
+      "id": "06",
+      "label": "Model service",
+      "group": "external",
+      "attrs": {
+        "role_in_this_use_case": "Splits steps, chooses among candidates, writes the answer"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "02",
+      "target": "01",
+      "id": "IF-01",
+      "label": "use case in, answer out"
+    },
+    {
+      "source": "03",
+      "target": "02",
+      "id": "IF-02",
+      "label": "read-only tools"
+    },
+    {
+      "source": "06",
+      "target": "02",
+      "id": "IF-03",
+      "label": "steps, choices, answer"
+    },
+    {
+      "source": "04",
+      "target": "05",
+      "id": "IF-04",
+      "label": "release API files"
+    },
+    {
+      "source": "05",
+      "target": "03",
+      "id": "IF-05",
+      "label": "ontology and vectors"
+    }
+  ],
+  "groups": [
+    {
+      "id": "actor",
+      "label": "actor"
+    },
+    {
+      "id": "external",
+      "label": "external"
+    },
+    {
+      "id": "solution",
+      "label": "solution"
+    }
+  ],
+  "scenarios": [
+    {
+      "key": "S1",
+      "name": "Main flow",
+      "steps": [
+        {
+          "step": 1,
+          "actor": "01",
+          "action": "paste the use case",
+          "edge": "IF-01",
+          "target": "02"
+        },
+        {
+          "step": 2,
+          "actor": "02",
+          "action": "split it into business steps, shown to the architect",
+          "edge": "IF-03",
+          "target": "06"
+        },
+        {
+          "step": 3,
+          "actor": "02",
+          "action": "retrieve candidate service domains for each step",
+          "edge": "IF-02",
+          "target": "03"
+        },
+        {
+          "step": 4,
+          "actor": "02",
+          "action": "choose among the candidates only, with reasons",
+          "edge": "IF-03",
+          "target": "06"
+        },
+        {
+          "step": 5,
+          "actor": "02",
+          "action": "fetch the chosen domains' operations and business objects",
+          "edge": "IF-02",
+          "target": "03"
+        },
+        {
+          "step": 6,
+          "actor": "02",
+          "action": "show steps, domains, interfaces and data sets, each with its reference model id, and the gaps",
+          "edge": "IF-01",
+          "target": "01"
+        }
+      ]
+    },
+    {
+      "key": "S2",
+      "name": "Load a reference model release",
+      "steps": [
+        {
+          "step": 1,
+          "actor": "05",
+          "action": "read the release's API files",
+          "edge": "IF-04",
+          "target": "04"
+        },
+        {
+          "step": 2,
+          "actor": "05",
+          "action": "load the ontology, its provenance and definition vectors",
+          "edge": "IF-05",
+          "target": "03"
+        }
+      ]
+    }
+  ],
+  "attrs": {
+    "model": {
+      "diagram": "components.drawio"
+    },
+    "mapping": [
+      {
+        "local": "01",
+        "relationship": "gap"
+      },
+      {
+        "local": "02",
+        "relationship": "gap"
+      },
+      {
+        "local": "03",
+        "relationship": "gap"
+      },
+      {
+        "local": "04",
+        "relationship": "gap"
+      },
+      {
+        "local": "05",
+        "relationship": "gap"
+      },
+      {
+        "local": "06",
+        "relationship": "gap"
+      }
+    ]
+  }
+}

@@ -2,9 +2,18 @@
 
 # Changelog
 
-Releases of the architecture-pattern plugin. The `pattern` skill keeps its own [changelog](skills/pattern/CHANGELOG.md) with the detail, and a release takes its version.
+Releases of the architecture-pattern plugin. Each skill keeps its own changelog with the detail, [pattern](skills/pattern/CHANGELOG.md) and [use-case](skills/use-case/CHANGELOG.md), and a release takes the version of the skill it releases.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+
+## [use-case 0.1.0] - 2026-10-02
+
+### Added
+
+- The `use-case` skill 0.1.0, beside `pattern`: a use case as one Markdown document that is also the model and the deck, published with `pattern`'s `publish.py`. It has its own [changelog](skills/use-case/CHANGELOG.md), version and release tag, `use-case--v<version>`.
+- `bundle.json` and `.claude-plugin/marketplace.json` list it, with its post-install check and its requirements on `pattern` ^0.10.3, `model` ^0.8.2 and `markdown-deck` ^0.6.0.
+- CI checks the UC-900 example as it checks the pattern examples, publishes it with `publish.py`, and runs both skills' post-install checks.
+- [docs/use-cases.md](docs/use-cases.md), and a README section on updating and reinstalling the skills after this repository changes.
 
 ## [0.10.3] - 2026-09-30
 

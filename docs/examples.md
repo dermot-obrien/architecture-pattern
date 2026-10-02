@@ -11,6 +11,7 @@ Every example uses invented identifiers and names, so none can be mistaken for a
 | PAT-900 Knowledge Retrieval | A full domain-scope pattern: eight catalogued building blocks, seven interfaces with protocols, error handling and NFRs, two scenarios, controls, variation points, decisions and risks, and its committed diagram, views and render records | [skills/pattern/examples/knowledge-retrieval](../skills/pattern/examples/knowledge-retrieval) |
 | PAT-910 Staff Assistant | A composite pattern over PAT-900: a participation step bound `PAT-900 S1 (ABB-908=03)`, joining at PAT-900 S1's declared Start and Finish, and one open participating pattern. Tables only, no diagram | [skills/pattern/examples/composite](../skills/pattern/examples/composite) |
 | The template | Every section, with the guidance for each in HTML comments | [skills/pattern/assets/template.md](../skills/pattern/assets/template.md) |
+| UC-900 Map a business use case to an industry reference model | A use case from the `use-case` skill: six local participants, five interactions, a main flow and a set-up flow, with its diagram, view, render record and extracted model | [skills/use-case/examples/uc-900](../skills/use-case/examples/uc-900), and [use cases](use-cases.md#the-worked-example) |
 
 ## PAT-900 Knowledge Retrieval
 
