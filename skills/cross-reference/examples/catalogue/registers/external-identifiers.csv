@@ -1,0 +1,2 @@
+namespace,id,name,repository,url,notes
+lab,BB-007,Message broker,lab-notes,https://lab.example.org/notes/message-broker,Kept as a page in the lab's notes.

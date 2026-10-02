@@ -6,12 +6,13 @@ Author an architecture pattern, at any scope from one recurring problem to a who
 
 The document's tables generate the draw.io diagram and its numbered scenario overlays, and are validated against it, so a diagram that drifts is caught rather than believed. The document's tagged sections publish as HTML slides and a PDF.
 
-This repository ships two [Agent Skills](https://agentskills.io/specification), usable in VS Code with GitHub Copilot, Cursor, Claude Code, Codex, Gemini CLI and any other agent that reads the format. Nothing in them assumes a particular agent, IDE or organisation.
+This repository ships three [Agent Skills](https://agentskills.io/specification), usable in VS Code with GitHub Copilot, Cursor, Claude Code, Codex, Gemini CLI and any other agent that reads the format. Nothing in them assumes a particular agent, IDE or organisation.
 
 | Skill | What it writes |
 |---|---|
 | `pattern` | An architecture pattern: how a solution is built |
 | `use-case` | A use case: what a solution does for someone and what it needs, before anyone designs how it is built. It publishes with `pattern`'s tools; see [use cases](docs/use-cases.md) |
+| `cross-reference` | References to another catalogue's building blocks and patterns, `ops:ABB-024`, without clashes, and stable addresses for your own. It needs only Node; see [cross-references](docs/cross-references.md) |
 
 `pattern` is composition. It depends on two skills that are useful on their own and live in their own repositories:
 
@@ -46,6 +47,7 @@ Or ask your agent for a pattern and it does the same. The [quick start](docs/qui
 | [Troubleshooting](docs/troubleshooting.md) | Each error and warning message, and its fix |
 | [Examples](docs/examples.md) | The worked examples and what each shows |
 | [Use cases](docs/use-cases.md) | The `use-case` skill: binding it, writing a use case, adapting the template |
+| [Cross-references](docs/cross-references.md) | The `cross-reference` skill: namespace codes, the two registers, checking references, the Docusaurus plugins |
 
 ## Install
 
