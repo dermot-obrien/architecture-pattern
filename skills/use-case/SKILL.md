@@ -22,7 +22,7 @@ The terms follow UML and the Unified Process. A use case is a set of behaviours 
 | | Local | Endorsed |
 |---|---|---|
 | Identifier | Scoped to its container: `localIdFormat`, by default `{container}-UC{n}`, such as `EP-12-UC1` | The next free number in `idSeries`, such as `UC-007`, from `register` if bound |
-| Folder | `<container>/<localDir>/<id>-<slug>/`, inside the container that needs it | `<outputDir>/<id>-<slug>/` |
+| Folder | `<container>/<localDir>/<id>-<slug>/`, inside the container that needs it | `<outputDir>/<id>-<slug>/`, or the register's `slug` for that id when it has a `slug` column |
 | For | Scoping or proving the container's own work. Nobody outside the container relies on it | A need the organisation has accepted, which more than one container may serve |
 
 Write a use case local by default. Make it endorsed only when the user says it has been endorsed, by whatever body endorses use cases where they work. Never invent a registered identifier for a local use case.
@@ -121,9 +121,9 @@ It renders `components.svg`, builds the animated walkthrough `scenarios.html` of
 When the user says a local use case has been endorsed:
 
 1. Take the next free number in `idSeries`, from `register` when it is bound.
-2. Move the folder to `<outputDir>/<new id>-<slug>/`, keeping its history if the repository is under version control.
+2. Move the folder to `<outputDir>/<new id>-<slug>/`, or to the register's `slug` when it has a `slug` column, keeping its history if the repository is under version control.
 3. Change the identifier in the H1, the header table and the title, and add the local identifier to `former_ids` in the front matter.
-4. Add the register row, if `register` is bound.
+4. Add the register row, if `register` is bound, filling every column the register has. Before step 2 when the folder takes its name from the row.
 5. Replace every link to the old folder, starting with the container's own index, so the container now links to the endorsed use case.
 6. Republish it, and validate it.
 

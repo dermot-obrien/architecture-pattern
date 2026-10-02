@@ -36,7 +36,8 @@ description = "Identifier prefix for new use cases, e.g. UC gives UC-001"
 type = "file"
 required = false
 description = """The register of endorsed use cases, a CSV whose first column is the identifier.
-Read for the next free number when a use case is endorsed, and given a row then. Unset,
+Read for the next free number when a use case is endorsed, and given a row then. When it has
+a slug column, an endorsed use case's folder takes that name. Unset,
 the next number is the highest found under outputDir plus one."""
 
 [inputs.options.localDir]
