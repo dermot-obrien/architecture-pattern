@@ -6,7 +6,7 @@ Releases of the architecture-pattern plugin. Each skill keeps its own changelog 
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [cross-reference 0.1.0] - Unreleased
+## [cross-reference 0.1.0] - 2026-10-03
 
 ### Added
 
