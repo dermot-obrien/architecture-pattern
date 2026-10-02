@@ -1,8 +1,9 @@
 # Bindings for the worked example. A real workspace has one of these at its root.
+# Paths are relative to this file, so the registers folder beside .agents is ../registers.
 
 [suite.cross-reference]
-namespaces    = "registers/identifier-namespaces.csv"
-external      = "registers/external-identifiers.csv"
-schemes       = "registers/identifier-schemes.csv"
-localManifest = "registers/local-ids.json"
-scan          = ["docs"]
+namespaces    = "../registers/identifier-namespaces.csv"
+external      = "../registers/external-identifiers.csv"
+schemes       = "../registers/identifier-schemes.csv"
+localManifest = "../registers/local-ids.json"
+scan          = ["../docs"]

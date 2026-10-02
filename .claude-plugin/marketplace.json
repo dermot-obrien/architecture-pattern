@@ -95,7 +95,7 @@
       "source": "./",
       "strict": false,
       "description": "Refer to another catalogue's architecture identifiers without clashes: a bare ABB-024 means this catalogue, ops:ABB-024 means the catalogue whose short code is ops. Validates the namespace and identifier registers, resolves and checks references, and ships Docusaurus plugins for links, stable identifier addresses and a manifest.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "author": {
         "name": "Dermot O'Brien",
         "url": "https://github.com/dermot-obrien"

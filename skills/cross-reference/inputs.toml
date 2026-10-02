@@ -2,7 +2,7 @@
 #
 # What this skill needs from the repository it is installed into, and nothing about
 # where any of it lives. The consuming repository answers in [suite.cross-reference]
-# of its .agents/skill-bindings.toml.
+# of its .agents/skill-bindings.toml. Paths there are relative to that file.
 #
 # Checked by:  node <skills>/cross-reference/scripts/check.cjs
 

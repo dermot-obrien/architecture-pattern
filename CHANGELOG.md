@@ -6,6 +6,12 @@ Releases of the architecture-pattern plugin. Each skill keeps its own changelog 
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [cross-reference 0.1.1] - 2026-10-03
+
+### Fixed
+
+- `cross-reference` 0.1.1: binding paths are relative to the bindings file, as for the other skills; see its changelog.
+
 ## [cross-reference 0.1.0] - 2026-10-03
 
 ### Added
