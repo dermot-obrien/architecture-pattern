@@ -113,12 +113,16 @@ spec.loader.exec_module(register)
 try:
     _bindings, _tables = register.load_bindings(os.getcwd())
 except register.UsageError:
-    _tables = {}
+    _bindings, _tables = "", {}
 _pattern = _tables.get("pattern") or {}
+if not _pattern.get("outputDir"):
+    _out = register.Series("pattern", _pattern, _bindings, os.getcwd()).output
+    print(f"note: no outputDir is bound under [suite.pattern], so new patterns go in the default, "
+          f"{_out}. Bind outputDir to put them elsewhere.")
 if not any(_pattern.get(k) for k in ("register", "patternsRoot", "outputDir")):
     warnings.append("none of register, patternsRoot or outputDir is bound under [suite.pattern], so "
-                    "numbering a new pattern scans every folder in the repository, and the agent "
-                    "asks where to create it. Bind register, or patternsRoot and outputDir.")
+                    "numbering a new pattern scans every folder in the repository. Bind register, "
+                    "or patternsRoot, to number without a full scan.")
 if _pattern.get("register"):
     if register.main(["check"]) != 0:
         problems.append("register.py check reported the errors above. Fix the register, or run "

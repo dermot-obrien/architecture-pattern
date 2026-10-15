@@ -14,9 +14,10 @@ short_description = "Bindings required to author a use case in this repository"
 
 [inputs.options.outputDir]
 type = "dir"
-required = true
+required = false
 description = """Directory endorsed use cases live in, each with a registered identifier from
-idSeries. A local use case lives in its container instead; see localDir."""
+idSeries. A local use case lives in its container instead; see localDir. Unset, use-cases/ at
+the repository root, and the agent says so when it first puts a use case there."""
 
 [inputs.options.template]
 type = "file"

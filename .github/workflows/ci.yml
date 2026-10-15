@@ -49,6 +49,9 @@ jobs:
           $R check --fix
           grep -qx 'PAT-001,pattern,Order intake,Approved,patterns/integration/PAT-001-order-intake,,' catalogue.csv
           test "$($R next)" = PAT-002
+          # outputDir when bound, else the default at the repository root.
+          test "$($R outdir 2>/dev/null)" = "$W/patterns/_inbox"
+          test "$($R --suite use-case outdir 2>/dev/null)" = "$W/use-cases"
           mkdir -p patterns/_inbox/PAT-002-x && echo '# PAT-002 X' > patterns/_inbox/PAT-002-x/index.md
           $R add PAT-002 --name X --path patterns/_inbox/PAT-002-x
           if $R add PAT-002 --name again; then echo "::error::add accepted a duplicate id"; exit 1; fi
@@ -119,13 +122,13 @@ jobs:
         run: |
           mkdir -p /tmp/ws/.agents /tmp/ws/patterns /tmp/ws/use-cases
           if node scripts/validate-bundle.mjs --run-checks /tmp/ws --skills skills .; then
-            echo "::error::the checks passed with no binding file (use-case requires outputDir)"; exit 1
+            echo "::error::the checks passed with no binding file (cross-reference requires namespaces, and no tables are bound)"; exit 1
           fi
           printf 'namespace,name,self,base_url,url_template,manifest,owner,notes\nws,Workspace,yes,,,,,\n' > /tmp/ws/namespaces.csv
           # The example's tables, so the shipped templates are checked against a real contract.
           sed -n '/^\[model\]/,/^\[rules\]/p' skills/pattern/examples/knowledge-retrieval/model.toml | sed '$d' > /tmp/ws/tables.toml
           printf 'bindingsVersion = "1.0"\n\n' | cat - /tmp/ws/tables.toml > /tmp/ws/.agents/skill-bindings.toml
-          printf '\n[suite.pattern]\noutputDir = "../patterns"\n\n[suite.pattern.types.architecture-pattern]\nidSeries = "AP"\nphysical = "none"\n\n[suite.pattern.types.reference-architecture]\nidSeries = "RA"\nphysical = "most"\n\n[suite.use-case]\noutputDir = "../use-cases"\n\n[suite.cross-reference]\nnamespaces = "../namespaces.csv"\n' >> /tmp/ws/.agents/skill-bindings.toml
+          printf '\n[suite.pattern]\noutputDir = "../patterns"\n\n[suite.pattern.types.architecture-pattern]\nidSeries = "AP"\nphysical = "none"\n\n[suite.pattern.types.reference-architecture]\nidSeries = "RA"\nphysical = "most"\n\n[suite.use-case]\nidSeries = "UC"\n\n[suite.cross-reference]\nnamespaces = "../namespaces.csv"\n' >> /tmp/ws/.agents/skill-bindings.toml
           node scripts/validate-bundle.mjs --run-checks /tmp/ws --skills skills .
       - name: The worked example agrees with itself, without draw.io
         working-directory: skills/pattern/examples/knowledge-retrieval

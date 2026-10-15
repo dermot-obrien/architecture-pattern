@@ -63,7 +63,11 @@ The [configuration reference](configuration.md#a-complete-binding-for-the-shippe
 
 ### `warning: none of register, patternsRoot or outputDir is bound under [suite.pattern]`
 
-From `check.py`, and from `register.py next` as `the whole repository under <root> was scanned`. Nothing says where patterns live, so a new pattern's number comes from scanning every folder, and the agent asks where to create it. That works; bind `register`, or `patternsRoot` and `outputDir`, to make it faster and to stop the questions.
+From `check.py`, and from `register.py next` as `the whole repository under <root> was scanned`. Nothing says where patterns live, so a new pattern's number comes from scanning every folder, and new patterns go in the default `patterns/` at the repository root. That works; bind `register` or `patternsRoot` to number without a full scan, and `outputDir` to put new patterns elsewhere.
+
+### `note: no outputDir is bound under [suite.pattern], so new patterns go in the default, <path>`
+
+Not a problem: `outputDir` is optional, and this says where new patterns go without it, `patterns/` at the repository root. The `use-case` check says the same for `use-cases/`. Bind `outputDir` to choose another folder.
 
 ### `error  suite.pattern: 'outputDir' points at <path>, which does not exist`
 

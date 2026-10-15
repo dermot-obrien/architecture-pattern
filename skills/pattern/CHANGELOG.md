@@ -17,7 +17,7 @@
 
 ### Changed
 
-- `outputDir` is optional. Unset, the agent asks where to create a new pattern. With no `register`, `patternsRoot` or `outputDir` bound, `register.py next` scans every folder in the repository for the highest number and warns that it did, and `check.py` warns about the configuration.
+- `outputDir` is optional. Unset, new patterns go in `patterns/` at the repository root; `register.py outdir` prints the folder in use with a note when it is the default, which the agent passes on once, and `check.py` prints the same note. With no `register`, `patternsRoot` or `outputDir` bound, `register.py next` scans every folder in the repository for the highest number and warns that it did, and `check.py` warns about the configuration.
 - `SKILL.md` and the template no longer say a reference architecture is a wide-scope pattern: what a practice calls its kinds of pattern is the repository's to bind in `types`. With types bound, the agent settles the type before numbering.
 - `SKILL.md` numbers a new pattern with `register.py next`, from the whole tree rather than `outputDir` alone, so a pattern filed into a category folder still counts, and names the new folder `<ID>-<slug>`.
 - Requires model ^0.9.0, whose composition reads the register.

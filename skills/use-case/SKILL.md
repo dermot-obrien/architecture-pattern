@@ -48,7 +48,7 @@ Do not proceed on an error, and do not guess a path. Every path this skill needs
 | `siblings.model` | The model CLI, at `<that>/bin/model.py` |
 | `siblings.pattern` | `publish.py`, at `<that>/scripts/publish.py` |
 | `siblings.markdown-deck` | Used by `publish.py` to build the deck |
-| `outputDir` | Where endorsed use cases live |
+| `outputDir` | Where endorsed use cases live. Unset, `use-cases/` at the repository root: `register.py --suite use-case outdir` prints the folder in use, and its note says when it is the default; tell the user once |
 | `idSeries` | The prefix for an endorsed use case's id, `UC` by default |
 | `register` | The register of endorsed ids, if bound, perhaps shared with patterns. `register.py --suite use-case next` gives the next free number, and `register.py --suite use-case add` the row, both in the pattern skill's `scripts/` |
 | `localDir`, `localIdFormat` | Where a container keeps its local use cases, and how their ids are formed |
@@ -121,7 +121,7 @@ It renders `components.svg`, builds the animated walkthrough `scenarios.html` of
 When the user says a local use case has been endorsed:
 
 1. Take the next free number in `idSeries`: `python <pattern>/scripts/register.py --suite use-case next`, which reads `register` when it is bound and the folders under `outputDir` either way.
-2. Move the folder to `<outputDir>/<new id>-<slug>/`, or to the register's `slug` when it has a `slug` column, keeping its history if the repository is under version control.
+2. Move the folder to `<outdir>/<new id>-<slug>/`, where `<outdir>` is what `register.py --suite use-case outdir` prints, or to the register's `slug` when it has a `slug` column, keeping its history if the repository is under version control.
 3. Change the identifier in the H1, the header table and the title, and add the local identifier to `former_ids` in the front matter.
 4. Add the register row, if `register` is bound, filling every column the register has: `register.py --suite use-case add UC-007 --name "..." --status ... --path <folder>`, with `--set slug=...` for a `slug` column. Before step 2 when the folder takes its name from the row, and then `register.py --suite use-case check --fix` records the path.
 5. Replace every link to the old folder, starting with the container's own index, so the container now links to the endorsed use case.

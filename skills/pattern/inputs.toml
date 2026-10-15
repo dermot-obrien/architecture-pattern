@@ -16,8 +16,9 @@ short_description = "Bindings required to author a pattern in this repository"
 type = "dir"
 required = false
 description = """Directory new pattern folders are created in, by default. The user may name
-another. Unset, the agent asks where to create each one, and with no register or
-patternsRoot either, numbering scans every folder in the repository."""
+another. Unset, patterns/ at the repository root, and the agent says so when it first puts a
+pattern there; with no register or patternsRoot either, numbering scans every folder in
+the repository."""
 
 [inputs.options.register]
 type = "file"

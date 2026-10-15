@@ -6,6 +6,7 @@
     python scripts/register.py add ID --name NAME --path FOLDER [--type T] [--status S]
                                       [--summary S] [--url URL] [--set COLUMN=VALUE ...]
     python scripts/register.py check [--fix]
+    python scripts/register.py outdir
 
     common options: --suite pattern|use-case   whose bindings to read (default pattern)
                     --register FILE            the register, instead of the bound one
@@ -31,6 +32,8 @@ next   prints the next free identifier in PREFIX, or in the idSeries of a patter
        highest number in the register, or in a folder name under patternsRoot and
        outputDir at any depth, plus one, with as many digits as the widest. With none of
        the three bound, every folder in the repository is scanned, with a warning.
+outdir prints the folder new documents go in: outputDir, else the default, patterns/ or
+       use-cases/ at the repository root, with a note on stderr saying it is the default.
 add    appends one row and refuses an identifier already there. A row is appended,
        never inserted, so two branches that each take the next number both change the
        end of the file and git reports a conflict instead of merging a duplicate.
@@ -63,6 +66,8 @@ import tomllib  # noqa: E402
 
 BINDING_NAMES = (".agents/skill-bindings.toml", "skill-bindings.toml", "model.toml", ".model.toml")
 SUITES = {"pattern": "PAT", "use-case": "UC"}
+# Where new documents go when a suite binds no outputDir, relative to the repository root.
+DEFAULT_OUTPUT = {"pattern": "patterns", "use-case": "use-cases"}
 SKIP_DIRS = {"node_modules", "dist", "build"}
 H1_RE = re.compile(r"^#\s+(.+?)\s*#*\s*$")
 FENCE_RE = re.compile(r"^\s*(```|~~~)")
@@ -131,6 +136,11 @@ class Series:
         self.suite = suite
         self.type = suite
         self.prefix = str(table.get("idSeries") or SUITES[suite])
+        self.output = bound(binding_file, table.get("outputDir"))
+        self.output_default = not self.output
+        if self.output_default:
+            self.output = os.path.join(repo_root(binding_file, start or os.getcwd()),
+                                       DEFAULT_OUTPUT[suite])
         roots = [table.get("patternsRoot"), table.get("outputDir")]
         self.roots = [bound(binding_file, r) for r in roots if r]
         self.register = bound(binding_file, table.get("register"))
@@ -337,6 +347,16 @@ def cmd_next(a, series, reg):
     return 0
 
 
+def cmd_outdir(a, series):
+    print(series.output)
+    if series.output_default:
+        exists = "" if os.path.isdir(series.output) else "; it does not exist yet, so create it"
+        print(f"note: no outputDir is bound under [suite.{series.suite}], so new documents go in "
+              f"the default, {series.output}{exists}. Bind [suite.{series.suite}] outputDir, "
+              f"relative to the binding file, to put them elsewhere.", file=sys.stderr)
+    return 0
+
+
 def cmd_add(a, series, reg):
     if not reg:
         raise UsageError(f"no register is bound under [suite.{series.suite}]; bind register "
@@ -475,6 +495,7 @@ def main(argv=None) -> int:
                     help="whose [suite.*] bindings to read (default pattern)")
     ap.add_argument("--register", help="the register CSV, instead of the bound one")
     sub = ap.add_subparsers(dest="cmd", required=True)
+    sub.add_parser("outdir", help="print the folder new documents go in: outputDir, else the default")
     n = sub.add_parser("next", help="print the next free identifier")
     n.add_argument("prefix", nargs="?", help="the series, default the suite's idSeries")
     n.add_argument("--type", help="a pattern type bound under [suite.pattern.types]; its idSeries")
@@ -498,6 +519,8 @@ def main(argv=None) -> int:
         series = Series(a.suite, tables.get(a.suite, {}), binding_file, os.getcwd())
         reg_path = os.path.abspath(a.register) if a.register else series.register
         reg = Register(reg_path) if reg_path else None
+        if a.cmd == "outdir":
+            return cmd_outdir(a, series)
         if a.cmd == "next":
             return cmd_next(a, series, reg)
         if a.cmd == "add":

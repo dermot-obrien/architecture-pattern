@@ -16,11 +16,11 @@ Every term, with its definition and source (the UML specification, Jacobson, Boo
 
 A use case starts local to the container that needs it, such as an epic or a project: a folder whose name begins with the container's identifier. It lives in the container's `use-cases` folder and takes an identifier scoped to the container, `EP-12-UC1` by default. Nobody outside the container relies on it.
 
-When the organisation endorses it, it takes the next identifier from the registered series, `UC-007` say, moves to `outputDir`, records its local identifier in `former_ids`, and the container links to it. Ask your agent to endorse it, and it does each step; [SKILL.md](../skills/use-case/SKILL.md) lists them.
+When the organisation endorses it, it takes the next identifier from the registered series, `UC-007` say, moves to `outputDir` (by default `use-cases/` at the repository root), records its local identifier in `former_ids`, and the container links to it. Ask your agent to endorse it, and it does each step; [SKILL.md](../skills/use-case/SKILL.md) lists them.
 
 | Binding | Default | What it sets |
 |---|---|---|
-| `outputDir` | Required | Where endorsed use cases live |
+| `outputDir` | `use-cases/` at the repository root | Where endorsed use cases live. `register.py --suite use-case outdir` prints the folder in use; the agent says so when it uses the default |
 | `idSeries` | `UC` | The registered series |
 | `register` | None | A CSV of endorsed use cases, read for the next number and given a row on endorsement, by the pattern skill's `register.py --suite use-case`. It may be the pattern [register](configuration.md#register), with `type` `use-case`. A `slug` column, if it has one, names the endorsed folder |
 | `localDir` | `use-cases` | The folder inside a container for its local use cases |

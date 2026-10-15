@@ -6,6 +6,8 @@
 
 ### Changed
 
+- `outputDir` is optional. Unset, endorsed use cases go in `use-cases/` at the repository root; `register.py --suite use-case outdir` prints the folder in use with a note when it is the default, which the agent passes on once, and `check.py` prints the same note.
+
 - An endorsed use case is numbered and registered with the pattern skill's `register.py --suite use-case`. `register` may be the same file as `[suite.pattern] register`, with `type` `use-case`, and its identifier column is `id` when it has one.
 - Requires pattern ^0.11.0 and model ^0.9.0.
 

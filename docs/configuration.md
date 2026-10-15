@@ -31,7 +31,7 @@ The keys the `pattern` skill declares in `inputs.toml`.
 
 | Key | Type | Required | Default | Read by |
 |---|---|---|---|---|
-| `outputDir` | directory | no | none: the agent asks | The agent, for new patterns; `register.py`; `model` for compositions |
+| `outputDir` | directory | no | `patterns/` at the repository root | The agent, for new patterns; `register.py`; `model` for compositions |
 | `template` | file | no | the skill's `assets/template.md` | The agent |
 | `idSeries` | string | no | `PAT` | The agent, `register.py` |
 | `register` | file | no | none | `register.py`; `model`, for compositions |
@@ -46,7 +46,7 @@ The keys the `pattern` skill declares in `inputs.toml`.
 
 The folder new pattern folders are created in by default, as `<outputDir>/<ID>-<slug>/index.md`; the user can always name another. If set, it must exist; `doctor` fails otherwise. It is also the last fallback for where participating patterns are found.
 
-Unset, the agent asks where to create each new pattern. If `register` and `patternsRoot` are unset too, nothing says where the patterns are, so `register.py next` scans every folder in the repository (skipping hidden folders, `node_modules`, `dist` and `build`) for the highest number, and warns that it did. `check.py` warns about this configuration. It is correct, only slower in a large repository; bind `register` or `patternsRoot` to avoid it.
+Unset, new patterns go in `patterns/` at the repository root (the folder holding `.agents/`, or the binding file's own), created when first needed. `register.py outdir` prints the folder in use, with a note when it is the default; the agent tells you once where it put the pattern, and `check.py` prints the same note. If `register` and `patternsRoot` are unset too, nothing says where the patterns are, so `register.py next` scans every folder in the repository (skipping hidden folders, `node_modules`, `dist` and `build`) for the highest number, and warns that it did. `check.py` warns about this configuration. It is correct, only slower in a large repository; bind `register` or `patternsRoot` to avoid it.
 
 ```toml
 [suite.pattern]

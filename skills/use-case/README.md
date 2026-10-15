@@ -27,7 +27,7 @@ gh skill install dermot-obrien/markdown-deck markdown-deck
 
 ## Use
 
-Bind the workspace in `.agents/skill-bindings.toml`: `[suite.use-case] outputDir`, and the Participants and Interactions tables (the snippet is in `SKILL.md`). Copy `assets/template.md` into a new folder under `outputDir` as `index.md`, fill it in, then:
+Bind the workspace in `.agents/skill-bindings.toml`: the Participants and Interactions tables (the snippet is in `SKILL.md`), and `[suite.use-case] outputDir` if endorsed use cases should not go in the default `use-cases/` at the repository root. Copy `assets/template.md` into a new folder under that folder as `index.md`, fill it in, then:
 
 ```bash
 python <skills>/model/bin/model.py emit index.md --to drawio --out components.drawio

@@ -97,6 +97,22 @@ if "model" in found:
         warnings.append("draw.io desktop was not found, so views are exported by hand and stamped "
                         "with model stamp. Install draw.io desktop to render them.")
 
+# outputDir is optional: unset, endorsed use cases go in the default, which is worth saying.
+_rspec = importlib.util.spec_from_file_location(
+    "pattern_register", os.path.join(os.path.dirname(publish_py), "register.py"))
+if _rspec and os.path.exists(_rspec.origin):
+    register = importlib.util.module_from_spec(_rspec)
+    _rspec.loader.exec_module(register)
+    try:
+        _bindings, _tables = register.load_bindings(os.getcwd())
+        _uc = _tables.get("use-case") or {}
+        if not _uc.get("outputDir"):
+            _out = register.Series("use-case", _uc, _bindings, os.getcwd()).output
+            print(f"note: no outputDir is bound under [suite.use-case], so endorsed use cases go in "
+                  f"the default, {_out}. Bind outputDir to put them elsewhere.")
+    except register.UsageError:
+        pass
+
 for w in warnings:
     print(f"warning: {w}")
 for p in problems:
