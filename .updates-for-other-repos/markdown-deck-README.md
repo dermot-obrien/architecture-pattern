@@ -95,6 +95,35 @@ See [docs/commands.md](../../docs/commands.md) for all options.
 
 To update after a new release:
 
+### Automated Update (Recommended)
+
+The repository includes update scripts that automatically fetch the latest version, backup your current installation, run npm install, and verify:
+
+**bash:**
+```bash
+# From repository root
+./scripts/update-markdown-deck.sh             # Update workspace skill
+./scripts/update-markdown-deck.sh --user      # Update user-level skill
+./scripts/update-markdown-deck.sh --check-only  # Check version without updating
+```
+
+**PowerShell:**
+```powershell
+# From repository root
+.\scripts\update-markdown-deck.ps1            # Update workspace skill
+.\scripts\update-markdown-deck.ps1 -User      # Update user-level skill
+.\scripts\update-markdown-deck.ps1 -CheckOnly # Check version without updating
+```
+
+The script will:
+1. Check current vs latest version
+2. Backup your current installation to `.skill-backups/`
+3. Download and install the latest version
+4. Run `npm install` automatically
+5. Verify the installation
+
+### Manual Update
+
 1. **Delete old installation:**
    ```bash
    rm -rf .agents/skills/markdown-deck

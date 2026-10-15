@@ -81,6 +81,34 @@ See [docs/commands.md](../../docs/commands.md) for every flag and option.
 
 To update after a new release:
 
+### Automated Update (Recommended)
+
+The repository includes update scripts that automatically fetch the latest version, backup your current installation, and verify the update:
+
+**bash:**
+```bash
+# From repository root
+./scripts/update-model.sh             # Update workspace skill
+./scripts/update-model.sh --user      # Update user-level skill
+./scripts/update-model.sh --check-only  # Check version without updating
+```
+
+**PowerShell:**
+```powershell
+# From repository root
+.\scripts\update-model.ps1            # Update workspace skill
+.\scripts\update-model.ps1 -User      # Update user-level skill
+.\scripts\update-model.ps1 -CheckOnly # Check version without updating
+```
+
+The script will:
+1. Check current vs latest version
+2. Backup your current installation to `.skill-backups/`
+3. Download and install the latest version
+4. Verify the installation
+
+### Manual Update
+
 1. **Delete the old installation first** (important):
    ```bash
    rm -rf .agents/skills/model

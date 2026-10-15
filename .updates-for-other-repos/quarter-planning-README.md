@@ -86,6 +86,35 @@ See [docs/commands.md](../../docs/commands.md) for all flags and options.
 
 To update after a new release:
 
+### Automated Update (Recommended)
+
+The repository includes update scripts that automatically fetch the latest version, backup your current installation, and verify:
+
+**bash:**
+```bash
+# From repository root
+./scripts/update-quarter-planning.sh             # Update workspace skill
+./scripts/update-quarter-planning.sh --user      # Update user-level skill
+./scripts/update-quarter-planning.sh --check-only  # Check version without updating
+```
+
+**PowerShell:**
+```powershell
+# From repository root
+.\scripts\update-quarter-planning.ps1            # Update workspace skill
+.\scripts\update-quarter-planning.ps1 -User      # Update user-level skill
+.\scripts\update-quarter-planning.ps1 -CheckOnly # Check version without updating
+```
+
+The script will:
+1. Check current vs latest version
+2. Backup your current installation to `.skill-backups/`
+3. Download and install the latest version
+4. Verify the installation
+5. Remind you to check for new bindings
+
+### Manual Update
+
 1. **Delete old installation:**
    ```bash
    rm -rf .agents/skills/quarter-planning
