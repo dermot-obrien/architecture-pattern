@@ -80,38 +80,62 @@ The repository's [docs](https://github.com/dermot-obrien/architecture-pattern/tr
 
 An installed skill is a copy. To update after a new release:
 
+### Automated Update (Recommended)
+
+The repository includes scripts that automatically fetch the latest versions, backup your current installation, and verify the update:
+
+**bash:**
+```bash
+# From repository root
+./scripts/update-skills.sh             # Update workspace skills
+./scripts/update-skills.sh --user      # Update user-level skills
+./scripts/update-skills.sh --check-only  # Check versions without updating
+```
+
+**PowerShell:**
+```powershell
+# From repository root
+.\scripts\update-skills.ps1            # Update workspace skills
+.\scripts\update-skills.ps1 -User      # Update user-level skills
+.\scripts\update-skills.ps1 -CheckOnly # Check versions without updating
+```
+
+The script will:
+1. Check current vs latest versions
+2. Backup your current installation to `.skill-backups/`
+3. Download and install latest versions of pattern, use-case, cross-reference, model, and markdown-deck
+4. Run `npm install` for markdown-deck
+5. Verify all installations
+
+### Manual Update
+
 1. **Delete the old installation first** (important - copying over leaves stale files):
    ```bash
-   rm -rf .agents/skills/pattern
+   rm -rf .agents/skills/pattern .agents/skills/model .agents/skills/markdown-deck
    ```
 
 2. **Reinstall using the same method you used initially:**
-   - With `gh skill`: `gh skill install dermot-obrien/architecture-pattern pattern`
+   - With `gh skill`: 
+     ```bash
+     gh skill install dermot-obrien/architecture-pattern pattern
+     gh skill install dermot-obrien/diagram-model model
+     gh skill install dermot-obrien/markdown-deck markdown-deck
+     npm install --prefix .agents/skills/markdown-deck
+     ```
    - By copying: Follow the [install instructions](#install) again
 
-3. **Update dependencies too** - `pattern` requires specific versions:
-   ```bash
-   # Check required versions
-   grep "x-skill-requires" .agents/skills/pattern/SKILL.md
-   
-   # Reinstall model and markdown-deck at compatible versions
-   rm -rf .agents/skills/model .agents/skills/markdown-deck
-   gh skill install dermot-obrien/diagram-model model
-   gh skill install dermot-obrien/markdown-deck markdown-deck
-   npm install --prefix .agents/skills/markdown-deck
-   ```
-
-4. **Verify the update:**
+3. **Verify the update:**
    ```bash
    python .agents/skills/pattern/scripts/check.py
-   ```
-
-5. **Check for new bindings** - new releases may add required configuration:
-   ```bash
    python .agents/skills/model/bin/model.py doctor --skill pattern
    ```
 
-6. **Republish existing patterns** to verify they still build:
+4. **Check for new bindings** - new releases may add required configuration:
+   ```bash
+   python .agents/skills/model/bin/model.py doctor --skill pattern --json
+   ```
+
+5. **Republish existing patterns** to verify they still build:
    ```bash
    python .agents/skills/pattern/scripts/publish.py patterns/PAT-001-order-intake
    ```

@@ -65,6 +65,26 @@ python <skills>/pattern/scripts/publish.py .
 
 To update after a new release:
 
+### Automated Update (Recommended)
+
+Use the update script from the repository root (automatically updates all dependencies):
+
+**bash:**
+```bash
+./scripts/update-skills.sh             # Update workspace skills
+./scripts/update-skills.sh --user      # Update user-level skills
+```
+
+**PowerShell:**
+```powershell
+.\scripts\update-skills.ps1            # Update workspace skills
+.\scripts\update-skills.ps1 -User      # Update user-level skills
+```
+
+The script automatically updates `use-case`, `pattern`, `model`, and `markdown-deck` together with coordinated versions.
+
+### Manual Update
+
 1. **Delete old installations:**
    ```bash
    rm -rf .agents/skills/use-case .agents/skills/pattern .agents/skills/model .agents/skills/markdown-deck

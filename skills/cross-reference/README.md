@@ -73,6 +73,26 @@ Tests: `node --test skills/cross-reference/tests/*.test.cjs` from the repository
 
 To update after a new release:
 
+### Automated Update (Recommended)
+
+The repository includes an update script:
+
+**bash:**
+```bash
+./scripts/update-skills.sh             # Updates cross-reference with other skills
+./scripts/update-skills.sh --user      # Update user-level
+./scripts/update-skills.sh --check-only  # Check version without updating
+```
+
+**PowerShell:**
+```powershell
+.\scripts\update-skills.ps1            # Updates cross-reference with other skills
+.\scripts\update-skills.ps1 -User      # Update user-level
+.\scripts\update-skills.ps1 -CheckOnly # Check version without updating
+```
+
+### Manual Update
+
 1. **Delete the old installation:**
    ```bash
    rm -rf .agents/skills/cross-reference
