@@ -2,6 +2,26 @@
 
 # Changelog
 
+## [0.11.0] - 2026-10-15
+
+### Added
+
+- `register`, an optional binding: a CSV of every identifier the repository has minted, `id,type,name,status,path,url,summary`, with `path` relative to the register. One file can serve patterns, use cases and your own series, told apart by `type`.
+- `scripts/register.py`: `next` prints the next free id from the register and from the folder names under `patternsRoot` and `outputDir`; `add` appends a row and refuses an id already there; `check` fails on a duplicate id or a path that names nothing, and `check --fix` corrects a moved folder's path, keeps `name` and `status` in step with the document, and registers folders with no row. Rows are appended, never inserted, so two branches taking the same number meet as a merge conflict on the register.
+- `check.py` runs `register.py check` when a register is bound.
+- `types`, an optional binding, `[suite.pattern.types.<name>]` with `label`, `idSeries` and `physical`: the repository's kinds of pattern, such as a technology-agnostic architecture pattern (`AP`, no SBBs) and a technology-specific reference architecture (`RA`, mainly SBBs), each numbered in its own series. `register.py next --type <name>` numbers in a type's series and is required once types are bound; `add` records the type from the id's series; `check` covers every type's series. `model validate` (0.9.0) checks a document's boxes against its type.
+- Templates per type: `assets/templates/architecture-pattern.md` (ABBs only) and `assets/templates/reference-architecture.md` (SBBs, with a Realises column and `implements`). A type may bind its own `template`, or `builtin:<name>`; the order is the type's own, then `[suite.pattern] template`, then the shipped one for the type, then `assets/template.md`. `scripts/template.py which --type <type>` prints the one in use.
+- `template.py check`, run by `check.py`: every template in use is checked with `model contract` (0.9.0) for the sections, tables and columns the binding reads, so a repository can replace any template so long as it keeps that construct. `check.py` now fails when the template in use does not fit the binding, which includes a repository that binds no `[[markdown.tables]]`.
+- Front matter `pattern_type`, and `implements: [AP-004]` for a pattern that makes another concrete; both in the template, commented out or empty.
+- Documentation of patterns in category folders under `patternsRoot`, with `outputDir` as the folder new patterns land in.
+
+### Changed
+
+- `outputDir` is optional. Unset, new patterns go in `patterns/` at the repository root; `register.py outdir` prints the folder in use with a note when it is the default, which the agent passes on once, and `check.py` prints the same note. With no `register`, `patternsRoot` or `outputDir` bound, `register.py next` scans every folder in the repository for the highest number and warns that it did, and `check.py` warns about the configuration.
+- `SKILL.md` and the template no longer say a reference architecture is a wide-scope pattern: what a practice calls its kinds of pattern is the repository's to bind in `types`. With types bound, the agent settles the type before numbering.
+- `SKILL.md` numbers a new pattern with `register.py next`, from the whole tree rather than `outputDir` alone, so a pattern filed into a category folder still counts, and names the new folder `<ID>-<slug>`.
+- Requires model ^0.9.0, whose composition reads the register.
+
 ## [0.10.3] - 2026-09-30
 
 ### Fixed

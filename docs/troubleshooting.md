@@ -48,9 +48,9 @@ From `check.py`. Not an error. Install draw.io desktop (the installed build, not
 
 ## Bindings
 
-### `error  suite.pattern: 'outputDir' is required and not set.`
+### `warn  bindings: no binding file found; built-in defaults are in use.`
 
-`doctor --skill pattern` found no `outputDir` in `[suite.pattern]`, often because there is no binding file at all (`warn  bindings: no binding file found; built-in defaults are in use.`). Create `.agents/skill-bindings.toml` at the workspace root with at least:
+There is no binding file, so the model reads the wrong tables and nothing says where patterns go. Before pattern 0.11.0 this was `error  suite.pattern: 'outputDir' is required and not set.` Create `.agents/skill-bindings.toml` at the workspace root with at least:
 
 ```toml
 bindingsVersion = "1.0"
@@ -61,13 +61,21 @@ outputDir = "../patterns"
 
 The [configuration reference](configuration.md#a-complete-binding-for-the-shipped-template) has a complete file for the shipped template.
 
+### `warning: none of register, patternsRoot or outputDir is bound under [suite.pattern]`
+
+From `check.py`, and from `register.py next` as `the whole repository under <root> was scanned`. Nothing says where patterns live, so a new pattern's number comes from scanning every folder, and new patterns go in the default `patterns/` at the repository root. That works; bind `register` or `patternsRoot` to number without a full scan, and `outputDir` to put new patterns elsewhere.
+
+### `note: no outputDir is bound under [suite.pattern], so new patterns go in the default, <path>`
+
+Not a problem: `outputDir` is optional, and this says where new patterns go without it, `patterns/` at the repository root. The `use-case` check says the same for `use-cases/`. Bind `outputDir` to choose another folder.
+
 ### `error  suite.pattern: 'outputDir' points at <path>, which does not exist`
 
 Paths are relative to the binding file, not to where you ran the command. From `.agents/skill-bindings.toml`, a `patterns/` folder at the root is `../patterns`. Create the folder, or fix the path. The same message names `template` or `ontologySchema` when those are wrong, and `the patterns root <path> does not exist` names `patternsRoot`.
 
 ### `'<key>' is not a binding this skill declares`
 
-A warning: a key in `[suite.pattern]` the skill does not know, usually a typo. The keys are `outputDir`, `template`, `idSeries`, `deckTheme`, `ontologySchema`, `ontologySchemaSha256`, `patternsRoot` and `approvedStatuses`, in that camel case.
+A warning: a key in `[suite.pattern]` the skill does not know, usually a typo. The keys are `outputDir`, `register`, `template`, `idSeries`, `deckTheme`, `ontologySchema`, `ontologySchemaSha256`, `patternsRoot` and `approvedStatuses`, in that camel case.
 
 ### `'<name>' is an absolute path. It will not survive a clone on another machine`
 
@@ -88,6 +96,34 @@ The binding file was written for a newer `model`. Update `model`, or set `bindin
 ### A document validates with no errors but reads no rows
 
 With no binding file, `model` reads only `## Components` and `## Interfaces` with its default columns, so a pattern's Building Blocks table is ignored. Add the `[[markdown.tables]]` entries from the [configuration reference](configuration.md#a-complete-binding-for-the-shipped-template).
+
+## Templates
+
+### `a template in use lacks a section, table or column the binding reads`
+
+From `check.py`, after `template.py check` printed the template and each `contract_*` finding. Either the template no longer has what `[[markdown.tables]]` or `[markdown.scenarios]` reads, or the binding names sections the template never had. Fix whichever is wrong; [which template](configuration.md#which-template-and-replacing-one) lists what a template must keep. With no `[[markdown.tables]]` bound at all, the model's built-in tables (`Nodes` or `Components`, `Edges` or `Interfaces`) do not match the shipped templates: bind the tables, as the [complete binding](configuration.md#a-complete-binding-for-the-shipped-template) does.
+
+## The register
+
+### `error: <ID> is in the register twice, rows <n> and <m>`
+
+Two rows claim one id, usually because a merge conflict on the register was resolved by keeping both lines. Give one pattern the next free number (`register.py next`), change its folder name, H1 and front matter, and fix its row, before anything references either.
+
+### `error: <ID>: path <path> names no document`
+
+The folder was moved or renamed, or it holds no `index.md`. If the message ends `found at <folder>`, `register.py check --fix` rewrites the path. If it names several folders, two folders claim the id: renumber one.
+
+### `warning: <ID> at <folder> is not in the register`
+
+A pattern folder under `patternsRoot` or `outputDir` has no row. `register.py check --fix` appends one from its H1 and front matter.
+
+### `error: <ID> is already in <register>; take register.py next instead`
+
+`register.py add` refuses an id the register already has. Take the next one.
+
+### `the register <path> does not exist`
+
+`[suite.pattern] register` names a missing file. Create it with at least a header row, `id,type,name,status,path,url,summary`. The path is relative to the binding file.
 
 ## The document and the diagram
 

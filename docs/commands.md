@@ -56,9 +56,49 @@ The post-install check. Run from the workspace root; it takes no arguments.
 python <skills>/pattern/scripts/check.py
 ```
 
-It confirms `model` and `markdown-deck` are installed where an agent would find them, runs `model doctor --skill pattern` on the workspace's bindings, prints the patterns root and approved statuses composing will use, and fails if the installed `model` is older than 0.8.0. A missing draw.io desktop is a warning. `SKILL_DIR` names the installed skill; it defaults to the folder above the script.
+It confirms `model` and `markdown-deck` are installed where an agent would find them, runs `model doctor --skill pattern` on the workspace's bindings, prints the patterns root and approved statuses composing will use, and fails if the installed `model` is older than 0.8.0. When `register` is bound it runs `register.py check`, so a duplicate id is a problem. It runs `template.py check`, so a template in use that lacks a section, table or column the binding reads is a problem. A missing draw.io desktop is a warning. `SKILL_DIR` names the installed skill; it defaults to the folder above the script.
 
 Exit codes: 0 correct (warnings may be printed); 1 problems, one line each; 2 usage or environment error, including Python older than 3.11. `--help` prints its description.
+
+### register.py
+
+Number, register and check identifiers in the [register](configuration.md#register). Run from the workspace root.
+
+```
+python <skills>/pattern/scripts/register.py next [PREFIX]
+python <skills>/pattern/scripts/register.py add ID --name NAME --path FOLDER [--status S] [--summary S] [--type T] [--url URL] [--set COLUMN=VALUE]
+python <skills>/pattern/scripts/register.py check [--fix]
+python <skills>/pattern/scripts/register.py outdir
+```
+
+| Command | Effect |
+|---|---|
+| `next` | Prints the next free id in `PREFIX`, default `idSeries`: the highest number in the register or in a folder name under `patternsRoot` and `outputDir`, plus one, with as many digits as the widest. With none of `register`, `patternsRoot` and `outputDir` bound, it scans every folder in the repository and warns on stderr |
+| `add` | Appends a row, filling only the columns the register has, and refuses an id already there. `--path` is relative to the working directory and stored relative to the register; `--type` defaults to the suite |
+| `check` | Errors: a duplicate id, a row with no id, a `path` that names nothing, two folders for one id. Warnings: `name` or `status` that differ from the document, a folder under the bound roots with no row |
+| `outdir` | Prints the folder new documents go in: `outputDir`, else the default, `patterns/` or (with `--suite use-case`) `use-cases/` at the repository root, with a note on stderr when it is the default |
+| `check --fix` | Rewrites `path` for a moved folder found by its `<ID>-` name, `name` and `status` from the documents, and appends a row for each unregistered folder. Never removes a row |
+
+| Option | Effect |
+|---|---|
+| `--suite pattern\|use-case` | Whose bindings to read, default `pattern`. `check` also covers every other suite bound to the same register |
+| `--register FILE` | Use this CSV instead of the bound one |
+
+Exit codes: 0 ok (warnings may be printed); 1 errors; 2 usage or bindings.
+
+### template.py
+
+Which template a new pattern is written from, and whether every template in use fits the binding. Run from the workspace root.
+
+```
+python <skills>/pattern/scripts/template.py which [--type TYPE]
+python <skills>/pattern/scripts/template.py check
+```
+
+| Command | Effect |
+|---|---|
+| `which` | Prints the template's path, and on stderr where it came from: the type's own, the repository's, the one shipped for the type, or the generic one. See [which template](configuration.md#which-template-and-replacing-one) |
+| `check` | Runs `model contract` on the template of every bound type, or the one template with no types: every section, table and column the binding reads. A repository's own template for a type is also held to its series. Exit 1 on an error |
 
 ### name-endpoints.py
 
@@ -162,4 +202,4 @@ python $MODEL validate PAT-910-staff-assistant/index.md
 Pop-Location
 ```
 
-`doctor` reports an error, because this repository binds no `outputDir`; CI ignores that and checks only that `siblings` lists `model` and `markdown-deck`. Everything after it should pass, with one `participant_open` warning for PAT-910's open participating pattern. [.github/workflows/ci.yml](../.github/workflows/ci.yml) has the rest: the model extract comparison, the sync round trip, the deck build and the approval-gate check.
+`doctor` reports a warning, because this repository has no binding file; CI ignores that and checks only that `siblings` lists `model` and `markdown-deck`. Everything after it should pass, with one `participant_open` warning for PAT-910's open participating pattern. [.github/workflows/ci.yml](../.github/workflows/ci.yml) has the rest: the model extract comparison, the sync round trip, the deck build and the approval-gate check.

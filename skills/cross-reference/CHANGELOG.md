@@ -2,6 +2,14 @@
 
 # Changelog
 
+## [0.3.0] - 2026-10-15
+
+### Added
+
+- `localRegister`, a binding: this catalogue's identifiers from the register CSV the pattern skill numbers from, an `id` column and a `url` or `path` column. Set it, `localManifest` or `localMap`.
+- `scripts/lib/local-register.cjs`: `fromRegister(file)` returns the `localUrlFor` for `remark-xref`, linking to each identifier's Markdown file relative to the page with `<id> <name>` as the tooltip, and the `localMap` for `id-routes`, following the docs plugin's routes. A row's `url` wins.
+- `remark-xref` option `bare`: also link an identifier written without a code, such as `PAT-004`, when the catalogue knows it. Never inside a heading, never from a page to itself, and an unknown one is left alone without a warning.
+
 ## [0.2.0] - 2026-10-03
 
 ### Added

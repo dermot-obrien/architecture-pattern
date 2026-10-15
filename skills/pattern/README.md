@@ -2,7 +2,7 @@
 
 # pattern
 
-An agent skill for authoring an architecture pattern, at any scope from one recurring problem to a whole domain, as one Markdown document that is also the model and also the deck. What is often called a reference architecture is a wide-scope pattern.
+An agent skill for authoring an architecture pattern, at any scope from one recurring problem to a whole domain, as one Markdown document that is also the model and also the deck. A repository may name its kinds of pattern, such as technology-agnostic architecture patterns and technology-specific reference architectures, each with its own id series.
 
 The document's tables generate the draw.io diagram and its numbered scenario overlays. The document's tagged sections generate HTML slides and a PDF. Both are checked back against the document, so a diagram that drifts is caught rather than believed.
 
@@ -35,7 +35,7 @@ gh skill install dermot-obrien/markdown-deck markdown-deck
 
 ## Use
 
-Bind the workspace in `.agents/skill-bindings.toml` (at least `[suite.pattern] outputDir`, and the tables the model reads), copy `assets/template.md` into a new folder under `outputDir` as `index.md`, fill it in, and declare `model: diagram: components.drawio` in its front matter. Then, with `<skills>` the folder the skills are installed in:
+Bind the workspace in `.agents/skill-bindings.toml` (the tables the model reads, and usually `[suite.pattern] outputDir`, where new patterns go), copy `assets/template.md` into a new folder `<ID>-<slug>` as `index.md`, fill it in, and declare `model: diagram: components.drawio` in its front matter. Then, with `<skills>` the folder the skills are installed in:
 
 ```bash
 python <skills>/model/bin/model.py emit index.md --to drawio --out components.drawio   # once

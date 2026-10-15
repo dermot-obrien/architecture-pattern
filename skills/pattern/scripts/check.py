@@ -10,7 +10,10 @@ folder above this script; an installer sets it:
 Checks that the two skills this one needs are installed where an agent would find them,
 `model` and `markdown-deck`, then runs `model doctor --skill pattern`, which checks the
 workspace's [suite.pattern] bindings against inputs.toml, and reports the patterns root
-composing searches (model 0.8.0 or later). draw.io desktop is optional:
+composing searches (model 0.8.0 or later). When a register is bound, runs
+`register.py check` on it, so a duplicate id or a path that names nothing is a problem, and
+`template.py check`, so a template in use that lacks the construct the binding reads is one.
+draw.io desktop is optional:
 without it, views are exported by hand and stamped, so its absence is a warning.
 
 Exit 0: correct (warnings may be printed). Exit 1: problems, one line each.
@@ -88,6 +91,42 @@ if "model" in found:
     if d.returncode != 0:
         warnings.append("draw.io desktop was not found, so views are exported by hand and stamped "
                         "with model stamp. Install draw.io desktop to render them.")
+
+# Every template in use has the construct the binding reads: model contract, per type.
+_template = importlib.util.spec_from_file_location("pattern_template", os.path.join(HERE, "template.py"))
+template = importlib.util.module_from_spec(_template)
+_template.loader.exec_module(template)
+if "model" in found:
+    try:
+        _b, _t = template.register.load_bindings(os.getcwd())
+        if template.cmd_check(_t.get("pattern", {}), _b,
+                              template.register.repo_root(_b, os.getcwd())) != 0:
+            problems.append("a template in use lacks a section, table or column the binding reads; "
+                            "see template.py check above. Fix the template, or the binding.")
+    except template.register.UsageError as ex:
+        problems.append(f"template.py check: {ex}")
+
+# The register, when bound: the same check register.py runs, read-only.
+spec = importlib.util.spec_from_file_location("pattern_register", os.path.join(HERE, "register.py"))
+register = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(register)
+try:
+    _bindings, _tables = register.load_bindings(os.getcwd())
+except register.UsageError:
+    _bindings, _tables = "", {}
+_pattern = _tables.get("pattern") or {}
+if not _pattern.get("outputDir"):
+    _out = register.Series("pattern", _pattern, _bindings, os.getcwd()).output
+    print(f"note: no outputDir is bound under [suite.pattern], so new patterns go in the default, "
+          f"{_out}. Bind outputDir to put them elsewhere.")
+if not any(_pattern.get(k) for k in ("register", "patternsRoot", "outputDir")):
+    warnings.append("none of register, patternsRoot or outputDir is bound under [suite.pattern], so "
+                    "numbering a new pattern scans every folder in the repository. Bind register, "
+                    "or patternsRoot, to number without a full scan.")
+if _pattern.get("register"):
+    if register.main(["check"]) != 0:
+        problems.append("register.py check reported the errors above. Fix the register, or run "
+                        "register.py check --fix for paths, names and statuses.")
 
 for w in warnings:
     print(f"warning: {w}")

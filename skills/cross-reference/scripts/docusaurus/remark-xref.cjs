@@ -24,6 +24,11 @@
  *     localUrlFor: (id) => '/abbs/abb-024',                // or localMap: () => Map of id -> path
  *   }]]
  *
+ * bare: true also links an identifier written without a code, PAT-004, when localUrlFor or
+ * localMap knows it. One it does not know is left alone without a warning, since text is
+ * full of things shaped like identifiers (ISO-9001). Never inside a heading, so a page's
+ * own title is not a link.
+ *
  * localUrlFor(id, file) is also given the vfile being built, so it can return a Markdown
  * file path relative to that page, which Docusaurus then resolves and checks like any other
  * file link. It may return {url, title} to set the link's tooltip.
@@ -43,6 +48,7 @@ function remarkXref(options = {}) {
   const root = options.root || process.cwd();
   const abs = (p) => (p ? path.resolve(root, p) : undefined);
   const warn = options.onWarn || ((m) => console.warn(`[cross-reference] ${m}`));
+  const bare = Boolean(options.bare);
   let regs = options.registers || null;
   let localUrlFor = options.localUrlFor || null;
   let textRe;
@@ -60,7 +66,13 @@ function remarkXref(options = {}) {
         return map.get(id) || null;
       };
     }
-    textRe = referenceRegex(regs.namespaces.keys());
+    textRe = referenceRegex(regs.namespaces.keys(), {bare});
+  }
+
+  function resolveBare(id, file) {
+    const found = localUrlFor ? localUrlFor(id, file) : null;
+    const url = found && typeof found === 'object' ? found.url : found;
+    return {url: url || null, title: (found && found.title) || null};
   }
 
   function resolve(ns, id, file) {
@@ -95,7 +107,8 @@ function remarkXref(options = {}) {
 
   return (tree, file) => {
     setup();
-    if (!regs.namespaces.size) return;
+    if (!regs.namespaces.size && !bare) return;
+    const inHeading = new WeakSet();
     const queue = [tree];
     while (queue.length) {
       const parent = queue.shift();
@@ -126,7 +139,8 @@ function remarkXref(options = {}) {
           let last = 0;
           let m;
           while ((m = textRe.exec(child.value)) !== null) {
-            const r = resolve(m[1], m[2], file);
+            if (!m[1] && inHeading.has(parent)) continue;
+            const r = m[1] ? resolve(m[1], m[2], file) : resolveBare(m[2], file);
             if (!r.url) continue;
             if (m.index > last) parts.push({type: 'text', value: child.value.slice(last, m.index)});
             const link = {type: 'link', url: r.url, children: [{type: 'text', value: m[0]}]};
@@ -142,7 +156,10 @@ function remarkXref(options = {}) {
           }
         }
 
-        if (!SKIP_TYPES.has(child.type) && Array.isArray(child.children)) queue.push(child);
+        if (!SKIP_TYPES.has(child.type) && Array.isArray(child.children)) {
+          if (child.type === 'heading' || inHeading.has(parent)) inHeading.add(child);
+          queue.push(child);
+        }
         i++;
       }
     }

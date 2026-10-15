@@ -16,6 +16,7 @@ const remarkXref = require('../scripts/docusaurus/remark-xref.cjs');
 const idRoutesPlugin = require('../scripts/docusaurus/id-routes.cjs');
 const {writeIdRoutes, pagePath, docRoutes} = idRoutesPlugin;
 const {check, configure, stripCode} = require('../scripts/xref.cjs');
+const {registerToMap, fromRegister} = require('../scripts/lib/local-register.cjs');
 
 const EXAMPLE = path.join(__dirname, '..', 'examples', 'catalogue');
 const reg = (f) => path.join(EXAMPLE, 'registers', f);
@@ -200,4 +201,81 @@ test('check ignores code and reports what cannot resolve', async () => {
   assert.equal(await check(bad, {offline: true, log: (l) => out.push(l)}), 2);
   assert.match(out.join('\n'), /ex:BB-404 is not an identifier this catalogue publishes/);
   assert.match(out.join('\n'), /lab:BB-099 has no URL/);
+});
+
+// ------------------------------------------------------------------ the local register
+
+function tmpRegister() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'xref-register-'));
+  const write = (rel, text) => {
+    fs.mkdirSync(path.dirname(path.join(dir, rel)), {recursive: true});
+    fs.writeFileSync(path.join(dir, rel), text);
+  };
+  write('docs/patterns/integration/PAT-001-order-intake/index.md', '# PAT-001 Order intake\n');
+  write('docs/patterns/platform/PAT-002-event-backbone/index.md', '# PAT-002 Event backbone\n');
+  write('docs/guide.md', 'See PAT-001.\n');
+  write('registers/catalogue.csv', [
+    'id,type,name,status,path,url,summary',
+    'PAT-001,pattern,Order intake,Approved,../docs/patterns/integration/PAT-001-order-intake,,"Accepts orders, all channels"',
+    'PAT-002,pattern,Event backbone,Draft,../docs/patterns/platform/PAT-002-event-backbone/index.md,,',
+    'PAT-003,pattern,Moved away,Draft,../docs/patterns/gone/PAT-003-x,,',
+    'UC-001,use-case,Track an order,Draft,,https://wiki.example.org/uc-001,',
+  ].join('\n') + '\n');
+  return dir;
+}
+
+test('the register is a local map, for the CLI', () => {
+  const dir = tmpRegister();
+  const map = registerToMap(path.join(dir, 'registers', 'catalogue.csv'));
+  assert.deepEqual([...map.keys()], ['PAT-001', 'PAT-002', 'PAT-003', 'UC-001']);
+  assert.equal(map.get('UC-001'), 'https://wiki.example.org/uc-001');
+  fs.mkdirSync(path.join(dir, '.agents'));
+  fs.writeFileSync(path.join(dir, '.agents', 'skill-bindings.toml'),
+    '[suite.cross-reference]\nnamespaces = "../ns.csv"\nlocalRegister = "../registers/catalogue.csv"\n');
+  assert.equal(loadLocalMap(dir, readBindings(dir)).size, 4);
+});
+
+test('fromRegister links a page to the file relative to it, and url wins', () => {
+  const dir = tmpRegister();
+  const local = fromRegister('registers/catalogue.csv', {root: dir});
+  assert.deepEqual(local.localUrlFor('PAT-001', {path: path.join(dir, 'docs', 'guide.md')}),
+    {url: './patterns/integration/PAT-001-order-intake/index.md', title: 'PAT-001 Order intake'});
+  assert.equal(local.localUrlFor('PAT-002', {path: path.join(dir, 'docs', 'patterns', 'integration', 'PAT-001-order-intake', 'index.md')}).url,
+    '../../platform/PAT-002-event-backbone/index.md');
+  assert.equal(local.localUrlFor('PAT-003', {path: path.join(dir, 'docs', 'guide.md')}), null, 'a path that names nothing');
+  assert.equal(local.localUrlFor('UC-001', {}).url, 'https://wiki.example.org/uc-001');
+  assert.equal(local.localUrlFor('PAT-001', {path: path.join(dir, 'docs/patterns/integration/PAT-001-order-intake/index.md')}), null, 'never the page itself');
+  const routes = new Map([['docs/patterns/integration/PAT-001-order-intake/index.md', '/patterns/order-intake/']]);
+  assert.deepEqual([...local.localMap({routes})], [
+    ['PAT-001', '/patterns/order-intake/'],
+    ['UC-001', 'https://wiki.example.org/uc-001'],
+  ]);
+});
+
+test('bare identifiers link when asked, only when known, and never in a heading', () => {
+  const dir = tmpRegister();
+  const local = fromRegister('registers/catalogue.csv', {root: dir});
+  const warnings = [];
+  const plugin = remarkXref({
+    root: EXAMPLE,
+    namespaces: 'registers/identifier-namespaces.csv',
+    localUrlFor: local.localUrlFor,
+    bare: true,
+    onWarn: (m) => warnings.push(m),
+  });
+  const tree = {type: 'root', children: [
+    {type: 'heading', depth: 1, children: [{type: 'text', value: 'PAT-001 in a heading'}]},
+    {type: 'paragraph', children: [{type: 'text', value: 'PAT-001, ISO-9001, x-PAT-002, ex:PAT-002 and ops:BB-024.'}]},
+  ]};
+  plugin(tree, {path: path.join(dir, 'docs', 'guide.md')});
+  assert.equal(tree.children[0].children.length, 1, 'the heading is untouched');
+  const links = tree.children[1].children.filter((k) => k.type === 'link');
+  assert.deepEqual(links.map((l) => l.children[0].value), ['PAT-001', 'ex:PAT-002', 'ops:BB-024']);
+  assert.equal(links[0].title, 'PAT-001 Order intake');
+  assert.deepEqual(warnings, []);
+  // Without the option a bare identifier stays text, as before.
+  const off = remarkXref({root: EXAMPLE, namespaces: 'registers/identifier-namespaces.csv', localUrlFor: local.localUrlFor, onWarn: () => {}});
+  const t2 = para({type: 'text', value: 'PAT-001 here'});
+  off(t2, {path: path.join(dir, 'docs', 'guide.md')});
+  assert.equal(t2.children[0].children.length, 1);
 });

@@ -13,7 +13,7 @@ One file binds the whole skill suite to a repository: `.agents/skill-bindings.to
 3. `model.toml`
 4. `.model.toml`
 
-The first found wins; `--config <file>` on a `model` command overrides the search. With none found, `model` uses built-in defaults that read `## Components` and `## Interfaces` tables, which do not match the pattern template, and `doctor --skill pattern` fails because `outputDir` is required.
+The first found wins; `--config <file>` on a `model` command overrides the search. With none found, `model` uses built-in defaults that read `## Components` and `## Interfaces` tables, which do not match the pattern template, so `doctor --skill pattern` warns.
 
 Rules that apply to the whole file:
 
@@ -31,9 +31,11 @@ The keys the `pattern` skill declares in `inputs.toml`.
 
 | Key | Type | Required | Default | Read by |
 |---|---|---|---|---|
-| `outputDir` | directory | yes | none | The agent, for new patterns; `model` for compositions |
+| `outputDir` | directory | no | `patterns/` at the repository root | The agent, for new patterns; `register.py`; `model` for compositions |
 | `template` | file | no | the skill's `assets/template.md` | The agent |
-| `idSeries` | string | no | `PAT` | The agent |
+| `idSeries` | string | no | `PAT` | The agent, `register.py` |
+| `register` | file | no | none | `register.py`; `model`, for compositions |
+| `types` | tables | no | none | `register.py`; `model validate`; the agent |
 | `deckTheme` | string | no | unset: markdown-deck chooses | `publish.py` |
 | `ontologySchema` | file | no | none | The agent, as guidance |
 | `ontologySchemaSha256` | string | no | none | `doctor` |
@@ -42,19 +44,63 @@ The keys the `pattern` skill declares in `inputs.toml`.
 
 ### outputDir
 
-The folder new pattern folders are created in, as `<outputDir>/<ID>-<slug>/index.md`. It must exist; `doctor` fails otherwise. It is also the last fallback for where participating patterns are found.
+The folder new pattern folders are created in by default, as `<outputDir>/<ID>-<slug>/index.md`; the user can always name another. If set, it must exist; `doctor` fails otherwise. It is also the last fallback for where participating patterns are found.
+
+Unset, new patterns go in `patterns/` at the repository root (the folder holding `.agents/`, or the binding file's own), created when first needed. `register.py outdir` prints the folder in use, with a note when it is the default; the agent tells you once where it put the pattern, and `check.py` prints the same note. If `register` and `patternsRoot` are unset too, nothing says where the patterns are, so `register.py next` scans every folder in the repository (skipping hidden folders, `node_modules`, `dist` and `build`) for the highest number, and warns that it did. `check.py` warns about this configuration. It is correct, only slower in a large repository; bind `register` or `patternsRoot` to avoid it.
 
 ```toml
 [suite.pattern]
 outputDir = "../architecture/patterns"
 ```
 
+### Patterns in category folders
+
+Patterns need not sit in one flat folder. Point `patternsRoot` at the folder above your categories and `outputDir` at a folder new patterns land in, then move each into its category when you are ready:
+
+```toml
+[suite.pattern]
+outputDir    = "../architecture/patterns/_inbox"   # new patterns are created here
+patternsRoot = "../architecture/patterns"          # found here, at any depth
+register     = "../registers/catalogue.csv"        # optional, see register below
+```
+
+```
+architecture/patterns/
+  _inbox/PAT-012-new-idea/
+  integration/PAT-001-order-intake/
+  platform/PAT-002-event-backbone/
+```
+
+A pattern folder carries its diagram and views with it, so a move breaks nothing inside it, and composition finds a participating pattern anywhere under `patternsRoot`. `register.py next` numbers a new pattern from the whole tree, never from `outputDir` alone. Keep a `.gitkeep` in `_inbox` so the folder survives being emptied, since `doctor` fails on a bound folder that does not exist. A hand-written relative link to a moved pattern does break; a `PAT-001` linked through `cross-reference` does not.
+
 ### template
 
-Your repository's own pattern template, used instead of the generic one the skill ships. A house template carries what belongs to the repository rather than to a published skill: its identifier series, its deliverable code, its diagram palette, any conformance statement. Keep the section headings and table columns your `[[markdown.tables]]` bindings read. It must exist if set.
+Your repository's own pattern template, used instead of the generic one the skill ships, and instead of the one shipped for a type that names no template of its own. A house template carries what belongs to the repository rather than to a published skill: its identifier series, its deliverable code, its diagram palette, any conformance statement. It must exist if set.
 
 ```toml
 template = "../templates/pattern-template.md"
+```
+
+#### Which template, and replacing one
+
+The skill ships a template for each kind of pattern it knows, and any of them can be replaced. A new pattern of a type is written from the first of:
+
+| Order | Template | Bound as |
+|---|---|---|
+| 1 | The repository's own for that type | `[suite.pattern.types.<type>] template`, a path relative to the binding file, or `builtin:<name>` for a shipped one |
+| 2 | The repository's own for every pattern | `[suite.pattern] template` |
+| 3 | Shipped for that type | `assets/templates/architecture-pattern.md`, `assets/templates/reference-architecture.md` |
+| 4 | Shipped for any pattern | `assets/template.md` |
+
+`python <skills>/pattern/scripts/template.py which --type <type>` prints the one in use and where it came from.
+
+A replacement may say anything, in any order, with any extra sections and columns, so long as it keeps the construct the binding reads: every `[[markdown.tables]]` section with a table carrying every bound column, a Scenarios section with a scenario heading such as `### S1 <name>` and a steps table with Step, Actor and Action (and Target and Interface, or steps cannot name them), and the bound Catalogue Mapping columns if it has that section. A table needs only its header row. `template.py check`, which `check.py` runs, checks every template in use with `model contract`, and a repository's own template for a type is also held to that type's series in its H1. Copy a shipped template as the starting point; never edit the installed copy, which the next update overwrites.
+
+```toml
+[suite.pattern.types.reference-architecture]
+idSeries = "RA"
+physical = "most"
+template = "../templates/reference-architecture.md"   # ours, checked against the binding
 ```
 
 ### idSeries
@@ -95,10 +141,63 @@ ontologySchemaSha256 = "3f2a...e9"
 
 Where a Uses cell's participating pattern is looked for, to any depth. Unset, `outputDir` is used. `doctor` prints the root in use and the binding it came from as `patterns root`.
 
-Precedence, first set wins: `[model] patterns_root`, then `[suite.pattern] patternsRoot`, then `[suite.pattern] outputDir`, then a search of each folder from the composite pattern upward, two levels deep, stopping at the repository root.
+A row in `register` with a `path` that exists is used before any of these. Then precedence, first set wins: `[model] patterns_root`, then `[suite.pattern] patternsRoot`, then `[suite.pattern] outputDir`, then a search of each folder from the composite pattern upward, two levels deep, stopping at the repository root.
 
 ```toml
 patternsRoot = "../architecture"     # patterns spread over several folders below it
+```
+
+### types
+
+The repository's kinds of pattern, one table each. See [pattern types](concepts.md#pattern-types) for why.
+
+```toml
+[suite.pattern.types.architecture-pattern]
+label    = "Architecture pattern"
+idSeries = "AP"
+physical = "none"
+
+[suite.pattern.types.reference-architecture]
+label    = "Reference architecture"
+idSeries = "RA"
+physical = "most"
+```
+
+| Key | Meaning |
+|---|---|
+| `label` | What readers call it |
+| `idSeries` | The prefix of its identifiers. `register.py next --type <name>` numbers in it |
+| `physical` | `none`, `some` (at least one), `most` (more than half the boxes with a level) or `all` of its boxes SBBs or products, from a `[[catalogues]]` entry whose `level` is `physical`. Unset allows any mix |
+| `template` | The repository's own template for the type, or `builtin:<name>`. Unset, the shipped one for the type if there is one; see [which template](#which-template-and-replacing-one) |
+
+With types bound, `register.py next` needs `--type`, so no pattern is numbered in the wrong series, and the register's `type` column holds the type's name. `idSeries` itself is then unused by patterns.
+
+### register
+
+A CSV of every identifier the repository has minted, and where each lives. A new pattern takes its number from it and is given a row, composition finds a participating pattern through it before searching any folder, and `cross-reference` turns `PAT-001` in any document into a link from the same file. `use-case` may bind the same file, and so may your own building-block series: its `type` column says which is which.
+
+```csv
+id,type,name,status,path,url,summary
+PAT-001,pattern,Order intake,Approved,../architecture/patterns/integration/PAT-001-order-intake,,Accepts orders from every channel
+PAT-002,pattern,Event backbone,Draft,../architecture/patterns/platform/PAT-002-event-backbone,,Shared event streaming
+UC-004,use-case,Track an order,Draft,../use-cases/UC-004-track-an-order,,
+```
+
+| Column | Required | Meaning |
+|---|---|---|
+| `id` | yes | The identifier. A register with no `id` column uses its first column |
+| `type` | no | `pattern`, `use-case`, or any series of your own |
+| `name`, `status` | no | Kept in step with the document's H1 and front matter by `register.py check --fix` |
+| `path` | no | The folder or document, relative to the register file |
+| `url` | no | Its published page, when that cannot be found from its file. Wins over `path` for links |
+| `summary` | no | One line, for people reading the register |
+
+Other columns are kept and filled with `--set`. `register.py` never adds a column.
+
+Rows are appended, never inserted. Two branches that each take the next number both change the last line, so git stops with a conflict on the register, and resolving it is where the clash is noticed and one pattern renumbered. Do not give the register `merge=union` in `.gitattributes`, which would keep both rows silently. If both rows are kept anyway, `register.py check`, which `check.py` runs, fails on the duplicate.
+
+```toml
+register = "../registers/catalogue.csv"
 ```
 
 ### approvedStatuses
@@ -249,6 +348,8 @@ Keys in a pattern document's YAML front matter.
 | `sidebar_label` | string | no | sites, markdown-deck | Short label; markdown-deck's eyebrow falls back to it |
 | `description` | string | no | sites | One-line summary |
 | `document_type` | string | no | your site or catalogue | `pattern` |
+| `pattern_type` | string | no | `model validate`, the register | One of the bound [types](#types); unset, the type whose `idSeries` the identifier carries |
+| `implements` | list | no | `model validate` | The patterns this one makes concrete, `[AP-004]`; each must have a document |
 | `pattern_scope` | enum | yes | the agent, readers | `problem`, `domain`, `capability-area`, `platform`, `hosting-profile` or `epic` |
 | `status` | string | recommended | `model` | Checked against the approved statuses by the approval gate |
 | `version`, `last_modified`, `author` | string | no | readers | Housekeeping |

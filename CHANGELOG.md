@@ -6,6 +6,12 @@ Releases of the architecture-pattern plugin. Each skill keeps its own changelog 
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [pattern 0.11.0] - 2026-10-15
+
+### Added
+
+- `pattern` 0.11.0: a register of minted identifiers and `register.py` to number, register and check them, for patterns kept in category folders; pattern types with their own id series, such as architecture patterns and reference architectures; an optional `outputDir`; `use-case` 0.3.0 numbers endorsed use cases from the same register; `cross-reference` 0.3.0 reads it as `localRegister` and can link bare identifiers. See each skill's changelog.
+
 ## [cross-reference 0.2.0] - 2026-10-03
 
 ### Added

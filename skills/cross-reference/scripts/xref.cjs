@@ -21,7 +21,8 @@ only this catalogue's own references, and identifiers in the identifier register
 Fenced and inline code are ignored, so examples in documentation are never checked.
 
 Flags: --root <dir>  --bindings <file>  --namespaces <csv>  --external <csv>
-       --schemes <csv>  --local-manifest <json>  --local-map <module>  --json
+       --schemes <csv>  --local-manifest <json>  --local-register <csv>
+       --local-map <module>  --json
 Exit 0: clean. Exit 1: problems. Exit 2: usage or configuration error.`;
 
 const fs = require('fs');
@@ -47,7 +48,7 @@ function configure(flags) {
   const b = readBindings(root, flags.bindings || BINDINGS);
   // A flag is relative to the working directory, so make it absolute before it meets base.
   for (const [flag, key] of [['namespaces', 'namespaces'], ['external', 'external'], ['schemes', 'schemes'],
-    ['local-manifest', 'localManifest'], ['local-map', 'localMap']]) {
+    ['local-manifest', 'localManifest'], ['local-register', 'localRegister'], ['local-map', 'localMap']]) {
     if (flags[flag]) b[key] = path.resolve(flags[flag]);
   }
   if (!b.namespaces) {

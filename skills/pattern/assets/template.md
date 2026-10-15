@@ -1,6 +1,12 @@
 ---
 sidebar_label: Pattern Template
 status: Draft
+# Optional. One of the pattern types your repository binds, such as architecture-pattern or
+# reference-architecture; implied by the identifier's series when omitted. Uncomment to set.
+# pattern_type: reference-architecture
+# Optional. The patterns this one makes concrete, such as the architecture pattern a
+# reference architecture implements. Delete if none.
+implements: []
 version: "0.4"
 last_modified: 2026-09-26
 author: "<your name>"
@@ -32,7 +38,9 @@ HOW TO USE THIS TEMPLATE
   author, and the abstraction model validate derives. A problem-scope pattern answers ONE
   recurring problem: rename ## Context to ## Intent (the problem, its forces, the
   invariant enforced) and delete the sections marked WIDER SCOPE. What is often called a
-  reference architecture is a wide-scope pattern.
+  reference architecture is a wide-scope pattern, unless your repository binds pattern
+  types that name it otherwise, such as a reference architecture for a technology-specific
+  pattern of SBBs and an architecture pattern for a technology-agnostic one of ABBs.
 - Boxes may be any mix of local roles (01 Gateway), catalogued logical building blocks,
   catalogued products and external context. model validate derives the abstraction from
   them: all local is conceptual, logical blocks is logical, every box a product is
