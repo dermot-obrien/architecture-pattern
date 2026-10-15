@@ -35,7 +35,8 @@ Do not proceed on an error, and do not guess a path. Every path this skill needs
 | `siblings.model` | The model CLI, at `<that>/bin/model.py` |
 | `siblings.markdown-deck` | The deck CLI, at `<that>/bin/markdown-deck.mjs` |
 | `outputDir` | Where a new pattern folder is created by default. Unset, ask the user where to create it |
-| `idSeries` | The prefix for a new pattern's id, `PAT` by default |
+| `idSeries` | The prefix for a new pattern's id, `PAT` by default, when no `types` are bound |
+| `types` | The repository's kinds of pattern, if bound, each with its `label`, its own `idSeries` and how physical it may be. Use the labels as the repository's names for them |
 | `register` | The register of minted ids, if bound. `register.py next` gives the next free number, from it and from the folders, and `register.py add` gives the pattern its row |
 | `template` | The repository's own template, if it declares one. Otherwise use `assets/template.md` from this skill |
 | `deckTheme` | Passed to markdown-deck |
@@ -60,12 +61,13 @@ If `doctor` does not list both under `siblings`, stop and tell the user to insta
 
 ## What a pattern is
 
-Every architecture model is a pattern: building blocks, the interfaces between them and the scenarios that walk across them. Reusable as a reference, unlike a solution design, which instantiates one for one consumer. What is often called a reference architecture is a pattern with a wide scope, and this skill authors it the same way.
+Every architecture model is a pattern: building blocks, the interfaces between them and the scenarios that walk across them. Reusable as a reference, unlike a solution design, which instantiates one for one consumer. What a practice calls its kinds of pattern, such as an architecture pattern (technology-agnostic, ABBs) and a reference architecture (technology-specific, mainly SBBs), is the repository's to say, in `types`; this skill authors every kind the same way.
 
-Patterns differ by semantic type, which has two parts:
+Patterns differ by semantic type, which has up to three parts:
 
 | Part | Values | Set by |
 |---|---|---|
+| Type | The names bound in `types`, if any | The author, in front matter as `pattern_type`, or implied by the id's series. `model validate` checks the boxes fit it |
 | Scope | `problem` for one recurring problem; `domain`, `capability-area`, `platform`, `hosting-profile` or `epic` for a composed design | The author, in front matter as `pattern_scope` |
 | Abstraction | `conceptual`, `logical`, `physical`, `mixed` | Derived by `model validate` from the kinds of box, never declared |
 
@@ -106,14 +108,14 @@ Target at most about ten pages, and far less for a problem-scope pattern. Tables
 
 ### 1. Create the document
 
-Number it first: `python <skills>/pattern/scripts/register.py next` prints the next free id in `idSeries`, from the register when one is bound and from the folder names under `patternsRoot` and `outputDir` either way, so a pattern filed into a category folder still counts. Never number a pattern by looking in `outputDir` alone. With no register, `patternsRoot` or `outputDir` bound it scans every folder in the repository and says so on stderr; pass that warning on to the user once. Copy the template into `<ID>-<slug>/index.md` in the folder the user names, else in `outputDir`, else ask the user where; never guess a folder. Use the `template` binding if the repository declares one and `assets/template.md` from this skill if it does not. A repository's own template carries its identifier series, its deliverable code and its palette; the one shipped here is deliberately free of all three. Fill it in this order, which is not document order:
+When `types` are bound, settle the type first, asking the user if the request does not make it plain: a design in ABBs that names no technology is one kind, a design in SBBs and products another. Set `pattern_type` in the front matter, and for a technology-specific pattern that makes a technology-agnostic one concrete, `implements: [<its id>]`. Number it first: `python <skills>/pattern/scripts/register.py next --type <type>` (with no `types` bound, plain `next`) prints the next free id in `idSeries`, from the register when one is bound and from the folder names under `patternsRoot` and `outputDir` either way, so a pattern filed into a category folder still counts. Never number a pattern by looking in `outputDir` alone. With no register, `patternsRoot` or `outputDir` bound it scans every folder in the repository and says so on stderr; pass that warning on to the user once. Copy the template into `<ID>-<slug>/index.md` in the folder the user names, else in `outputDir`, else ask the user where; never guess a folder. Use the `template` binding if the repository declares one and `assets/template.md` from this skill if it does not. A repository's own template carries its identifier series, its deliverable code and its palette; the one shipped here is deliberately free of all three. Fill it in this order, which is not document order:
 
 Intent, or Context and Non-Goals for a wider scope, then Patterns Applied where published patterns cover part of the design, including every participating pattern a composite pattern's scenarios run (see step 6), then Building Blocks, then Interfaces. Interfaces is where most of the real thinking happens and it usually sends you back to revise Building Blocks. Write each Provider and Consumer, and each Actor and Target in a scenario's steps, as the identifier followed by the name, as Building Blocks has it (`ABB-901 Retrieval Service`, `04 Identity provider`), never the bare identifier: the table is read on the page and on its deck slide, and a reader should not have to look names up. The model reads only the leading identifier. `python <skills>/pattern/scripts/name-endpoints.py <file-or-folder>` fills in names from the Building Blocks table, and `--check` reports without changing anything; `publish.py` notes any document that still needs it. Only then the diagram, then Scenarios, then the controls and decisions, which are the residue of everything above.
 
 When `register` is bound, give the pattern its row as soon as the folder exists, so no one else takes the number:
 
 ```bash
-python <skills>/pattern/scripts/register.py add PAT-007 --name "Order intake" --status Draft --path <outputDir>/PAT-007-order-intake --summary "<one line>"
+python <skills>/pattern/scripts/register.py add <ID> --name "Order intake" --status Draft --path <outputDir>/PAT-007-order-intake --summary "<one line>"
 ```
 
 It appends the row and refuses an id already there. Appending is deliberate: two branches that each take the next number both change the end of the file, so git reports a conflict where it would otherwise merge a duplicate. After a pattern folder is moved, into a category folder say, `register.py check --fix` corrects its `path`, and its `name` and `status` from the document. `register.py check` alone reports, and fails on a duplicate id.

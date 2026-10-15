@@ -34,9 +34,9 @@ A published skill cannot know where your patterns go, what your identifiers look
 
 ## What a pattern is
 
-Every architecture model is a pattern: building blocks, the interfaces between them, and the scenarios that walk across them. It is reusable as a reference, where a solution design instantiates one for one consumer. What is often called a reference architecture is a pattern with a wide scope, authored the same way.
+Every architecture model is a pattern: building blocks, the interfaces between them, and the scenarios that walk across them. It is reusable as a reference, where a solution design instantiates one for one consumer. What a practice calls its kinds of pattern is up to the practice: see [Pattern types](#pattern-types) below.
 
-Patterns differ by semantic type, which has two parts.
+Patterns differ by semantic type, which has two parts, and a repository may add a third, its own pattern types.
 
 Scope is what you declare in front matter as `pattern_scope`:
 
@@ -54,7 +54,25 @@ Abstraction is derived by `model validate` from the kinds of box, and never decl
 | `physical` | Every box is a catalogued product |
 | `mixed` | Anything else, including any box whose kind is unknown |
 
-A conceptual pattern explains and scopes. One that a team will build from must be physical. A catalogue declares its level in the binding (`[[catalogues]] level`), which is how `validate` knows what a `COMP-001` is.
+A conceptual pattern explains and scopes. One that a team will build from must be physical.
+
+### Pattern types
+
+Many practices draw a line between a technology-agnostic pattern, built from architecture building blocks (ABBs), and a technology-specific one, built mainly from solution building blocks (SBBs) and products, and give them different names, often architecture pattern and reference architecture. Both are patterns, authored the same way; they differ in what their boxes are, which is the abstraction above. A repository names its types in its binding file, each with its own label, identifier series and expectation of how physical it is:
+
+```toml
+[suite.pattern.types.architecture-pattern]
+label    = "Architecture pattern"
+idSeries = "AP"
+physical = "none"     # ABBs and local roles only
+
+[suite.pattern.types.reference-architecture]
+label    = "Reference architecture"
+idSeries = "RA"
+physical = "most"     # mainly SBBs and products
+```
+
+A document's type is its front matter `pattern_type`, or else the type whose series its identifier carries, so `RA-007` is a reference architecture. `model validate` warns when its boxes do not fit, an SBB in an architecture pattern say. A reference architecture names the architecture pattern it makes concrete, `implements: [AP-004]`, as an SBB realises an ABB, and `validate` checks that pattern exists. With no types bound, every pattern is just a pattern, in `idSeries`. A catalogue declares its level in the binding (`[[catalogues]] level`), which is how `validate` knows what a `COMP-001` is.
 
 ## The tables are the model
 

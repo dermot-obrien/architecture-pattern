@@ -10,7 +10,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- `pattern` 0.11.0: a register of minted identifiers and `register.py` to number, register and check them, for patterns kept in category folders; `use-case` 0.3.0 numbers endorsed use cases from the same register; `cross-reference` 0.3.0 reads it as `localRegister` and can link bare identifiers. See each skill's changelog.
+- `pattern` 0.11.0: a register of minted identifiers and `register.py` to number, register and check them, for patterns kept in category folders; pattern types with their own id series, such as architecture patterns and reference architectures; an optional `outputDir`; `use-case` 0.3.0 numbers endorsed use cases from the same register; `cross-reference` 0.3.0 reads it as `localRegister` and can link bare identifiers. See each skill's changelog.
 
 ## [cross-reference 0.2.0] - 2026-10-03
 

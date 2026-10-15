@@ -2,7 +2,7 @@
 
 # pattern
 
-An agent skill for authoring an architecture pattern, at any scope from one recurring problem to a whole domain, as one Markdown document that is also the model and also the deck. What is often called a reference architecture is a wide-scope pattern.
+An agent skill for authoring an architecture pattern, at any scope from one recurring problem to a whole domain, as one Markdown document that is also the model and also the deck. A repository may name its kinds of pattern, such as technology-agnostic architecture patterns and technology-specific reference architectures, each with its own id series.
 
 The document's tables generate the draw.io diagram and its numbered scenario overlays. The document's tagged sections generate HTML slides and a PDF. Both are checked back against the document, so a diagram that drifts is caught rather than believed.
 

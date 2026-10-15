@@ -9,11 +9,14 @@
 - `register`, an optional binding: a CSV of every identifier the repository has minted, `id,type,name,status,path,url,summary`, with `path` relative to the register. One file can serve patterns, use cases and your own series, told apart by `type`.
 - `scripts/register.py`: `next` prints the next free id from the register and from the folder names under `patternsRoot` and `outputDir`; `add` appends a row and refuses an id already there; `check` fails on a duplicate id or a path that names nothing, and `check --fix` corrects a moved folder's path, keeps `name` and `status` in step with the document, and registers folders with no row. Rows are appended, never inserted, so two branches taking the same number meet as a merge conflict on the register.
 - `check.py` runs `register.py check` when a register is bound.
+- `types`, an optional binding, `[suite.pattern.types.<name>]` with `label`, `idSeries` and `physical`: the repository's kinds of pattern, such as a technology-agnostic architecture pattern (`AP`, no SBBs) and a technology-specific reference architecture (`RA`, mainly SBBs), each numbered in its own series. `register.py next --type <name>` numbers in a type's series and is required once types are bound; `add` records the type from the id's series; `check` covers every type's series. `model validate` (0.9.0) checks a document's boxes against its type.
+- Front matter `pattern_type`, and `implements: [AP-004]` for a pattern that makes another concrete; both in the template, commented out or empty.
 - Documentation of patterns in category folders under `patternsRoot`, with `outputDir` as the folder new patterns land in.
 
 ### Changed
 
 - `outputDir` is optional. Unset, the agent asks where to create a new pattern. With no `register`, `patternsRoot` or `outputDir` bound, `register.py next` scans every folder in the repository for the highest number and warns that it did, and `check.py` warns about the configuration.
+- `SKILL.md` and the template no longer say a reference architecture is a wide-scope pattern: what a practice calls its kinds of pattern is the repository's to bind in `types`. With types bound, the agent settles the type before numbering.
 - `SKILL.md` numbers a new pattern with `register.py next`, from the whole tree rather than `outputDir` alone, so a pattern filed into a category folder still counts, and names the new folder `<ID>-<slug>`.
 - Requires model ^0.9.0, whose composition reads the register.
 

@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """The register: one CSV of every identifier the repository has minted, and where each lives.
 
-    python scripts/register.py next [PREFIX]
+    python scripts/register.py next [PREFIX | --type TYPE]
     python scripts/register.py add ID --name NAME --path FOLDER [--type T] [--status S]
                                       [--summary S] [--url URL] [--set COLUMN=VALUE ...]
     python scripts/register.py check [--fix]
@@ -19,11 +19,15 @@ its first column when none is named `id`. Every other column is optional:
     PAT-001,pattern,Order intake,Approved,../patterns/integration/PAT-001-order-intake,,...
     UC-004,use-case,Track an order,Draft,../use-cases/UC-004-track-an-order,,...
 
-`path` is the folder (or the document) relative to the register file, so a pattern can
+`type` is a pattern type's name, such as architecture-pattern or reference-architecture,
+when the repository binds types, else the suite. `path` is the folder (or the document)
+relative to the register file, so a pattern can
 sit in any category folder. `url` is its page on a published site, when that cannot be
 built from the id. Columns the register does not have are never added.
 
-next   prints the next free identifier in PREFIX (default the suite's idSeries): the
+next   prints the next free identifier in PREFIX, or in the idSeries of a pattern type
+       bound under [suite.pattern.types.<TYPE>] (default the suite's idSeries; when types
+       are bound, --type is required so the id is in the right series): the
        highest number in the register, or in a folder name under patternsRoot and
        outputDir at any depth, plus one, with as many digits as the widest. With none of
        the three bound, every folder in the repository is scanned, with a warning.
@@ -31,7 +35,7 @@ add    appends one row and refuses an identifier already there. A row is appende
        never inserted, so two branches that each take the next number both change the
        end of the file and git reports a conflict instead of merging a duplicate.
        --path is relative to the working directory; it is stored relative to the register.
-check  reports duplicate identifiers and paths that do not exist (errors), and rows whose
+check  reports duplicate identifiers and paths that name no document (errors), and rows whose
        name or status differ from their document, and documents under the bound folders
        with no row (warnings). --fix rewrites path, name and status from the documents,
        finding a moved folder by its `<ID>-` name, and adds a row for each unregistered
@@ -43,6 +47,7 @@ Standard library only; Python 3.11 or newer.
 from __future__ import annotations
 
 import argparse
+import copy
 import csv
 import io
 import os
@@ -133,8 +138,45 @@ class Series:
         self.whole_repo = not self.roots and not self.register
         if self.whole_repo:
             self.roots = [repo_root(binding_file, start or os.getcwd())]
-        self.id_re = re.compile(rf"^{re.escape(self.prefix)}-([0-9]+)$")
-        self.folder_re = re.compile(rf"^({re.escape(self.prefix)}-[0-9]+)(?:-|$)")
+        self.set_prefix(self.prefix)
+        # [suite.pattern.types.<name>]: the repository's kinds of pattern, each with its own
+        # idSeries, such as AP for architecture patterns and RA for reference architectures.
+        self.types = {str(k): v for k, v in (table.get("types") or {}).items()
+                      if isinstance(v, dict)}
+
+    def set_prefix(self, prefix, type_name=None):
+        self.prefix = prefix
+        if type_name:
+            self.type = type_name
+        self.id_re = re.compile(rf"^{re.escape(prefix)}-([0-9]+)$")
+        self.folder_re = re.compile(rf"^({re.escape(prefix)}-[0-9]+)(?:-|$)")
+        return self
+
+    def of_type(self, name):
+        """This series narrowed to one pattern type's idSeries."""
+        t = self.types.get(name)
+        if t is None:
+            raise UsageError(f"'{name}' is not a type bound under [suite.{self.suite}.types]; "
+                             f"expected one of {', '.join(sorted(self.types)) or '(none bound)'}")
+        if not t.get("idSeries"):
+            raise UsageError(f"[suite.{self.suite}.types.{name}] has no idSeries to number from")
+        s = copy.copy(self)
+        return s.set_prefix(str(t["idSeries"]), name)
+
+    def type_for(self, pid) -> str:
+        """The bound type whose idSeries an identifier carries, else this series' type."""
+        for name, t in self.types.items():
+            if t.get("idSeries") and pid.startswith(f"{t['idSeries']}-"):
+                return name
+        return self.type
+
+    def every_series(self) -> list:
+        """This series, and one per bound type with an idSeries."""
+        out = [self]
+        for name, t in self.types.items():
+            if t.get("idSeries") and t["idSeries"] != self.prefix:
+                out.append(self.of_type(name))
+        return out
 
 
 # ---------------------------------------------------------------------- the CSV
@@ -279,10 +321,13 @@ def whole_repo_warning(series) -> str:
 
 
 def cmd_next(a, series, reg):
-    if a.prefix:
-        series.prefix = a.prefix
-        series.id_re = re.compile(rf"^{re.escape(a.prefix)}-([0-9]+)$")
-        series.folder_re = re.compile(rf"^({re.escape(a.prefix)}-[0-9]+)(?:-|$)")
+    if a.type:
+        series = series.of_type(a.type)
+    elif a.prefix:
+        series.set_prefix(a.prefix)
+    elif series.types:
+        raise UsageError(f"this repository binds pattern types; name one with --type "
+                         f"({', '.join(sorted(series.types))}), so the id is in its series")
     if not reg and not any(os.path.isdir(r) for r in series.roots):
         raise UsageError(f"no register is bound under [suite.{series.suite}] and none of its "
                          "folders exist, so there is nothing to number from")
@@ -301,7 +346,7 @@ def cmd_add(a, series, reg):
         print(f"error: {pid} is already in {reg.path}; take `register.py next` instead",
               file=sys.stderr)
         return 1
-    values = {"type": a.type or series.type, "name": a.name, "status": a.status,
+    values = {"type": a.type or series.type_for(pid), "name": a.name, "status": a.status,
               "summary": a.summary, "url": a.url}
     if a.path:
         values["path"] = reg.relative(a.path)
@@ -365,7 +410,7 @@ def cmd_check(a, series_by_prefix, reg):
                     if len(candidates) == 1:
                         hint += "; `check --fix` corrects it"
                 if rel:
-                    errors.append(f"{pid}: path {rel} does not exist{hint}")
+                    errors.append(f"{pid}: path {rel} names no document{hint}")
                 else:
                     warnings.append(f"{pid}: has no path{hint}")
         if not doc:
@@ -432,11 +477,13 @@ def main(argv=None) -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     n = sub.add_parser("next", help="print the next free identifier")
     n.add_argument("prefix", nargs="?", help="the series, default the suite's idSeries")
+    n.add_argument("--type", help="a pattern type bound under [suite.pattern.types]; its idSeries")
     ad = sub.add_parser("add", help="append a row")
     ad.add_argument("id")
     ad.add_argument("--name")
     ad.add_argument("--path", help="the folder or document, relative to the working directory")
-    ad.add_argument("--type", help="default: the suite, pattern or use-case")
+    ad.add_argument("--type", help="default: the bound pattern type whose idSeries the id carries, "
+                                   "else the suite, pattern or use-case")
     ad.add_argument("--status")
     ad.add_argument("--summary")
     ad.add_argument("--url")
@@ -459,12 +506,13 @@ def main(argv=None) -> int:
             raise UsageError(f"no register is bound under [suite.{a.suite}]; bind register or "
                              "pass --register")
         # Every suite whose register is this file contributes its series and folders.
-        by_prefix = {series.prefix: series}
+        by_prefix = {s.prefix: s for s in series.every_series()}
         for name, table in tables.items():
             s = Series(name, table, binding_file, os.getcwd())
             if name != a.suite and s.register and os.path.isfile(s.register) \
                     and os.path.samefile(s.register, reg.path):
-                by_prefix.setdefault(s.prefix, s)
+                for each in s.every_series():
+                    by_prefix.setdefault(each.prefix, each)
         return cmd_check(a, by_prefix, reg)
     except UsageError as ex:
         print(f"error: {ex}", file=sys.stderr)

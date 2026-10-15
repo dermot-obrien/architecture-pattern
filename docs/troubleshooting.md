@@ -99,9 +99,9 @@ With no binding file, `model` reads only `## Components` and `## Interfaces` wit
 
 Two rows claim one id, usually because a merge conflict on the register was resolved by keeping both lines. Give one pattern the next free number (`register.py next`), change its folder name, H1 and front matter, and fix its row, before anything references either.
 
-### `error: <ID>: path <path> does not exist`
+### `error: <ID>: path <path> names no document`
 
-The folder was moved or renamed. If the message ends `found at <folder>`, `register.py check --fix` rewrites the path. If it names several folders, two folders claim the id: renumber one.
+The folder was moved or renamed, or it holds no `index.md`. If the message ends `found at <folder>`, `register.py check --fix` rewrites the path. If it names several folders, two folders claim the id: renumber one.
 
 ### `warning: <ID> at <folder> is not in the register`
 

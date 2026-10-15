@@ -35,6 +35,7 @@ The keys the `pattern` skill declares in `inputs.toml`.
 | `template` | file | no | the skill's `assets/template.md` | The agent |
 | `idSeries` | string | no | `PAT` | The agent, `register.py` |
 | `register` | file | no | none | `register.py`; `model`, for compositions |
+| `types` | tables | no | none | `register.py`; `model validate`; the agent |
 | `deckTheme` | string | no | unset: markdown-deck chooses | `publish.py` |
 | `ontologySchema` | file | no | none | The agent, as guidance |
 | `ontologySchemaSha256` | string | no | none | `doctor` |
@@ -123,6 +124,30 @@ A row in `register` with a `path` that exists is used before any of these. Then 
 ```toml
 patternsRoot = "../architecture"     # patterns spread over several folders below it
 ```
+
+### types
+
+The repository's kinds of pattern, one table each. See [pattern types](concepts.md#pattern-types) for why.
+
+```toml
+[suite.pattern.types.architecture-pattern]
+label    = "Architecture pattern"
+idSeries = "AP"
+physical = "none"
+
+[suite.pattern.types.reference-architecture]
+label    = "Reference architecture"
+idSeries = "RA"
+physical = "most"
+```
+
+| Key | Meaning |
+|---|---|
+| `label` | What readers call it |
+| `idSeries` | The prefix of its identifiers. `register.py next --type <name>` numbers in it |
+| `physical` | `none`, `some` (at least one), `most` (more than half the boxes with a level) or `all` of its boxes SBBs or products, from a `[[catalogues]]` entry whose `level` is `physical`. Unset allows any mix |
+
+With types bound, `register.py next` needs `--type`, so no pattern is numbered in the wrong series, and the register's `type` column holds the type's name. `idSeries` itself is then unused by patterns.
 
 ### register
 
@@ -300,6 +325,8 @@ Keys in a pattern document's YAML front matter.
 | `sidebar_label` | string | no | sites, markdown-deck | Short label; markdown-deck's eyebrow falls back to it |
 | `description` | string | no | sites | One-line summary |
 | `document_type` | string | no | your site or catalogue | `pattern` |
+| `pattern_type` | string | no | `model validate`, the register | One of the bound [types](#types); unset, the type whose `idSeries` the identifier carries |
+| `implements` | list | no | `model validate` | The patterns this one makes concrete, `[AP-004]`; each must have a document |
 | `pattern_scope` | enum | yes | the agent, readers | `problem`, `domain`, `capability-area`, `platform`, `hosting-profile` or `epic` |
 | `status` | string | recommended | `model` | Checked against the approved statuses by the approval gate |
 | `version`, `last_modified`, `author` | string | no | readers | Housekeeping |

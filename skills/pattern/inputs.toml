@@ -29,6 +29,17 @@ pattern through its path, relative to the register, before searching folders. On
 may serve several suites; its type column says which. Unset, numbers come from the
 folder names under patternsRoot and outputDir."""
 
+[inputs.options.types]
+type = "table"
+required = false
+description = """The repository's kinds of pattern, one table each,
+[suite.pattern.types.<name>], with label (what readers call it), idSeries (the prefix of
+its identifiers) and physical (none, some, most or all of its boxes SBBs or products).
+A practice that calls a technology-agnostic pattern an architecture pattern and a
+technology-specific one a reference architecture binds both. A document's type is its
+front matter pattern_type, else the type whose idSeries its identifier carries, and
+model validate checks its boxes against it."""
+
 [inputs.options.template]
 type = "file"
 required = false
