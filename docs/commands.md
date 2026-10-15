@@ -56,7 +56,7 @@ The post-install check. Run from the workspace root; it takes no arguments.
 python <skills>/pattern/scripts/check.py
 ```
 
-It confirms `model` and `markdown-deck` are installed where an agent would find them, runs `model doctor --skill pattern` on the workspace's bindings, prints the patterns root and approved statuses composing will use, and fails if the installed `model` is older than 0.8.0. When `register` is bound it runs `register.py check`, so a duplicate id is a problem. A missing draw.io desktop is a warning. `SKILL_DIR` names the installed skill; it defaults to the folder above the script.
+It confirms `model` and `markdown-deck` are installed where an agent would find them, runs `model doctor --skill pattern` on the workspace's bindings, prints the patterns root and approved statuses composing will use, and fails if the installed `model` is older than 0.8.0. When `register` is bound it runs `register.py check`, so a duplicate id is a problem. It runs `template.py check`, so a template in use that lacks a section, table or column the binding reads is a problem. A missing draw.io desktop is a warning. `SKILL_DIR` names the installed skill; it defaults to the folder above the script.
 
 Exit codes: 0 correct (warnings may be printed); 1 problems, one line each; 2 usage or environment error, including Python older than 3.11. `--help` prints its description.
 
@@ -83,6 +83,20 @@ python <skills>/pattern/scripts/register.py check [--fix]
 | `--register FILE` | Use this CSV instead of the bound one |
 
 Exit codes: 0 ok (warnings may be printed); 1 errors; 2 usage or bindings.
+
+### template.py
+
+Which template a new pattern is written from, and whether every template in use fits the binding. Run from the workspace root.
+
+```
+python <skills>/pattern/scripts/template.py which [--type TYPE]
+python <skills>/pattern/scripts/template.py check
+```
+
+| Command | Effect |
+|---|---|
+| `which` | Prints the template's path, and on stderr where it came from: the type's own, the repository's, the one shipped for the type, or the generic one. See [which template](configuration.md#which-template-and-replacing-one) |
+| `check` | Runs `model contract` on the template of every bound type, or the one template with no types: every section, table and column the binding reads. A repository's own template for a type is also held to its series. Exit 1 on an error |
 
 ### name-endpoints.py
 

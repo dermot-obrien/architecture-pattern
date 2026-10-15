@@ -93,6 +93,12 @@ The binding file was written for a newer `model`. Update `model`, or set `bindin
 
 With no binding file, `model` reads only `## Components` and `## Interfaces` with its default columns, so a pattern's Building Blocks table is ignored. Add the `[[markdown.tables]]` entries from the [configuration reference](configuration.md#a-complete-binding-for-the-shipped-template).
 
+## Templates
+
+### `a template in use lacks a section, table or column the binding reads`
+
+From `check.py`, after `template.py check` printed the template and each `contract_*` finding. Either the template no longer has what `[[markdown.tables]]` or `[markdown.scenarios]` reads, or the binding names sections the template never had. Fix whichever is wrong; [which template](configuration.md#which-template-and-replacing-one) lists what a template must keep. With no `[[markdown.tables]]` bound at all, the model's built-in tables (`Nodes` or `Components`, `Edges` or `Interfaces`) do not match the shipped templates: bind the tables, as the [complete binding](configuration.md#a-complete-binding-for-the-shipped-template) does.
+
 ## The register
 
 ### `error: <ID> is in the register twice, rows <n> and <m>`

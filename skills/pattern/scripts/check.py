@@ -11,7 +11,8 @@ Checks that the two skills this one needs are installed where an agent would fin
 `model` and `markdown-deck`, then runs `model doctor --skill pattern`, which checks the
 workspace's [suite.pattern] bindings against inputs.toml, and reports the patterns root
 composing searches (model 0.8.0 or later). When a register is bound, runs
-`register.py check` on it, so a duplicate id or a path that names nothing is a problem.
+`register.py check` on it, so a duplicate id or a path that names nothing is a problem, and
+`template.py check`, so a template in use that lacks the construct the binding reads is one.
 draw.io desktop is optional:
 without it, views are exported by hand and stamped, so its absence is a warning.
 
@@ -90,6 +91,20 @@ if "model" in found:
     if d.returncode != 0:
         warnings.append("draw.io desktop was not found, so views are exported by hand and stamped "
                         "with model stamp. Install draw.io desktop to render them.")
+
+# Every template in use has the construct the binding reads: model contract, per type.
+_template = importlib.util.spec_from_file_location("pattern_template", os.path.join(HERE, "template.py"))
+template = importlib.util.module_from_spec(_template)
+_template.loader.exec_module(template)
+if "model" in found:
+    try:
+        _b, _t = template.register.load_bindings(os.getcwd())
+        if template.cmd_check(_t.get("pattern", {}), _b,
+                              template.register.repo_root(_b, os.getcwd())) != 0:
+            problems.append("a template in use lacks a section, table or column the binding reads; "
+                            "see template.py check above. Fix the template, or the binding.")
+    except template.register.UsageError as ex:
+        problems.append(f"template.py check: {ex}")
 
 # The register, when bound: the same check register.py runs, read-only.
 spec = importlib.util.spec_from_file_location("pattern_register", os.path.join(HERE, "register.py"))

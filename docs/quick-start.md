@@ -119,6 +119,8 @@ The last lines should read:
 ```
   result       : ok
 patterns root: <your folder>\patterns [suite.pattern.outputDir]; approved statuses: Final, Approved, Active, Published
+template for every pattern: shipped
+  <skills>\pattern\assets\template.md: ok
 pattern: ok
 ```
 

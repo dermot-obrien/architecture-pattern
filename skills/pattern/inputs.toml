@@ -34,7 +34,10 @@ type = "table"
 required = false
 description = """The repository's kinds of pattern, one table each,
 [suite.pattern.types.<name>], with label (what readers call it), idSeries (the prefix of
-its identifiers) and physical (none, some, most or all of its boxes SBBs or products).
+its identifiers), physical (none, some, most or all of its boxes SBBs or products) and
+template (the repository's own template for the type, relative to the binding file, or
+builtin:<name> for one this skill ships; unset, template below, else the shipped one for
+the type, else assets/template.md).
 A practice that calls a technology-agnostic pattern an architecture pattern and a
 technology-specific one a reference architecture binds both. A document's type is its
 front matter pattern_type, else the type whose idSeries its identifier carries, and
@@ -44,7 +47,8 @@ model validate checks its boxes against it."""
 type = "file"
 required = false
 description = """The repository's own pattern template, used instead of the
-generic one this skill ships. A template carries a house profile: the identifier series,
+generic one this skill ships, and instead of the shipped one for a type that names none
+of its own. A template carries a house profile: the identifier series,
 the deliverable code, the diagram palette and any conformance statement. That profile
 belongs to the repository, not to a published skill."""
 

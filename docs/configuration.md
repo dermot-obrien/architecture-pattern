@@ -75,10 +75,32 @@ A pattern folder carries its diagram and views with it, so a move breaks nothing
 
 ### template
 
-Your repository's own pattern template, used instead of the generic one the skill ships. A house template carries what belongs to the repository rather than to a published skill: its identifier series, its deliverable code, its diagram palette, any conformance statement. Keep the section headings and table columns your `[[markdown.tables]]` bindings read. It must exist if set.
+Your repository's own pattern template, used instead of the generic one the skill ships, and instead of the one shipped for a type that names no template of its own. A house template carries what belongs to the repository rather than to a published skill: its identifier series, its deliverable code, its diagram palette, any conformance statement. It must exist if set.
 
 ```toml
 template = "../templates/pattern-template.md"
+```
+
+#### Which template, and replacing one
+
+The skill ships a template for each kind of pattern it knows, and any of them can be replaced. A new pattern of a type is written from the first of:
+
+| Order | Template | Bound as |
+|---|---|---|
+| 1 | The repository's own for that type | `[suite.pattern.types.<type>] template`, a path relative to the binding file, or `builtin:<name>` for a shipped one |
+| 2 | The repository's own for every pattern | `[suite.pattern] template` |
+| 3 | Shipped for that type | `assets/templates/architecture-pattern.md`, `assets/templates/reference-architecture.md` |
+| 4 | Shipped for any pattern | `assets/template.md` |
+
+`python <skills>/pattern/scripts/template.py which --type <type>` prints the one in use and where it came from.
+
+A replacement may say anything, in any order, with any extra sections and columns, so long as it keeps the construct the binding reads: every `[[markdown.tables]]` section with a table carrying every bound column, a Scenarios section with a scenario heading such as `### S1 <name>` and a steps table with Step, Actor and Action (and Target and Interface, or steps cannot name them), and the bound Catalogue Mapping columns if it has that section. A table needs only its header row. `template.py check`, which `check.py` runs, checks every template in use with `model contract`, and a repository's own template for a type is also held to that type's series in its H1. Copy a shipped template as the starting point; never edit the installed copy, which the next update overwrites.
+
+```toml
+[suite.pattern.types.reference-architecture]
+idSeries = "RA"
+physical = "most"
+template = "../templates/reference-architecture.md"   # ours, checked against the binding
 ```
 
 ### idSeries
@@ -146,6 +168,7 @@ physical = "most"
 | `label` | What readers call it |
 | `idSeries` | The prefix of its identifiers. `register.py next --type <name>` numbers in it |
 | `physical` | `none`, `some` (at least one), `most` (more than half the boxes with a level) or `all` of its boxes SBBs or products, from a `[[catalogues]]` entry whose `level` is `physical`. Unset allows any mix |
+| `template` | The repository's own template for the type, or `builtin:<name>`. Unset, the shipped one for the type if there is one; see [which template](#which-template-and-replacing-one) |
 
 With types bound, `register.py next` needs `--type`, so no pattern is numbered in the wrong series, and the register's `type` column holds the type's name. `idSeries` itself is then unused by patterns.
 
