@@ -34,7 +34,14 @@ description = """A CSV with a prefix column listing this catalogue's identifier 
 type = "file"
 required = false
 description = """This catalogue's identifiers and their pages, as JSON: {"ids": {"ABB-024":
-"abbs/abb-024/"}}. A built site's id/index.json is one. Set this or localMap."""
+"abbs/abb-024/"}}. A built site's id/index.json is one. Set this, localRegister or localMap."""
+
+[inputs.options.localRegister]
+type = "file"
+required = false
+description = """This catalogue's register: a CSV with an id column (else the first) and a url
+or path column, the same file the pattern skill numbers patterns and use cases from. path is
+relative to the register. Set this, localManifest or localMap."""
 
 [inputs.options.localMap]
 type = "file"

@@ -2,6 +2,13 @@
 
 # Changelog
 
+## [0.3.0] - 2026-10-15
+
+### Changed
+
+- An endorsed use case is numbered and registered with the pattern skill's `register.py --suite use-case`. `register` may be the same file as `[suite.pattern] register`, with `type` `use-case`, and its identifier column is `id` when it has one.
+- Requires pattern ^0.11.0 and model ^0.9.0.
+
 ## [0.2.0] - 2026-10-02
 
 ### Added

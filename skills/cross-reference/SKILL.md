@@ -4,7 +4,7 @@ description: Refer to another catalogue's architecture identifiers, such as its 
 license: CC-BY-4.0 AND Apache-2.0. Content under CC BY 4.0, code under Apache-2.0; see LICENSE and NOTICE.
 compatibility: Node 18+. No other skills and no npm packages. The Docusaurus plugins work with Docusaurus 3; the registers, CLI and check work with any static site generator or none.
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
   homepage: https://github.com/dermot-obrien/architecture-pattern
 ---
 
@@ -38,7 +38,7 @@ It reads `[suite.cross-reference]` in `.agents/skill-bindings.toml`, the contrac
 | `namespaces` | Required. The namespace register |
 | `external` | The identifier register |
 | `schemes` | A CSV with a `prefix` column: this catalogue's identifier prefixes, which a code may not equal |
-| `localManifest` or `localMap` | This catalogue's identifiers and their pages, as JSON or as a module exporting a function |
+| `localManifest`, `localRegister` or `localMap` | This catalogue's identifiers and their pages: as JSON, as the register CSV the pattern skill numbers from (an `id` column and a `url` or `path` column), or as a module exporting a function |
 | `scan`, `skip` | Where `check` looks for Markdown, and directory names it never enters |
 
 ## The rules
@@ -85,6 +85,22 @@ plugins: [[require.resolve(`./${skill}/id-routes.cjs`), {
 ```
 
 `localUrlFor(id, file)` also gets the page being built, so it can return a Markdown file path relative to that page, which Docusaurus resolves and checks, or `{url, title}` for a tooltip. `localMap` is called with `{routes}`, each doc's source file to its permalink, so a catalogue that knows each identifier's file can follow the docs plugin's own routes.
+
+A catalogue that keeps its identifiers in a register CSV, `id,type,name,status,path,url,summary` with `path` relative to the register, can build both options from it:
+
+```js
+const {fromRegister} = require(`./${skill}/../lib/local-register.cjs`);
+const local = fromRegister('registers/catalogue.csv');     // relative to the site directory
+
+remarkPlugins: [[require(`./${skill}/remark-xref.cjs`), {
+  namespaces: 'registers/identifier-namespaces.csv',
+  localUrlFor: local.localUrlFor,     // links to the Markdown file, relative to the page
+  bare: true,                         // also link PAT-004 written without a code
+}]],
+plugins: [[require.resolve(`./${skill}/id-routes.cjs`), {localMap: local.localMap}]],
+```
+
+A row's `url` wins; otherwise its `path` must be a document in the site. `bare: true` links an identifier written without a code only when the catalogue knows it, never in a heading and never from a page to itself, and an unknown one is left alone without a warning.
 
 Put `remark-xref` before any plugin that links bare identifiers. A reference that can't resolve stays plain text with a build warning, so it never breaks the build's link check.
 

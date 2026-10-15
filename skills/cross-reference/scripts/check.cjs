@@ -48,8 +48,8 @@ if (b.namespaces) {
     problems.push(...regs.warnings);
     if (!regs.self) warnings.push('no row in the namespace register has self = yes, so references in this catalogue\'s own code are not checked');
   }
-  if (!b.localManifest && !b.localMap) {
-    warnings.push('neither localManifest nor localMap is bound, so this catalogue\'s own references cannot be checked');
+  if (!b.localManifest && !b.localRegister && !b.localMap) {
+    warnings.push('none of localManifest, localRegister or localMap is bound, so this catalogue\'s own references cannot be checked');
   } else {
     try {
       const n = loadLocalMap(root, b).size;

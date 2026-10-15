@@ -35,9 +35,10 @@ description = "Identifier prefix for new use cases, e.g. UC gives UC-001"
 [inputs.options.register]
 type = "file"
 required = false
-description = """The register of endorsed use cases, a CSV whose first column is the identifier.
-Read for the next free number when a use case is endorsed, and given a row then. When it has
-a slug column, an endorsed use case's folder takes that name. Unset,
+description = """The register of endorsed use cases, a CSV whose id column (else its first) is the
+identifier. Read for the next free number when a use case is endorsed, and given a row then,
+with type use-case when it has a type column. It may be the same file as [suite.pattern]
+register. When it has a slug column, an endorsed use case's folder takes that name. Unset,
 the next number is the highest found under outputDir plus one."""
 
 [inputs.options.localDir]

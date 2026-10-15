@@ -16,6 +16,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const {registerToMap} = require('./local-register.cjs');
 
 const SUITE = 'cross-reference';
 const BINDINGS = '.agents/skill-bindings.toml';
@@ -64,17 +65,23 @@ function toMap(value) {
  * The catalogue's own identifiers and their pages, from whichever binding is set:
  *
  *   localManifest  a JSON file: {"ids": {"ABB-024": "abbs/abb-024/"}} or a flat object
+ *   localRegister  the catalogue's register, a CSV with an id column and a url or path
+ *                  column (see local-register.cjs)
  *   localMap       a CommonJS module exporting a function (or `localMapExport` naming one)
  *                  that returns a Map, an object or a manifest
  *
  * Named exports win over the module itself, since a remark plugin module is often a
- * function with the map builder attached. An empty Map when neither is bound.
+ * function with the map builder attached. The first bound wins, in the order above. An
+ * empty Map when none is bound.
  */
 function loadLocalMap(root, bindings) {
   const base = bindings.base || root;
   if (bindings.localManifest) {
     const p = path.resolve(base, bindings.localManifest);
     return toMap(JSON.parse(fs.readFileSync(p, 'utf-8')));
+  }
+  if (bindings.localRegister) {
+    return registerToMap(path.resolve(base, bindings.localRegister));
   }
   if (bindings.localMap) {
     const mod = require(path.resolve(base, bindings.localMap));

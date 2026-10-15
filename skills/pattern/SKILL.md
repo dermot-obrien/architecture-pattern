@@ -4,9 +4,9 @@ description: Author an architecture pattern as one Markdown document that is als
 license: CC-BY-4.0 AND Apache-2.0. Content under CC BY 4.0, code under Apache-2.0; see LICENSE and NOTICE.
 compatibility: Python 3.11+ and Node 18+. Requires the `model` skill (diagram-model repository) and the `markdown-deck` skill (markdown-deck repository), installed wherever the agent reads skills. draw.io desktop is optional; without it, views are exported by hand from draw.io desktop or online and stamped. PDF export needs playwright.
 metadata:
-  version: "0.10.3"
+  version: "0.11.0"
   homepage: https://github.com/dermot-obrien/architecture-pattern
-  x-skill-requires: "pkg:generic/dermot-obrien/diagram-model/model ^0.8.2, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
+  x-skill-requires: "pkg:generic/dermot-obrien/diagram-model/model ^0.9.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
   x-derived-from: "https://github.com/dermot-obrien/ai-assisted-architecture/tree/5a1c13860ad5093125afb3c41a82793e084cc0b7/skills/pattern"
 ---
 
@@ -35,7 +35,8 @@ Do not proceed on an error, and do not guess a path. Every path this skill needs
 | `siblings.model` | The model CLI, at `<that>/bin/model.py` |
 | `siblings.markdown-deck` | The deck CLI, at `<that>/bin/markdown-deck.mjs` |
 | `outputDir` | Where a new pattern folder is created |
-| `idSeries` | The prefix for a new pattern's id, `PAT` by default. Take the next free number in it |
+| `idSeries` | The prefix for a new pattern's id, `PAT` by default |
+| `register` | The register of minted ids, if bound. `register.py next` gives the next free number, from it and from the folders, and `register.py add` gives the pattern its row |
 | `template` | The repository's own template, if it declares one. Otherwise use `assets/template.md` from this skill |
 | `deckTheme` | Passed to markdown-deck |
 | `ontologySchema` | The repository's own schema, which the section structure is expected to match, if declared. Guidance only; nothing validates a pattern against it |
@@ -105,9 +106,17 @@ Target at most about ten pages, and far less for a problem-scope pattern. Tables
 
 ### 1. Create the document
 
-Copy the template into `<outputDir>/<slug>/index.md`, using the `template` binding if the repository declares one and `assets/template.md` from this skill if it does not. A repository's own template carries its identifier series, its deliverable code and its palette; the one shipped here is deliberately free of all three. Fill it in this order, which is not document order:
+Number it first: `python <skills>/pattern/scripts/register.py next` prints the next free id in `idSeries`, from the register when one is bound and from the folder names under `patternsRoot` and `outputDir` either way, so a pattern filed into a category folder still counts. Never number a pattern by looking in `outputDir` alone. Copy the template into `<outputDir>/<ID>-<slug>/index.md`, or into the folder the user names, using the `template` binding if the repository declares one and `assets/template.md` from this skill if it does not. A repository's own template carries its identifier series, its deliverable code and its palette; the one shipped here is deliberately free of all three. Fill it in this order, which is not document order:
 
 Intent, or Context and Non-Goals for a wider scope, then Patterns Applied where published patterns cover part of the design, including every participating pattern a composite pattern's scenarios run (see step 6), then Building Blocks, then Interfaces. Interfaces is where most of the real thinking happens and it usually sends you back to revise Building Blocks. Write each Provider and Consumer, and each Actor and Target in a scenario's steps, as the identifier followed by the name, as Building Blocks has it (`ABB-901 Retrieval Service`, `04 Identity provider`), never the bare identifier: the table is read on the page and on its deck slide, and a reader should not have to look names up. The model reads only the leading identifier. `python <skills>/pattern/scripts/name-endpoints.py <file-or-folder>` fills in names from the Building Blocks table, and `--check` reports without changing anything; `publish.py` notes any document that still needs it. Only then the diagram, then Scenarios, then the controls and decisions, which are the residue of everything above.
+
+When `register` is bound, give the pattern its row as soon as the folder exists, so no one else takes the number:
+
+```bash
+python <skills>/pattern/scripts/register.py add PAT-007 --name "Order intake" --status Draft --path <outputDir>/PAT-007-order-intake --summary "<one line>"
+```
+
+It appends the row and refuses an id already there. Appending is deliberate: two branches that each take the next number both change the end of the file, so git reports a conflict where it would otherwise merge a duplicate. After a pattern folder is moved, into a category folder say, `register.py check --fix` corrects its `path`, and its `name` and `status` from the document. `register.py check` alone reports, and fails on a duplicate id.
 
 ### 2. Generate the diagram
 

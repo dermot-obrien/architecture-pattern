@@ -33,7 +33,8 @@ The keys the `pattern` skill declares in `inputs.toml`.
 |---|---|---|---|---|
 | `outputDir` | directory | yes | none | The agent, for new patterns; `model` for compositions |
 | `template` | file | no | the skill's `assets/template.md` | The agent |
-| `idSeries` | string | no | `PAT` | The agent |
+| `idSeries` | string | no | `PAT` | The agent, `register.py` |
+| `register` | file | no | none | `register.py`; `model`, for compositions |
 | `deckTheme` | string | no | unset: markdown-deck chooses | `publish.py` |
 | `ontologySchema` | file | no | none | The agent, as guidance |
 | `ontologySchemaSha256` | string | no | none | `doctor` |
@@ -48,6 +49,26 @@ The folder new pattern folders are created in, as `<outputDir>/<ID>-<slug>/index
 [suite.pattern]
 outputDir = "../architecture/patterns"
 ```
+
+### Patterns in category folders
+
+Patterns need not sit in one flat folder. Point `patternsRoot` at the folder above your categories and `outputDir` at a folder new patterns land in, then move each into its category when you are ready:
+
+```toml
+[suite.pattern]
+outputDir    = "../architecture/patterns/_inbox"   # new patterns are created here
+patternsRoot = "../architecture/patterns"          # found here, at any depth
+register     = "../registers/catalogue.csv"        # optional, see register below
+```
+
+```
+architecture/patterns/
+  _inbox/PAT-012-new-idea/
+  integration/PAT-001-order-intake/
+  platform/PAT-002-event-backbone/
+```
+
+A pattern folder carries its diagram and views with it, so a move breaks nothing inside it, and composition finds a participating pattern anywhere under `patternsRoot`. `register.py next` numbers a new pattern from the whole tree, never from `outputDir` alone. Keep a `.gitkeep` in `_inbox` so the folder `doctor` requires survives an empty commit. A hand-written relative link to a moved pattern does break; a `PAT-001` linked through `cross-reference` does not.
 
 ### template
 
@@ -95,10 +116,38 @@ ontologySchemaSha256 = "3f2a...e9"
 
 Where a Uses cell's participating pattern is looked for, to any depth. Unset, `outputDir` is used. `doctor` prints the root in use and the binding it came from as `patterns root`.
 
-Precedence, first set wins: `[model] patterns_root`, then `[suite.pattern] patternsRoot`, then `[suite.pattern] outputDir`, then a search of each folder from the composite pattern upward, two levels deep, stopping at the repository root.
+A row in `register` with a `path` that exists is used before any of these. Then precedence, first set wins: `[model] patterns_root`, then `[suite.pattern] patternsRoot`, then `[suite.pattern] outputDir`, then a search of each folder from the composite pattern upward, two levels deep, stopping at the repository root.
 
 ```toml
 patternsRoot = "../architecture"     # patterns spread over several folders below it
+```
+
+### register
+
+A CSV of every identifier the repository has minted, and where each lives. A new pattern takes its number from it and is given a row, composition finds a participating pattern through it before searching any folder, and `cross-reference` turns `PAT-001` in any document into a link from the same file. `use-case` may bind the same file, and so may your own building-block series: its `type` column says which is which.
+
+```csv
+id,type,name,status,path,url,summary
+PAT-001,pattern,Order intake,Approved,../architecture/patterns/integration/PAT-001-order-intake,,Accepts orders from every channel
+PAT-002,pattern,Event backbone,Draft,../architecture/patterns/platform/PAT-002-event-backbone,,Shared event streaming
+UC-004,use-case,Track an order,Draft,../use-cases/UC-004-track-an-order,,
+```
+
+| Column | Required | Meaning |
+|---|---|---|
+| `id` | yes | The identifier. A register with no `id` column uses its first column |
+| `type` | no | `pattern`, `use-case`, or any series of your own |
+| `name`, `status` | no | Kept in step with the document's H1 and front matter by `register.py check --fix` |
+| `path` | no | The folder or document, relative to the register file |
+| `url` | no | Its published page, when that cannot be found from its file. Wins over `path` for links |
+| `summary` | no | One line, for people reading the register |
+
+Other columns are kept and filled with `--set`. `register.py` never adds a column.
+
+Rows are appended, never inserted. Two branches that each take the next number both change the last line, so git stops with a conflict on the register, and resolving it is where the clash is noticed and one pattern renumbered. Do not give the register `merge=union` in `.gitattributes`, which would keep both rows silently. If both rows are kept anyway, `register.py check`, which `check.py` runs, fails on the duplicate.
+
+```toml
+register = "../registers/catalogue.csv"
 ```
 
 ### approvedStatuses

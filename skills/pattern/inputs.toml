@@ -17,6 +17,16 @@ type = "dir"
 required = true
 description = "Directory new pattern folders are created in"
 
+[inputs.options.register]
+type = "file"
+required = false
+description = """The register: a CSV of every identifier the repository has minted, with an
+id column (else the first), and optionally type, name, status, path, url and summary.
+A new pattern takes its number from it and is given a row, and composition finds a
+pattern through its path, relative to the register, before searching folders. One file
+may serve several suites; its type column says which. Unset, numbers come from the
+folder names under patternsRoot and outputDir."""
+
 [inputs.options.template]
 type = "file"
 required = false

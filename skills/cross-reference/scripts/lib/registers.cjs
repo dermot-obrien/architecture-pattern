@@ -158,10 +158,16 @@ function loadRegisters({namespaces, external, schemes, prefixes = []} = {}) {
   return {namespaces: nsMap, ids, warnings, self, entry, externalUrl, titleFor, resolve};
 }
 
-/** A regular expression matching a bare-text reference in any of the given codes, or null. */
-function referenceRegex(codes) {
+/**
+ * A regular expression matching a reference in text in any of the given codes, or null:
+ * group 1 the code, group 2 the identifier. With `bare`, it also matches an identifier
+ * written without a code, with group 1 undefined or empty.
+ */
+function referenceRegex(codes, {bare = false} = {}) {
   const names = [...codes].sort((a, b) => b.length - a.length);
-  return names.length ? new RegExp(`(?<![\\w/:.-])(${names.join('|')}):(${ID_SOURCE})`, 'g') : null;
+  if (!bare) return names.length ? new RegExp(`(?<![\\w/:.-])(${names.join('|')}):(${ID_SOURCE})`, 'g') : null;
+  const ns = names.length ? `(?:(${names.join('|')}):)?` : '()';
+  return new RegExp(`(?<![\\w/:.-])${ns}(${ID_SOURCE})(?![\\w])`, 'g');
 }
 
 module.exports = {

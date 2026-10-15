@@ -2,6 +2,20 @@
 
 # Changelog
 
+## [0.11.0] - 2026-10-15
+
+### Added
+
+- `register`, an optional binding: a CSV of every identifier the repository has minted, `id,type,name,status,path,url,summary`, with `path` relative to the register. One file can serve patterns, use cases and your own series, told apart by `type`.
+- `scripts/register.py`: `next` prints the next free id from the register and from the folder names under `patternsRoot` and `outputDir`; `add` appends a row and refuses an id already there; `check` fails on a duplicate id or a path that names nothing, and `check --fix` corrects a moved folder's path, keeps `name` and `status` in step with the document, and registers folders with no row. Rows are appended, never inserted, so two branches taking the same number meet as a merge conflict on the register.
+- `check.py` runs `register.py check` when a register is bound.
+- Documentation of patterns in category folders under `patternsRoot`, with `outputDir` as the folder new patterns land in.
+
+### Changed
+
+- `SKILL.md` numbers a new pattern with `register.py next`, from the whole tree rather than `outputDir` alone, so a pattern filed into a category folder still counts, and names the new folder `<ID>-<slug>`.
+- Requires model ^0.9.0, whose composition reads the register.
+
 ## [0.10.3] - 2026-09-30
 
 ### Fixed

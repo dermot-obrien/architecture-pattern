@@ -4,9 +4,9 @@ description: Author a use case as one Markdown document that is also the model a
 license: CC-BY-4.0 AND Apache-2.0. Content under CC BY 4.0, code under Apache-2.0; see LICENSE and NOTICE.
 compatibility: Python 3.11+ and Node 18+. Requires the `pattern` skill (this repository), the `model` skill (diagram-model repository) and the `markdown-deck` skill (markdown-deck repository), installed wherever the agent reads skills. draw.io desktop is optional; without it, views are exported by hand and stamped. PDF export needs playwright.
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
   homepage: https://github.com/dermot-obrien/architecture-pattern
-  x-skill-requires: "pkg:generic/dermot-obrien/architecture-pattern/pattern ^0.10.3, pkg:generic/dermot-obrien/diagram-model/model ^0.8.2, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
+  x-skill-requires: "pkg:generic/dermot-obrien/architecture-pattern/pattern ^0.11.0, pkg:generic/dermot-obrien/diagram-model/model ^0.9.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
 ---
 
 # Use case
@@ -50,7 +50,7 @@ Do not proceed on an error, and do not guess a path. Every path this skill needs
 | `siblings.markdown-deck` | Used by `publish.py` to build the deck |
 | `outputDir` | Where endorsed use cases live |
 | `idSeries` | The prefix for an endorsed use case's id, `UC` by default |
-| `register` | The register of endorsed ids, if bound. Take the next free number from it, and add a row on endorsement |
+| `register` | The register of endorsed ids, if bound, perhaps shared with patterns. `register.py --suite use-case next` gives the next free number, and `register.py --suite use-case add` the row, both in the pattern skill's `scripts/` |
 | `localDir`, `localIdFormat` | Where a container keeps its local use cases, and how their ids are formed |
 | `template` | The repository's own template, if it declares one. Otherwise use `assets/template.md` from this skill |
 
@@ -120,10 +120,10 @@ It renders `components.svg`, builds the animated walkthrough `scenarios.html` of
 
 When the user says a local use case has been endorsed:
 
-1. Take the next free number in `idSeries`, from `register` when it is bound.
+1. Take the next free number in `idSeries`: `python <pattern>/scripts/register.py --suite use-case next`, which reads `register` when it is bound and the folders under `outputDir` either way.
 2. Move the folder to `<outputDir>/<new id>-<slug>/`, or to the register's `slug` when it has a `slug` column, keeping its history if the repository is under version control.
 3. Change the identifier in the H1, the header table and the title, and add the local identifier to `former_ids` in the front matter.
-4. Add the register row, if `register` is bound, filling every column the register has. Before step 2 when the folder takes its name from the row.
+4. Add the register row, if `register` is bound, filling every column the register has: `register.py --suite use-case add UC-007 --name "..." --status ... --path <folder>`, with `--set slug=...` for a `slug` column. Before step 2 when the folder takes its name from the row, and then `register.py --suite use-case check --fix` records the path.
 5. Replace every link to the old folder, starting with the container's own index, so the container now links to the endorsed use case.
 6. Republish it, and validate it.
 

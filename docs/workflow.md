@@ -12,7 +12,7 @@ Ask in plain words: "create a pattern for order intake", "review PAT-004 against
 
 ## Author a new pattern
 
-1. Copy the template to `<outputDir>/<ID>-<slug>/index.md`: your repository's `template` binding if it has one, otherwise `<skills>/pattern/assets/template.md`. Take the next id in your `idSeries`.
+1. Take the next id, `python <skills>/pattern/scripts/register.py next`, and copy the template to `<outputDir>/<ID>-<slug>/index.md`: your repository's `template` binding if it has one, otherwise `<skills>/pattern/assets/template.md`. With a `register` bound, add the row straight away, `register.py add <ID> --name ... --path <folder>`, so the number is taken. Move the folder into its category whenever you like, then run `register.py check --fix`.
 2. Set `pattern_scope`. For `problem`, rename Context to Intent and delete the sections marked WIDER SCOPE.
 3. Fill it in this order, which is not document order: Intent (or Context and Non-Goals); Patterns Applied; Building Blocks; Interfaces, which usually sends you back to revise Building Blocks; then the diagram; then Scenarios; then controls, decisions and risks, which are the residue of the rest.
 4. Write every endpoint as id and name, `02 Order service`. `name-endpoints.py` fills in names you left out.

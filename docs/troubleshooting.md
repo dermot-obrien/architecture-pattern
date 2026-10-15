@@ -89,6 +89,28 @@ The binding file was written for a newer `model`. Update `model`, or set `bindin
 
 With no binding file, `model` reads only `## Components` and `## Interfaces` with its default columns, so a pattern's Building Blocks table is ignored. Add the `[[markdown.tables]]` entries from the [configuration reference](configuration.md#a-complete-binding-for-the-shipped-template).
 
+## The register
+
+### `error: <ID> is in the register twice, rows <n> and <m>`
+
+Two rows claim one id, usually because a merge conflict on the register was resolved by keeping both lines. Give one pattern the next free number (`register.py next`), change its folder name, H1 and front matter, and fix its row, before anything references either.
+
+### `error: <ID>: path <path> does not exist`
+
+The folder was moved or renamed. If the message ends `found at <folder>`, `register.py check --fix` rewrites the path. If it names several folders, two folders claim the id: renumber one.
+
+### `warning: <ID> at <folder> is not in the register`
+
+A pattern folder under `patternsRoot` or `outputDir` has no row. `register.py check --fix` appends one from its H1 and front matter.
+
+### `error: <ID> is already in <register>; take register.py next instead`
+
+`register.py add` refuses an id the register already has. Take the next one.
+
+### `the register <path> does not exist`
+
+`[suite.pattern] register` names a missing file. Create it with at least a header row, `id,type,name,status,path,url,summary`. The path is relative to the binding file.
+
 ## The document and the diagram
 
 ### `'<text>' in Building Blocks matches no identifier rule, so the row was not read; a local id leads its cell, as in '01 Name'  [id_unmatched]`

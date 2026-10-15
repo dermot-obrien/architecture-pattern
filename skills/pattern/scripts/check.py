@@ -10,7 +10,9 @@ folder above this script; an installer sets it:
 Checks that the two skills this one needs are installed where an agent would find them,
 `model` and `markdown-deck`, then runs `model doctor --skill pattern`, which checks the
 workspace's [suite.pattern] bindings against inputs.toml, and reports the patterns root
-composing searches (model 0.8.0 or later). draw.io desktop is optional:
+composing searches (model 0.8.0 or later). When a register is bound, runs
+`register.py check` on it, so a duplicate id or a path that names nothing is a problem.
+draw.io desktop is optional:
 without it, views are exported by hand and stamped, so its absence is a warning.
 
 Exit 0: correct (warnings may be printed). Exit 1: problems, one line each.
@@ -88,6 +90,19 @@ if "model" in found:
     if d.returncode != 0:
         warnings.append("draw.io desktop was not found, so views are exported by hand and stamped "
                         "with model stamp. Install draw.io desktop to render them.")
+
+# The register, when bound: the same check register.py runs, read-only.
+spec = importlib.util.spec_from_file_location("pattern_register", os.path.join(HERE, "register.py"))
+register = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(register)
+try:
+    _bindings, _tables = register.load_bindings(os.getcwd())
+except register.UsageError:
+    _tables = {}
+if (_tables.get("pattern") or {}).get("register"):
+    if register.main(["check"]) != 0:
+        problems.append("register.py check reported the errors above. Fix the register, or run "
+                        "register.py check --fix for paths, names and statuses.")
 
 for w in warnings:
     print(f"warning: {w}")
