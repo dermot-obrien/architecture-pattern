@@ -46,11 +46,77 @@ python <skills>/pattern/scripts/publish.py <folder>                             
 
 Or ask your agent for a pattern, and it follows `SKILL.md` to do all of it.
 
+## Quick start
+
+From an empty workspace with the skill installed:
+
+```bash
+# 1. Verify installation
+python .agents/skills/pattern/scripts/check.py
+
+# 2. Create a pattern from the template
+mkdir -p patterns/PAT-001-order-intake
+cp .agents/skills/pattern/assets/template.md patterns/PAT-001-order-intake/index.md
+
+# 3. Fill in the document, then generate the diagram
+python .agents/skills/model/bin/model.py emit patterns/PAT-001-order-intake/index.md --to drawio --out patterns/PAT-001-order-intake/components.drawio
+
+# 4. Arrange the diagram in draw.io, then validate
+python .agents/skills/model/bin/model.py validate patterns/PAT-001-order-intake/index.md
+
+# 5. Publish: view, walkthrough, deck and PDF
+python .agents/skills/pattern/scripts/publish.py patterns/PAT-001-order-intake
+```
+
+The [quick start guide](https://github.com/dermot-obrien/architecture-pattern/blob/main/docs/quick-start.md) goes step by step with a complete example.
+
 ## Documentation
 
 The repository's [docs](https://github.com/dermot-obrien/architecture-pattern/tree/main/docs) have a [quick start](https://github.com/dermot-obrien/architecture-pattern/blob/main/docs/quick-start.md) from an empty folder to a published pattern and a composite pattern, the [concepts](https://github.com/dermot-obrien/architecture-pattern/blob/main/docs/concepts.md), a [configuration reference](https://github.com/dermot-obrien/architecture-pattern/blob/main/docs/configuration.md) with a complete binding for the template, a [command reference](https://github.com/dermot-obrien/architecture-pattern/blob/main/docs/commands.md) and [troubleshooting](https://github.com/dermot-obrien/architecture-pattern/blob/main/docs/troubleshooting.md) for every error message.
 
 [examples/knowledge-retrieval](./examples/knowledge-retrieval) is a complete worked example with a `run.sh` that produces every output.
+
+## Updating
+
+An installed skill is a copy. To update after a new release:
+
+1. **Delete the old installation first** (important - copying over leaves stale files):
+   ```bash
+   rm -rf .agents/skills/pattern
+   ```
+
+2. **Reinstall using the same method you used initially:**
+   - With `gh skill`: `gh skill install dermot-obrien/architecture-pattern pattern`
+   - By copying: Follow the [install instructions](#install) again
+
+3. **Update dependencies too** - `pattern` requires specific versions:
+   ```bash
+   # Check required versions
+   grep "x-skill-requires" .agents/skills/pattern/SKILL.md
+   
+   # Reinstall model and markdown-deck at compatible versions
+   rm -rf .agents/skills/model .agents/skills/markdown-deck
+   gh skill install dermot-obrien/diagram-model model
+   gh skill install dermot-obrien/markdown-deck markdown-deck
+   npm install --prefix .agents/skills/markdown-deck
+   ```
+
+4. **Verify the update:**
+   ```bash
+   python .agents/skills/pattern/scripts/check.py
+   ```
+
+5. **Check for new bindings** - new releases may add required configuration:
+   ```bash
+   python .agents/skills/model/bin/model.py doctor --skill pattern
+   ```
+
+6. **Republish existing patterns** to verify they still build:
+   ```bash
+   python .agents/skills/pattern/scripts/publish.py patterns/PAT-001-order-intake
+   ```
+
+**Always update all three skills together** (`pattern`, `model`, `markdown-deck`) because they have coordinated version dependencies.
 
 ## Composing patterns
 
