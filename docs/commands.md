@@ -72,7 +72,7 @@ python <skills>/pattern/scripts/register.py check [--fix]
 
 | Command | Effect |
 |---|---|
-| `next` | Prints the next free id in `PREFIX`, default `idSeries`: the highest number in the register or in a folder name under `patternsRoot` and `outputDir`, plus one, with as many digits as the widest. Works without a register |
+| `next` | Prints the next free id in `PREFIX`, default `idSeries`: the highest number in the register or in a folder name under `patternsRoot` and `outputDir`, plus one, with as many digits as the widest. With none of `register`, `patternsRoot` and `outputDir` bound, it scans every folder in the repository and warns on stderr |
 | `add` | Appends a row, filling only the columns the register has, and refuses an id already there. `--path` is relative to the working directory and stored relative to the register; `--type` defaults to the suite |
 | `check` | Errors: a duplicate id, a row with no id, a `path` that names nothing, two folders for one id. Warnings: `name` or `status` that differ from the document, a folder under the bound roots with no row |
 | `check --fix` | Rewrites `path` for a moved folder found by its `<ID>-` name, `name` and `status` from the documents, and appends a row for each unregistered folder. Never removes a row |
@@ -186,4 +186,4 @@ python $MODEL validate PAT-910-staff-assistant/index.md
 Pop-Location
 ```
 
-`doctor` reports an error, because this repository binds no `outputDir`; CI ignores that and checks only that `siblings` lists `model` and `markdown-deck`. Everything after it should pass, with one `participant_open` warning for PAT-910's open participating pattern. [.github/workflows/ci.yml](../.github/workflows/ci.yml) has the rest: the model extract comparison, the sync round trip, the deck build and the approval-gate check.
+`doctor` reports a warning, because this repository has no binding file; CI ignores that and checks only that `siblings` lists `model` and `markdown-deck`. Everything after it should pass, with one `participant_open` warning for PAT-910's open participating pattern. [.github/workflows/ci.yml](../.github/workflows/ci.yml) has the rest: the model extract comparison, the sync round trip, the deck build and the approval-gate check.

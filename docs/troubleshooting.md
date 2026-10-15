@@ -48,9 +48,9 @@ From `check.py`. Not an error. Install draw.io desktop (the installed build, not
 
 ## Bindings
 
-### `error  suite.pattern: 'outputDir' is required and not set.`
+### `warn  bindings: no binding file found; built-in defaults are in use.`
 
-`doctor --skill pattern` found no `outputDir` in `[suite.pattern]`, often because there is no binding file at all (`warn  bindings: no binding file found; built-in defaults are in use.`). Create `.agents/skill-bindings.toml` at the workspace root with at least:
+There is no binding file, so the model reads the wrong tables and nothing says where patterns go. Before pattern 0.11.0 this was `error  suite.pattern: 'outputDir' is required and not set.` Create `.agents/skill-bindings.toml` at the workspace root with at least:
 
 ```toml
 bindingsVersion = "1.0"
@@ -61,13 +61,17 @@ outputDir = "../patterns"
 
 The [configuration reference](configuration.md#a-complete-binding-for-the-shipped-template) has a complete file for the shipped template.
 
+### `warning: none of register, patternsRoot or outputDir is bound under [suite.pattern]`
+
+From `check.py`, and from `register.py next` as `the whole repository under <root> was scanned`. Nothing says where patterns live, so a new pattern's number comes from scanning every folder, and the agent asks where to create it. That works; bind `register`, or `patternsRoot` and `outputDir`, to make it faster and to stop the questions.
+
 ### `error  suite.pattern: 'outputDir' points at <path>, which does not exist`
 
 Paths are relative to the binding file, not to where you ran the command. From `.agents/skill-bindings.toml`, a `patterns/` folder at the root is `../patterns`. Create the folder, or fix the path. The same message names `template` or `ontologySchema` when those are wrong, and `the patterns root <path> does not exist` names `patternsRoot`.
 
 ### `'<key>' is not a binding this skill declares`
 
-A warning: a key in `[suite.pattern]` the skill does not know, usually a typo. The keys are `outputDir`, `template`, `idSeries`, `deckTheme`, `ontologySchema`, `ontologySchemaSha256`, `patternsRoot` and `approvedStatuses`, in that camel case.
+A warning: a key in `[suite.pattern]` the skill does not know, usually a typo. The keys are `outputDir`, `register`, `template`, `idSeries`, `deckTheme`, `ontologySchema`, `ontologySchemaSha256`, `patternsRoot` and `approvedStatuses`, in that camel case.
 
 ### `'<name>' is an absolute path. It will not survive a clone on another machine`
 

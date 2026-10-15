@@ -35,7 +35,7 @@ gh skill install dermot-obrien/markdown-deck markdown-deck
 
 ## Use
 
-Bind the workspace in `.agents/skill-bindings.toml` (at least `[suite.pattern] outputDir`, and the tables the model reads), copy `assets/template.md` into a new folder under `outputDir` as `index.md`, fill it in, and declare `model: diagram: components.drawio` in its front matter. Then, with `<skills>` the folder the skills are installed in:
+Bind the workspace in `.agents/skill-bindings.toml` (the tables the model reads, and usually `[suite.pattern] outputDir`, where new patterns go), copy `assets/template.md` into a new folder `<ID>-<slug>` as `index.md`, fill it in, and declare `model: diagram: components.drawio` in its front matter. Then, with `<skills>` the folder the skills are installed in:
 
 ```bash
 python <skills>/model/bin/model.py emit index.md --to drawio --out components.drawio   # once

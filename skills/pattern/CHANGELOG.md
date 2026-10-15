@@ -13,6 +13,7 @@
 
 ### Changed
 
+- `outputDir` is optional. Unset, the agent asks where to create a new pattern. With no `register`, `patternsRoot` or `outputDir` bound, `register.py next` scans every folder in the repository for the highest number and warns that it did, and `check.py` warns about the configuration.
 - `SKILL.md` numbers a new pattern with `register.py next`, from the whole tree rather than `outputDir` alone, so a pattern filed into a category folder still counts, and names the new folder `<ID>-<slug>`.
 - Requires model ^0.9.0, whose composition reads the register.
 

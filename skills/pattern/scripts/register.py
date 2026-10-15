@@ -25,7 +25,8 @@ built from the id. Columns the register does not have are never added.
 
 next   prints the next free identifier in PREFIX (default the suite's idSeries): the
        highest number in the register, or in a folder name under patternsRoot and
-       outputDir at any depth, plus one, with as many digits as the widest.
+       outputDir at any depth, plus one, with as many digits as the widest. With none of
+       the three bound, every folder in the repository is scanned, with a warning.
 add    appends one row and refuses an identifier already there. A row is appended,
        never inserted, so two branches that each take the next number both change the
        end of the file and git reports a conflict instead of merging a duplicate.
@@ -95,6 +96,22 @@ def load_bindings(start) -> tuple:
     return path, {k: v for k, v in suite.items() if k in SUITES and isinstance(v, dict)}
 
 
+def repo_root(binding_file, start) -> str:
+    """The folder a binding file binds: the one holding `.agents/`, or the file's own. With no
+    binding file, the nearest folder above `start` holding `.git`, else `start`."""
+    if binding_file:
+        d = os.path.dirname(os.path.abspath(binding_file))
+        return os.path.dirname(d) if os.path.basename(d) == ".agents" else d
+    d = os.path.abspath(start)
+    while True:
+        if os.path.exists(os.path.join(d, ".git")):
+            return d
+        up = os.path.dirname(d)
+        if up == d:
+            return os.path.abspath(start)
+        d = up
+
+
 def bound(binding_file, value) -> str:
     """A path from the binding file, which is relative to the file's folder."""
     if not value:
@@ -105,13 +122,17 @@ def bound(binding_file, value) -> str:
 class Series:
     """One suite's identifier series: its prefix, its row type, and where its documents live."""
 
-    def __init__(self, suite, table, binding_file):
+    def __init__(self, suite, table, binding_file, start=None):
         self.suite = suite
         self.type = suite
         self.prefix = str(table.get("idSeries") or SUITES[suite])
         roots = [table.get("patternsRoot"), table.get("outputDir")]
         self.roots = [bound(binding_file, r) for r in roots if r]
         self.register = bound(binding_file, table.get("register"))
+        # Nothing bound to number from: the whole repository is the only place left to look.
+        self.whole_repo = not self.roots and not self.register
+        if self.whole_repo:
+            self.roots = [repo_root(binding_file, start or os.getcwd())]
         self.id_re = re.compile(rf"^{re.escape(self.prefix)}-([0-9]+)$")
         self.folder_re = re.compile(rf"^({re.escape(self.prefix)}-[0-9]+)(?:-|$)")
 
@@ -251,6 +272,12 @@ def next_id(series, reg) -> str:
     return f"{series.prefix}-{(max(nums) + 1 if nums else 1):0{width}d}"
 
 
+def whole_repo_warning(series) -> str:
+    return (f"warning: no register, patternsRoot or outputDir is bound under [suite.{series.suite}], "
+            f"so the whole repository under {series.roots[0]} was scanned for {series.prefix}- "
+            "folders. Bind register, or patternsRoot, to number without a full scan.")
+
+
 def cmd_next(a, series, reg):
     if a.prefix:
         series.prefix = a.prefix
@@ -259,6 +286,8 @@ def cmd_next(a, series, reg):
     if not reg and not any(os.path.isdir(r) for r in series.roots):
         raise UsageError(f"no register is bound under [suite.{series.suite}] and none of its "
                          "folders exist, so there is nothing to number from")
+    if series.whole_repo and not a.register:
+        print(whole_repo_warning(series), file=sys.stderr)
     print(next_id(series, reg))
     return 0
 
@@ -419,7 +448,7 @@ def main(argv=None) -> int:
 
     try:
         binding_file, tables = load_bindings(os.getcwd())
-        series = Series(a.suite, tables.get(a.suite, {}), binding_file or os.getcwd())
+        series = Series(a.suite, tables.get(a.suite, {}), binding_file, os.getcwd())
         reg_path = os.path.abspath(a.register) if a.register else series.register
         reg = Register(reg_path) if reg_path else None
         if a.cmd == "next":
@@ -432,7 +461,7 @@ def main(argv=None) -> int:
         # Every suite whose register is this file contributes its series and folders.
         by_prefix = {series.prefix: series}
         for name, table in tables.items():
-            s = Series(name, table, binding_file)
+            s = Series(name, table, binding_file, os.getcwd())
             if name != a.suite and s.register and os.path.isfile(s.register) \
                     and os.path.samefile(s.register, reg.path):
                 by_prefix.setdefault(s.prefix, s)

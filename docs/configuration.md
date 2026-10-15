@@ -13,7 +13,7 @@ One file binds the whole skill suite to a repository: `.agents/skill-bindings.to
 3. `model.toml`
 4. `.model.toml`
 
-The first found wins; `--config <file>` on a `model` command overrides the search. With none found, `model` uses built-in defaults that read `## Components` and `## Interfaces` tables, which do not match the pattern template, and `doctor --skill pattern` fails because `outputDir` is required.
+The first found wins; `--config <file>` on a `model` command overrides the search. With none found, `model` uses built-in defaults that read `## Components` and `## Interfaces` tables, which do not match the pattern template, so `doctor --skill pattern` warns.
 
 Rules that apply to the whole file:
 
@@ -31,7 +31,7 @@ The keys the `pattern` skill declares in `inputs.toml`.
 
 | Key | Type | Required | Default | Read by |
 |---|---|---|---|---|
-| `outputDir` | directory | yes | none | The agent, for new patterns; `model` for compositions |
+| `outputDir` | directory | no | none: the agent asks | The agent, for new patterns; `register.py`; `model` for compositions |
 | `template` | file | no | the skill's `assets/template.md` | The agent |
 | `idSeries` | string | no | `PAT` | The agent, `register.py` |
 | `register` | file | no | none | `register.py`; `model`, for compositions |
@@ -43,7 +43,9 @@ The keys the `pattern` skill declares in `inputs.toml`.
 
 ### outputDir
 
-The folder new pattern folders are created in, as `<outputDir>/<ID>-<slug>/index.md`. It must exist; `doctor` fails otherwise. It is also the last fallback for where participating patterns are found.
+The folder new pattern folders are created in by default, as `<outputDir>/<ID>-<slug>/index.md`; the user can always name another. If set, it must exist; `doctor` fails otherwise. It is also the last fallback for where participating patterns are found.
+
+Unset, the agent asks where to create each new pattern. If `register` and `patternsRoot` are unset too, nothing says where the patterns are, so `register.py next` scans every folder in the repository (skipping hidden folders, `node_modules`, `dist` and `build`) for the highest number, and warns that it did. `check.py` warns about this configuration. It is correct, only slower in a large repository; bind `register` or `patternsRoot` to avoid it.
 
 ```toml
 [suite.pattern]
@@ -68,7 +70,7 @@ architecture/patterns/
   platform/PAT-002-event-backbone/
 ```
 
-A pattern folder carries its diagram and views with it, so a move breaks nothing inside it, and composition finds a participating pattern anywhere under `patternsRoot`. `register.py next` numbers a new pattern from the whole tree, never from `outputDir` alone. Keep a `.gitkeep` in `_inbox` so the folder `doctor` requires survives an empty commit. A hand-written relative link to a moved pattern does break; a `PAT-001` linked through `cross-reference` does not.
+A pattern folder carries its diagram and views with it, so a move breaks nothing inside it, and composition finds a participating pattern anywhere under `patternsRoot`. `register.py next` numbers a new pattern from the whole tree, never from `outputDir` alone. Keep a `.gitkeep` in `_inbox` so the folder survives being emptied, since `doctor` fails on a bound folder that does not exist. A hand-written relative link to a moved pattern does break; a `PAT-001` linked through `cross-reference` does not.
 
 ### template
 
