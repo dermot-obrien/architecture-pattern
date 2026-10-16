@@ -76,6 +76,14 @@ Write-Host "  Latest cross-reference:  $LATEST_XREF"
 Write-Host "  Latest model:            $LATEST_MODEL"
 Write-Host "  Latest markdown-deck:    $LATEST_DECK"
 
+# Check if any tags are unknown
+if ($LATEST_PATTERN -eq "unknown" -or $LATEST_MODEL -eq "unknown" -or $LATEST_DECK -eq "unknown") {
+    Write-Host ""
+    Write-Host "Error: Unable to fetch latest versions from GitHub." -ForegroundColor Red
+    Write-Host "Please check your internet connection and try again." -ForegroundColor Red
+    exit 1
+}
+
 if ($CheckOnly) {
     Write-Host ""
     Write-Host "Check complete. Run without -CheckOnly to update." -ForegroundColor Green
