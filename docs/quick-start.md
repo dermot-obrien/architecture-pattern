@@ -27,9 +27,9 @@ PowerShell:
 ```powershell
 New-Item -ItemType Directory pattern-quickstart | Out-Null
 Set-Location pattern-quickstart
-git clone --depth 1 --branch pattern--v0.10.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
-git clone --depth 1 --branch model--v0.8.0 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
-git clone --depth 1 --branch markdown-deck--v0.6.4 https://github.com/dermot-obrien/markdown-deck.git _src/markdown-deck
+git clone --depth 1 --branch pattern--v0.11.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
+git clone --depth 1 --branch model--v0.9.0 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
+git clone --depth 1 --branch markdown-deck--v0.6.8 https://github.com/dermot-obrien/markdown-deck.git _src/markdown-deck
 New-Item -ItemType Directory -Force .agents/skills | Out-Null
 Copy-Item -Recurse _src/architecture-pattern/skills/pattern .agents/skills/
 Copy-Item -Recurse _src/diagram-model/skills/model .agents/skills/
@@ -41,9 +41,9 @@ bash:
 
 ```bash
 mkdir pattern-quickstart && cd pattern-quickstart
-git clone --depth 1 --branch pattern--v0.10.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
-git clone --depth 1 --branch model--v0.8.0 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
-git clone --depth 1 --branch markdown-deck--v0.6.4 https://github.com/dermot-obrien/markdown-deck.git _src/markdown-deck
+git clone --depth 1 --branch pattern--v0.11.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
+git clone --depth 1 --branch model--v0.9.0 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
+git clone --depth 1 --branch markdown-deck--v0.6.8 https://github.com/dermot-obrien/markdown-deck.git _src/markdown-deck
 mkdir -p .agents/skills
 cp -r _src/architecture-pattern/skills/pattern _src/diagram-model/skills/model _src/markdown-deck/skills/markdown-deck .agents/skills/
 rm -rf _src
@@ -58,6 +58,41 @@ npm install --prefix .agents/skills/markdown-deck --no-audit --no-fund
 ```
 
 You should see `added 13 packages`, give or take. This installs Playwright for the PDF. It prints with Microsoft Edge or Google Chrome, so on Windows nothing more is needed; elsewhere, if neither browser is installed, run `npx playwright install chromium` from `.agents/skills/markdown-deck`.
+
+## 2a. Updating when already installed
+
+**If you already have the skills installed and need to update to a newer version**, the easiest approach is to use the automated update scripts from the [architecture-pattern repository](https://github.com/dermot-obrien/architecture-pattern):
+
+```bash
+# Clone the repository temporarily to get the scripts
+git clone --depth 1 https://github.com/dermot-obrien/architecture-pattern.git _update
+cd _update
+
+# Run the update script (bash or PowerShell)
+./scripts/update-skills.sh              # bash
+.\scripts\update-skills.ps1             # PowerShell
+
+# Clean up
+cd ..
+rm -rf _update                          # bash
+Remove-Item -Recurse -Force _update     # PowerShell
+```
+
+The script will automatically backup your current installation, download the latest versions, and verify everything works.
+
+**Manual update**: If you prefer to update manually, **you must delete the old installations first** to avoid stale files:
+
+PowerShell:
+```powershell
+Remove-Item -Recurse -Force .agents/skills/pattern, .agents/skills/model, .agents/skills/markdown-deck
+```
+
+bash:
+```bash
+rm -rf .agents/skills/{pattern,model,markdown-deck}
+```
+
+Then follow step 2 above to reinstall with the latest version tags.
 
 ## 3. Bind the skills to the workspace
 

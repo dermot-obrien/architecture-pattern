@@ -165,7 +165,7 @@ echo "cross-reference:"
 node "$SKILLS_DIR/cross-reference/scripts/check.cjs" || echo "  ⚠️  Check failed"
 echo ""
 echo "model:"
-python "$SKILLS_DIR/model/bin/model.py doctor || echo "  ⚠️  Check failed"
+python "$SKILLS_DIR/model/bin/model.py" doctor || echo "  ⚠️  Check failed"
 
 echo ""
 echo "🎉 Update complete!"
