@@ -206,18 +206,24 @@ Copy-Item -Recurse "$TEMP_DIR\markdown-deck\skills\markdown-deck" "$SKILLS_DIR\"
 # Install npm dependencies for markdown-deck
 Write-Host ""
 Write-Host "Installing npm dependencies for markdown-deck..." -ForegroundColor Cyan
-Push-Location "$SKILLS_DIR\markdown-deck"
-try {
-    npm install --no-audit --no-fund 2>&1 | Out-Null
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "Warning: npm install failed. Run manually from the markdown-deck directory:" -ForegroundColor Yellow
-        Write-Host "  cd $SKILLS_DIR\markdown-deck" -ForegroundColor Yellow
-        Write-Host "  npm install" -ForegroundColor Yellow
+$markdownDeckPath = Join-Path (Get-Location) "$SKILLS_DIR\markdown-deck"
+if (Test-Path "$markdownDeckPath\package.json") {
+    Push-Location $markdownDeckPath
+    try {
+        npm install --no-audit --no-fund 2>&1 | Out-Null
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "Warning: npm install failed. Run manually:" -ForegroundColor Yellow
+            Write-Host "  cd $markdownDeckPath" -ForegroundColor Yellow
+            Write-Host "  npm install" -ForegroundColor Yellow
+        }
+    } catch {
+        Write-Host "Warning: Could not install npm dependencies: $_" -ForegroundColor Yellow
+    } finally {
+        Pop-Location
     }
-} catch {
-    Write-Host "Warning: Could not install npm dependencies: $_" -ForegroundColor Yellow
-} finally {
-    Pop-Location
+} else {
+    Write-Host "Warning: markdown-deck package.json not found at: $markdownDeckPath" -ForegroundColor Yellow
+    Write-Host "Skipping npm install. Install manually if needed." -ForegroundColor Yellow
 }
 
 # Clean up
