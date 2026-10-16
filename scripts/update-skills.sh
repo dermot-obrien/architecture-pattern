@@ -141,18 +141,17 @@ cp -r "$TEMP_DIR/diagram-model/skills/model" "$SKILLS_DIR/"
 echo "  Installing markdown-deck..."
 cp -r "$TEMP_DIR/markdown-deck/skills/markdown-deck" "$SKILLS_DIR/"
 
-# Copy helper scripts to workspace
+# Copy helper scripts to pattern skill
 echo ""
-echo "📋 Installing helper scripts..."
-mkdir -p scripts
+echo "📋 Installing helper scripts to pattern skill..."
 if [ -f "$TEMP_DIR/architecture-pattern/scripts/list-patterns.sh" ]; then
-    cp "$TEMP_DIR/architecture-pattern/scripts/list-patterns.sh" scripts/
-    chmod +x scripts/list-patterns.sh
-    echo "  Installed list-patterns.sh"
+    cp "$TEMP_DIR/architecture-pattern/scripts/list-patterns.sh" "$SKILLS_DIR/pattern/scripts/"
+    chmod +x "$SKILLS_DIR/pattern/scripts/list-patterns.sh"
+    echo "  Installed list-patterns.sh to pattern skill"
 fi
 if [ -f "$TEMP_DIR/architecture-pattern/scripts/list-patterns.ps1" ]; then
-    cp "$TEMP_DIR/architecture-pattern/scripts/list-patterns.ps1" scripts/
-    echo "  Installed list-patterns.ps1"
+    cp "$TEMP_DIR/architecture-pattern/scripts/list-patterns.ps1" "$SKILLS_DIR/pattern/scripts/"
+    echo "  Installed list-patterns.ps1 to pattern skill"
 fi
 
 # Install npm dependencies for markdown-deck
@@ -201,6 +200,7 @@ echo "💡 Next steps:"
 echo "  1. Set up skill bindings if needed: create .agents/skill-bindings.toml"
 echo "     See: https://github.com/dermot-obrien/architecture-pattern/blob/main/docs/quick-start.md"
 echo "  2. Check bindings: python $SKILLS_DIR/model/bin/model.py doctor --skill pattern"
-echo "  3. Re-validate existing content: python $SKILLS_DIR/model/bin/model.py scan <your-folder> --recursive"
+echo "  3. List patterns: $SKILLS_DIR/pattern/scripts/list-patterns.sh <directory> [--verbose]"
+echo "  4. Re-validate existing content: python $SKILLS_DIR/model/bin/model.py scan <your-folder> --recursive"
 echo ""
 echo "Note: Catalogue mapping warnings are normal if you haven't created .agents/skill-bindings.toml yet"

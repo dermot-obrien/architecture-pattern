@@ -203,17 +203,16 @@ Copy-Item -Recurse "$TEMP_DIR\diagram-model\skills\model" "$SKILLS_DIR\"
 Write-Host "  Installing markdown-deck..."
 Copy-Item -Recurse "$TEMP_DIR\markdown-deck\skills\markdown-deck" "$SKILLS_DIR\"
 
-# Copy helper scripts to workspace
+# Copy helper scripts to pattern skill
 Write-Host ""
-Write-Host "Installing helper scripts..." -ForegroundColor Cyan
-New-Item -ItemType Directory -Force -Path "scripts" | Out-Null
+Write-Host "Installing helper scripts to pattern skill..." -ForegroundColor Cyan
 if (Test-Path "$TEMP_DIR\architecture-pattern\scripts\list-patterns.sh") {
-    Copy-Item "$TEMP_DIR\architecture-pattern\scripts\list-patterns.sh" "scripts\" -Force
-    Write-Host "  Installed list-patterns.sh"
+    Copy-Item "$TEMP_DIR\architecture-pattern\scripts\list-patterns.sh" "$SKILLS_DIR\pattern\scripts\" -Force
+    Write-Host "  Installed list-patterns.sh to pattern skill"
 }
 if (Test-Path "$TEMP_DIR\architecture-pattern\scripts\list-patterns.ps1") {
-    Copy-Item "$TEMP_DIR\architecture-pattern\scripts\list-patterns.ps1" "scripts\" -Force
-    Write-Host "  Installed list-patterns.ps1"
+    Copy-Item "$TEMP_DIR\architecture-pattern\scripts\list-patterns.ps1" "$SKILLS_DIR\pattern\scripts\" -Force
+    Write-Host "  Installed list-patterns.ps1 to pattern skill"
 }
 
 # Install npm dependencies for markdown-deck
@@ -277,6 +276,7 @@ Write-Host "Next steps:" -ForegroundColor Yellow
 Write-Host "  1. Set up skill bindings if needed: create .agents\skill-bindings.toml"
 Write-Host "     See: https://github.com/dermot-obrien/architecture-pattern/blob/main/docs/quick-start.md"
 Write-Host "  2. Check bindings: python $SKILLS_DIR\model\bin\model.py doctor --skill pattern"
-Write-Host "  3. Re-validate existing content: python $SKILLS_DIR\model\bin\model.py scan <your-folder> --recursive"
+Write-Host "  3. List patterns: $SKILLS_DIR\pattern\scripts\list-patterns.ps1 -Path <directory> [-Verbose]"
+Write-Host "  4. Re-validate existing content: python $SKILLS_DIR\model\bin\model.py scan <your-folder> --recursive"
 Write-Host ""
 Write-Host "Note: Catalogue mapping warnings are normal if you haven't created .agents\skill-bindings.toml yet" -ForegroundColor Cyan
