@@ -61,44 +61,7 @@ npm install --prefix .agents/skills/markdown-deck --no-audit --no-fund
 
 You should see `added 13 packages`, give or take. This installs Playwright for the PDF. It prints with Microsoft Edge or Google Chrome, so on Windows nothing more is needed; elsewhere, if neither browser is installed, run `npx playwright install chromium` from `.agents/skills/markdown-deck`.
 
-## 3. Updating when already installed
-
-**If you already have the skills installed and need to update to a newer version**, the easiest approach is to use the automated update scripts:
-
-PowerShell:
-
-```powershell
-# Download and run the update script
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/dermot-obrien/architecture-pattern/main/scripts/update-skills.ps1" -OutFile "update-skills.ps1"
-.\update-skills.ps1
-```
-
-bash:
-
-```bash
-# Download and run the update script
-curl -o update-skills.sh https://raw.githubusercontent.com/dermot-obrien/architecture-pattern/main/scripts/update-skills.sh
-chmod +x update-skills.sh
-./update-skills.sh
-```
-
-The script will automatically backup your current installation, download the latest versions, and verify everything works.
-
-**Manual update**: If you prefer to update manually, **you must delete the old installations first** to avoid stale files:
-
-PowerShell:
-```powershell
-Remove-Item -Recurse -Force .agents/skills/pattern, .agents/skills/model, .agents/skills/markdown-deck
-```
-
-bash:
-```bash
-rm -rf .agents/skills/{pattern,model,markdown-deck}
-```
-
-Then follow step 2 above to reinstall with the latest version tags.
-
-## 4. Bind the skills to the workspace
+## 3. Bind the skills to the workspace
 
 The skills know nothing about your folders or your tables until a binding file tells them. Create the folder patterns will go in:
 
@@ -165,7 +128,7 @@ pattern: ok
 
 A `warning:` line about draw.io desktop is fine if you do not have it.
 
-## 5. Write a small pattern
+## 4. Write a small pattern
 
 Create `patterns/PAT-001-order-intake/index.md`. PowerShell: `New-Item -ItemType Directory -Force patterns/PAT-001-order-intake | Out-Null`; bash: `mkdir -p patterns/PAT-001-order-intake`. Then give it this content:
 
@@ -254,7 +217,7 @@ This is a trimmed copy of the full template, `.agents/skills/pattern/assets/temp
 - `Start:` and `Finish:` say where S1's flow enters and leaves, so another pattern can run it (step 9).
 - The `deck:` comments choose what goes on slides. They are invisible when the Markdown is rendered.
 
-## 6. Generate the diagram and check it
+## 5. Generate the diagram and check it
 
 ```
 cd patterns/PAT-001-order-intake
@@ -272,7 +235,7 @@ You should see:
 
 `emit` wrote a draw.io file with one shape per building block, one labelled connector per interface, and a layer for S1 with its numbered steps. `validate` confirmed the document and the diagram agree, and derived the abstraction: every box is a local role, so the pattern is conceptual.
 
-## 7. Optionally, arrange the layout
+## 6. Optionally, arrange the layout
 
 `emit` lays the boxes out on a plain grid. Open `components.drawio` in draw.io, move the boxes, and save. From now on use `sync`, never `emit`, so your layout is kept:
 
@@ -282,7 +245,7 @@ python .agents/skills/model/bin/model.py sync patterns/PAT-001-order-intake/inde
 
 It prints `rebuild  scen  S1  2 step(s)`: scenario layers are always regenerated from the steps tables, while the boxes and connectors keep the places you gave them.
 
-## 8. Publish it
+## 7. Publish it
 
 ```
 python .agents/skills/pattern/scripts/publish.py patterns/PAT-001-order-intake
@@ -331,7 +294,7 @@ open patterns/PAT-001-order-intake/scenarios.html
 open patterns/PAT-001-order-intake/dist/PAT-001-order-intake/deck.html
 ```
 
-## 9. See validation catch a drift
+## 8. See validation catch a drift
 
 Add a row to Building Blocks, `| 04 Audit log | Records every order | loose |`, and validate without syncing:
 
@@ -346,7 +309,7 @@ python .agents/skills/model/bin/model.py validate patterns/PAT-001-order-intake/
 
 The document says a box exists that the diagram does not show. Delete the row again. To keep it instead, add `| 04 | gap | gap |` to Catalogue Mapping and run `sync`, which draws the new box. This is the point of the method: the tables and the picture cannot quietly disagree.
 
-## 10. Compose: a pattern that runs another
+## 9. Compose: a pattern that runs another
 
 A composite pattern's scenario steps run other patterns' flows. Here, checkout runs PAT-001's S1 to take the order, and leaves the customer notification as an open participating pattern, not written yet.
 
@@ -460,7 +423,7 @@ python .agents/skills/pattern/scripts/publish.py patterns --recursive
 
 Both report `ok`, and PAT-002's notes start with its composition. Its `components.svg` shows a dashed region labelled PAT-001 Order Intake round the two boxes that play PAT-001's part, and one labelled `Open: customer notification`. In its `scenarios.html`, step 1 carries a boxed-plus badge: click it, or press D, to open PAT-001's walkthrough at S1.
 
-## 11. See the approval gate
+## 10. See the approval gate
 
 An approved pattern cannot rest on an unapproved or unwritten one. Change PAT-002's front matter to `status: Approved` and validate:
 
@@ -475,7 +438,7 @@ python .agents/skills/model/bin/model.py validate patterns/PAT-002-checkout/inde
 
 It exits 1, and `publish.py` would skip PAT-002 until it is fixed. Set the status back to `Draft`.
 
-## 12. Let your agent do it
+## 11. Let your agent do it
 
 Everything above is what the `pattern` skill tells an agent to do. Open the workspace in VS Code with GitHub Copilot, Cursor, Claude Code, Codex, Gemini CLI or any agent that reads `.agents/skills/`, and ask, for example:
 
@@ -483,7 +446,7 @@ Everything above is what the `pattern` skill tells an agent to do. Open the work
 
 The agent runs `doctor` first, copies the template into `patterns/PAT-003-<slug>/index.md`, fills it, generates and validates the diagram, updates PAT-002's Uses cell, and publishes. In some agents you can also type `/pattern`.
 
-## 13. Helper scripts
+## 12. Helper scripts
 
 The pattern skill includes helper scripts for common housekeeping tasks.
 
