@@ -203,6 +203,19 @@ Copy-Item -Recurse "$TEMP_DIR\diagram-model\skills\model" "$SKILLS_DIR\"
 Write-Host "  Installing markdown-deck..."
 Copy-Item -Recurse "$TEMP_DIR\markdown-deck\skills\markdown-deck" "$SKILLS_DIR\"
 
+# Copy helper scripts to workspace
+Write-Host ""
+Write-Host "Installing helper scripts..." -ForegroundColor Cyan
+New-Item -ItemType Directory -Force -Path "scripts" | Out-Null
+if (Test-Path "$TEMP_DIR\architecture-pattern\scripts\list-patterns.sh") {
+    Copy-Item "$TEMP_DIR\architecture-pattern\scripts\list-patterns.sh" "scripts\" -Force
+    Write-Host "  Installed list-patterns.sh"
+}
+if (Test-Path "$TEMP_DIR\architecture-pattern\scripts\list-patterns.ps1") {
+    Copy-Item "$TEMP_DIR\architecture-pattern\scripts\list-patterns.ps1" "scripts\" -Force
+    Write-Host "  Installed list-patterns.ps1"
+}
+
 # Install npm dependencies for markdown-deck
 Write-Host ""
 Write-Host "Installing npm dependencies for markdown-deck..." -ForegroundColor Cyan
