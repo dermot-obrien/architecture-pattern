@@ -41,7 +41,14 @@ function Get-LatestTag {
     $tags = git ls-remote --tags $Repo 2>&1 | Select-String "$Skill--v"
     if ($tags) {
         $tags = $tags | ForEach-Object { $_.ToString() -replace '.*refs/tags/', '' }
-        $sorted = $tags | Sort-Object { [Version]($_ -replace '.*--v', '') }
+        $sorted = $tags | Sort-Object {
+            $versionStr = ($_ -replace '.*--v', '')
+            try {
+                [Version]$versionStr
+            } catch {
+                [Version]"0.0.0"
+            }
+        }
         return $sorted[-1]
     }
     return "unknown"
