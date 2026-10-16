@@ -206,7 +206,17 @@ Copy-Item -Recurse "$TEMP_DIR\markdown-deck\skills\markdown-deck" "$SKILLS_DIR\"
 # Install npm dependencies for markdown-deck
 Write-Host ""
 Write-Host "Installing npm dependencies for markdown-deck..." -ForegroundColor Cyan
-npm install --prefix "$SKILLS_DIR\markdown-deck" --no-audit --no-fund
+$currentDir = Get-Location
+try {
+    $absoluteSkillsDir = Resolve-Path $SKILLS_DIR
+    npm install --prefix "$absoluteSkillsDir\markdown-deck" --no-audit --no-fund
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Warning: npm install failed. You may need to run it manually:" -ForegroundColor Yellow
+        Write-Host "  npm install --prefix $SKILLS_DIR\markdown-deck" -ForegroundColor Yellow
+    }
+} catch {
+    Write-Host "Warning: Could not install npm dependencies: $_" -ForegroundColor Yellow
+}
 
 # Clean up
 Write-Host ""
@@ -240,6 +250,9 @@ Write-Host "  model:            $(Get-SkillVersion "$SKILLS_DIR\model")"
 Write-Host "  markdown-deck:    $(Get-SkillVersion "$SKILLS_DIR\markdown-deck")"
 Write-Host ""
 Write-Host "Next steps:" -ForegroundColor Yellow
-Write-Host "  1. Re-validate your patterns: python $SKILLS_DIR\model\bin\model.py scan patterns --recursive"
-Write-Host "  2. Republish any existing patterns: python $SKILLS_DIR\pattern\scripts\publish.py <folder>"
-Write-Host "  3. Check your bindings: python $SKILLS_DIR\model\bin\model.py doctor --skill pattern"
+Write-Host "  1. Set up skill bindings if needed: create .agents\skill-bindings.toml"
+Write-Host "     See: https://github.com/dermot-obrien/architecture-pattern/blob/main/docs/quick-start.md"
+Write-Host "  2. Check bindings: python $SKILLS_DIR\model\bin\model.py doctor --skill pattern"
+Write-Host "  3. Re-validate existing content: python $SKILLS_DIR\model\bin\model.py scan <your-folder> --recursive"
+Write-Host ""
+Write-Host "Note: Catalogue mapping warnings are normal if you haven't created .agents\skill-bindings.toml yet" -ForegroundColor Cyan
