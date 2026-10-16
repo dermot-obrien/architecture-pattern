@@ -59,58 +59,6 @@ npm install --prefix .agents/skills/markdown-deck --no-audit --no-fund
 
 You should see `added 13 packages`, give or take. This installs Playwright for the PDF. It prints with Microsoft Edge or Google Chrome, so on Windows nothing more is needed; elsewhere, if neither browser is installed, run `npx playwright install chromium` from `.agents/skills/markdown-deck`.
 
-## 2a. Updating when already installed
-
-**If you already have the skills installed and need to update to a newer version**, the easiest approach is to use the automated update scripts from the [architecture-pattern repository](https://github.com/dermot-obrien/architecture-pattern):
-
-PowerShell:
-
-```powershell
-# Remove any previous download and clone fresh
-Remove-Item -Recurse -Force _update -ErrorAction SilentlyContinue
-git clone --depth 1 https://github.com/dermot-obrien/architecture-pattern.git _update
-Set-Location _update
-
-# Run the update script
-.\scripts\update-skills.ps1
-
-# Clean up
-Set-Location ..
-Remove-Item -Recurse -Force _update
-```
-
-bash:
-
-```bash
-# Remove any previous download and clone fresh
-rm -rf _update
-git clone --depth 1 https://github.com/dermot-obrien/architecture-pattern.git _update
-cd _update
-
-# Run the update script
-./scripts/update-skills.sh
-
-# Clean up
-cd ..
-rm -rf _update
-```
-
-The script will automatically backup your current installation, download the latest versions, and verify everything works.
-
-**Manual update**: If you prefer to update manually, **you must delete the old installations first** to avoid stale files:
-
-PowerShell:
-```powershell
-Remove-Item -Recurse -Force .agents/skills/pattern, .agents/skills/model, .agents/skills/markdown-deck
-```
-
-bash:
-```bash
-rm -rf .agents/skills/{pattern,model,markdown-deck}
-```
-
-Then follow step 2 above to reinstall with the latest version tags.
-
 ## 3. Bind the skills to the workspace
 
 The skills know nothing about your folders or your tables until a binding file tells them. Create the folder patterns will go in:
@@ -496,6 +444,44 @@ Everything above is what the `pattern` skill tells an agent to do. Open the work
 
 The agent runs `doctor` first, copies the template into `patterns/PAT-003-<slug>/index.md`, fills it, generates and validates the diagram, updates PAT-002's Uses cell, and publishes. In some agents you can also type `/pattern`.
 
+## 12. Helper scripts
+
+The pattern skill includes helper scripts for common housekeeping tasks.
+
+### List all patterns
+
+List all patterns, use cases, and reference architectures with validation status:
+
+bash:
+```bash
+.agents/skills/pattern/scripts/list-patterns.sh patterns
+.agents/skills/pattern/scripts/list-patterns.sh patterns --verbose
+```
+
+PowerShell:
+```powershell
+.agents\skills\pattern\scripts\list-patterns.ps1 -Path patterns
+.agents\skills\pattern\scripts\list-patterns.ps1 -Path patterns -Verbose
+```
+
+Output shows each pattern with validation status:
+
+```
+[PAT-001] ✓ Order Intake Pattern
+  Version: 1.0
+  Path: ./patterns/PAT-001-order-intake
+
+[PAT-002] ✗ Checkout Composite
+  Version: 1.0
+  Path: ./patterns/PAT-002-checkout
+```
+
+In verbose mode, see detailed validation warnings for patterns that need attention.
+
+### Updating skills
+
+To update the skills to the latest versions, see [Updating](updating.md).
+
 ## Where next
 
 - [Concepts](concepts.md): what a pattern is, and the ideas behind the tables, the diagram and the deck.
@@ -503,3 +489,4 @@ The agent runs `doctor` first, copies the template into `patterns/PAT-003-<slug>
 - [Composing patterns](composing.md): the Uses column, Start and Finish, role bindings and the approval gate in full.
 - [Configuration](configuration.md) and [commands](commands.md): every key and every flag.
 - [Troubleshooting](troubleshooting.md): what each error means and how to fix it.
+- [Updating](updating.md): how to update skills to the latest versions.
