@@ -167,10 +167,15 @@ foreach ($skill in $skills) {
     $skillPath = "$SKILLS_DIR\$skill"
     if (Test-Path $skillPath) {
         Write-Host "  Backing up $skill..."
-        Copy-Item -Recurse $skillPath "$BACKUP_DIR\$skill"
+        # Use robocopy to avoid path length issues, exclude node_modules (can be reinstalled)
+        $excludeDirs = @("node_modules")
+        robocopy $skillPath "$BACKUP_DIR\$skill" /E /XD $excludeDirs /NFL /NDL /NJH /NJS | Out-Null
+        if ($LASTEXITCODE -ge 8) {
+            Write-Host "    Warning: Some files may not have been backed up" -ForegroundColor Yellow
+        }
     }
 }
-Write-Host "  Backups saved to: $BACKUP_DIR"
+Write-Host "  Backups saved to: $BACKUP_DIR (node_modules excluded)"
 
 # Remove old installations
 Write-Host ""

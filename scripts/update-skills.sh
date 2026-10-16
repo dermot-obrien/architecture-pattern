@@ -106,10 +106,17 @@ mkdir -p "$BACKUP_DIR"
 for skill in pattern use-case cross-reference model markdown-deck; do
     if [ -d "$SKILLS_DIR/$skill" ]; then
         echo "  Backing up $skill..."
-        cp -r "$SKILLS_DIR/$skill" "$BACKUP_DIR/$skill"
+        # Use rsync to exclude node_modules (can be reinstalled, causes path issues)
+        if command -v rsync >/dev/null 2>&1; then
+            rsync -a --exclude='node_modules' "$SKILLS_DIR/$skill/" "$BACKUP_DIR/$skill/"
+        else
+            # Fallback to cp with find to exclude node_modules
+            mkdir -p "$BACKUP_DIR/$skill"
+            (cd "$SKILLS_DIR/$skill" && find . -name node_modules -prune -o -print | cpio -pdm "$BACKUP_DIR/$skill" 2>/dev/null)
+        fi
     fi
 done
-echo "  Backups saved to: $BACKUP_DIR"
+echo "  Backups saved to: $BACKUP_DIR (node_modules excluded)"
 
 # Remove old installations
 echo ""
