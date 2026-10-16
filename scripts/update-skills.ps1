@@ -109,31 +109,50 @@ New-Item -ItemType Directory -Force -Path $TEMP_DIR | Out-Null
 Push-Location $TEMP_DIR
 try {
     Write-Host "  Cloning architecture-pattern..."
-    $cloneOutput = git clone --depth 1 --branch $LATEST_PATTERN $REPO_PATTERN architecture-pattern 2>&1
+    $ErrorActionPreference = "Continue"
+    git clone --depth 1 --branch $LATEST_PATTERN $REPO_PATTERN architecture-pattern 2>&1 | ForEach-Object { 
+        if ($_ -match "fatal:|error:") { 
+            Write-Host $_ -ForegroundColor Red 
+        }
+    }
+    $ErrorActionPreference = "Stop"
     if ($LASTEXITCODE -ne 0) { 
-        Write-Host $cloneOutput -ForegroundColor Red
-        throw "Failed to clone architecture-pattern" 
+        throw "Failed to clone architecture-pattern (exit code: $LASTEXITCODE)" 
     }
     
     Write-Host "  Cloning diagram-model..."
-    $cloneOutput = git clone --depth 1 --branch $LATEST_MODEL $REPO_MODEL diagram-model 2>&1
+    $ErrorActionPreference = "Continue"
+    git clone --depth 1 --branch $LATEST_MODEL $REPO_MODEL diagram-model 2>&1 | ForEach-Object { 
+        if ($_ -match "fatal:|error:") { 
+            Write-Host $_ -ForegroundColor Red 
+        }
+    }
+    $ErrorActionPreference = "Stop"
     if ($LASTEXITCODE -ne 0) { 
-        Write-Host $cloneOutput -ForegroundColor Red
-        throw "Failed to clone diagram-model" 
+        throw "Failed to clone diagram-model (exit code: $LASTEXITCODE)" 
     }
     
     Write-Host "  Cloning markdown-deck..."
-    $cloneOutput = git clone --depth 1 --branch $LATEST_DECK $REPO_DECK markdown-deck 2>&1
+    $ErrorActionPreference = "Continue"
+    git clone --depth 1 --branch $LATEST_DECK $REPO_DECK markdown-deck 2>&1 | ForEach-Object { 
+        if ($_ -match "fatal:|error:") { 
+            Write-Host $_ -ForegroundColor Red 
+        }
+    }
+    $ErrorActionPreference = "Stop"
     if ($LASTEXITCODE -ne 0) { 
-        Write-Host $cloneOutput -ForegroundColor Red
-        throw "Failed to clone markdown-deck" 
+        throw "Failed to clone markdown-deck (exit code: $LASTEXITCODE)" 
     }
 } catch {
     Pop-Location
     Remove-Item -Recurse -Force $TEMP_DIR -ErrorAction SilentlyContinue
     Write-Host ""
-    Write-Host "Error: $_" -ForegroundColor Red
-    Write-Host "Clone failed. Please check the error and try again." -ForegroundColor Red
+    Write-Host "Clone error: $_" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "This might be due to:" -ForegroundColor Yellow
+    Write-Host "  - Network connectivity issues" -ForegroundColor Yellow
+    Write-Host "  - Git not installed or not in PATH" -ForegroundColor Yellow
+    Write-Host "  - Missing or invalid repository tag" -ForegroundColor Yellow
     exit 1
 }
 Pop-Location
