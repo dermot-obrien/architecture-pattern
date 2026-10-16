@@ -66,7 +66,8 @@ You should see `added 13 packages`, give or take. This installs Playwright for t
 PowerShell:
 
 ```powershell
-# Clone the repository temporarily to get the scripts
+# Remove any previous download and clone fresh
+Remove-Item -Recurse -Force _update -ErrorAction SilentlyContinue
 git clone --depth 1 https://github.com/dermot-obrien/architecture-pattern.git _update
 Set-Location _update
 
@@ -81,7 +82,8 @@ Remove-Item -Recurse -Force _update
 bash:
 
 ```bash
-# Clone the repository temporarily to get the scripts
+# Remove any previous download and clone fresh
+rm -rf _update
 git clone --depth 1 https://github.com/dermot-obrien/architecture-pattern.git _update
 cd _update
 
