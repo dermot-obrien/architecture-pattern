@@ -22,6 +22,8 @@ You need Python 3.11 or newer, Node 18 or newer and any recent git. draw.io desk
 
 `pattern` does its work through two other skills, `model` (from the diagram-model repository) and `markdown-deck`. Install all three into `.agents/skills/`, the project folder most agents read. [Install](../README.md#install) lists the other folders and installers; this guide copies them with git so it works the same everywhere.
 
+**Note:** If you already have the skills installed and need to update to a newer version, see [Updating](updating.md) for automated update scripts and instructions.
+
 PowerShell:
 
 ```powershell
