@@ -206,16 +206,18 @@ Copy-Item -Recurse "$TEMP_DIR\markdown-deck\skills\markdown-deck" "$SKILLS_DIR\"
 # Install npm dependencies for markdown-deck
 Write-Host ""
 Write-Host "Installing npm dependencies for markdown-deck..." -ForegroundColor Cyan
-$currentDir = Get-Location
+Push-Location "$SKILLS_DIR\markdown-deck"
 try {
-    $absoluteSkillsDir = Resolve-Path $SKILLS_DIR
-    npm install --prefix "$absoluteSkillsDir\markdown-deck" --no-audit --no-fund
+    npm install --no-audit --no-fund 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "Warning: npm install failed. You may need to run it manually:" -ForegroundColor Yellow
-        Write-Host "  npm install --prefix $SKILLS_DIR\markdown-deck" -ForegroundColor Yellow
+        Write-Host "Warning: npm install failed. Run manually from the markdown-deck directory:" -ForegroundColor Yellow
+        Write-Host "  cd $SKILLS_DIR\markdown-deck" -ForegroundColor Yellow
+        Write-Host "  npm install" -ForegroundColor Yellow
     }
 } catch {
     Write-Host "Warning: Could not install npm dependencies: $_" -ForegroundColor Yellow
+} finally {
+    Pop-Location
 }
 
 # Clean up
