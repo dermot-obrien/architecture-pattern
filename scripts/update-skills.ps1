@@ -2,7 +2,6 @@
 # Usage: .\scripts\update-skills.ps1 [-User] [-CheckOnly]
 
 param(
-    [switch]$User,
     [switch]$CheckOnly
 )
 
@@ -13,27 +12,22 @@ $REPO_PATTERN = "https://github.com/dermot-obrien/architecture-pattern.git"
 $REPO_MODEL = "https://github.com/dermot-obrien/diagram-model.git"
 $REPO_DECK = "https://github.com/dermot-obrien/markdown-deck.git"
 
-# Determine installation directory
-if ($User) {
-    $SKILLS_DIR = "$env:USERPROFILE\.agents\skills"
-    Write-Host "Updating user-level skills at: $SKILLS_DIR" -ForegroundColor Cyan
-} else {
-    $SKILLS_DIR = ".agents\skills"
-    $workspaceSkillsPath = Join-Path (Get-Location) $SKILLS_DIR
-    Write-Host "Updating workspace-level skills at: $workspaceSkillsPath" -ForegroundColor Cyan
-    
-    # Warn if not in a repository root
-    if (-not (Test-Path ".git")) {
-        Write-Host ""
-        Write-Host "WARNING: No .git directory found in current location." -ForegroundColor Yellow
-        Write-Host "         Skills will be installed in: $workspaceSkillsPath" -ForegroundColor Yellow
-        Write-Host "         Make sure you are in your repository root directory." -ForegroundColor Yellow
-        Write-Host ""
-        $response = Read-Host "Continue anyway? (y/N)"
-        if ($response -ne 'y' -and $response -ne 'Y') {
-            Write-Host "Update cancelled." -ForegroundColor Red
-            exit 0
-        }
+# Always install in current directory
+$SKILLS_DIR = ".agents\skills"
+$workspaceSkillsPath = Join-Path (Get-Location) $SKILLS_DIR
+Write-Host "Updating skills in current directory at: $workspaceSkillsPath" -ForegroundColor Cyan
+
+# Warn if not in a repository root
+if (-not (Test-Path ".git")) {
+    Write-Host ""
+    Write-Host "WARNING: No .git directory found in current location." -ForegroundColor Yellow
+    Write-Host "         Skills will be installed in: $workspaceSkillsPath" -ForegroundColor Yellow
+    Write-Host "         Make sure you are in your repository root directory." -ForegroundColor Yellow
+    Write-Host ""
+    $response = Read-Host "Continue anyway? (y/N)"
+    if ($response -ne 'y' -and $response -ne 'Y') {
+        Write-Host "Update cancelled." -ForegroundColor Red
+        exit 0
     }
 }
 

@@ -10,16 +10,16 @@ Automatically update the pattern, use-case, cross-reference, model, and markdown
 
 **Usage:**
 ```bash
-# Bash
-./scripts/update-skills.sh              # Update workspace skills
-./scripts/update-skills.sh --user       # Update user-level skills (~/.agents/skills)
+# Bash (run from repository root)
+./scripts/update-skills.sh              # Update skills in .agents/skills
 ./scripts/update-skills.sh --check-only # Check versions without updating
 
-# PowerShell
-.\scripts\update-skills.ps1             # Update workspace skills
-.\scripts\update-skills.ps1 -User       # Update user-level skills
+# PowerShell (run from repository root)
+.\scripts\update-skills.ps1             # Update skills in .agents\skills
 .\scripts\update-skills.ps1 -CheckOnly  # Check versions without updating
 ```
+
+**Important:** Always run from your repository root directory. Skills are installed in `.agents/skills` in the current directory only.
 
 The script will:
 1. Check current vs latest versions

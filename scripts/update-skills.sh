@@ -10,37 +10,30 @@ REPO_MODEL="https://github.com/dermot-obrien/diagram-model.git"
 REPO_DECK="https://github.com/dermot-obrien/markdown-deck.git"
 
 # Parse arguments
-SCOPE="workspace"
 CHECK_ONLY=false
 for arg in "$@"; do
     case $arg in
-        --user) SCOPE="user" ;;
         --check-only) CHECK_ONLY=true ;;
     esac
 done
 
-# Determine installation directory
-if [ "$SCOPE" = "user" ]; then
-    SKILLS_DIR="$HOME/.agents/skills"
-    echo "📦 Updating user-level skills at: $SKILLS_DIR"
-else
-    SKILLS_DIR=".agents/skills"
-    WORKSPACE_SKILLS_PATH="$(pwd)/$SKILLS_DIR"
-    echo "📦 Updating workspace-level skills at: $WORKSPACE_SKILLS_PATH"
-    
-    # Warn if not in a repository root
-    if [ ! -d ".git" ]; then
-        echo ""
-        echo "⚠️  WARNING: No .git directory found in current location."
-        echo "   Skills will be installed in: $WORKSPACE_SKILLS_PATH"
-        echo "   Make sure you are in your repository root directory."
-        echo ""
-        read -p "Continue anyway? (y/N) " -n 1 -r
-        echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-            echo "❌ Update cancelled."
-            exit 0
-        fi
+# Always install in current directory
+SKILLS_DIR=".agents/skills"
+WORKSPACE_SKILLS_PATH="$(pwd)/$SKILLS_DIR"
+echo "📦 Updating skills in current directory at: $WORKSPACE_SKILLS_PATH"
+
+# Warn if not in a repository root
+if [ ! -d ".git" ]; then
+    echo ""
+    echo "⚠️  WARNING: No .git directory found in current location."
+    echo "   Skills will be installed in: $WORKSPACE_SKILLS_PATH"
+    echo "   Make sure you are in your repository root directory."
+    echo ""
+    read -p "Continue anyway? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "❌ Update cancelled."
+        exit 0
     fi
 fi
 

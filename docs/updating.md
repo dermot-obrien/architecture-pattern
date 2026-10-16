@@ -18,11 +18,8 @@ cd /path/to/your/repository
 curl -o update-skills.sh https://raw.githubusercontent.com/dermot-obrien/architecture-pattern/main/scripts/update-skills.sh
 chmod +x update-skills.sh
 
-# Update workspace skills (.agents/skills in current directory)
+# Update skills in current directory (.agents/skills)
 ./update-skills.sh
-
-# Update user-level skills (~/.agents/skills)
-./update-skills.sh --user
 
 # Check versions without updating
 ./update-skills.sh --check-only
@@ -31,14 +28,14 @@ chmod +x update-skills.sh
 ### PowerShell
 
 ```powershell
+# IMPORTANT: Run from your repository root directory
+Set-Location C:\path\to\your\repository
+
 # Download the update script
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/dermot-obrien/architecture-pattern/main/scripts/update-skills.ps1" -OutFile "update-skills.ps1"
 
-# Update workspace skills (.agents\skills)
+# Update skills in current directory (.agents\skills)
 .\update-skills.ps1
-
-# Update user-level skills
-.\update-skills.ps1 -User
 
 # Check versions without updating
 .\update-skills.ps1 -CheckOnly
