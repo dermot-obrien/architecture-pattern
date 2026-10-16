@@ -4,7 +4,7 @@ description: Author an architecture pattern as one Markdown document that is als
 license: CC-BY-4.0 AND Apache-2.0. Content under CC BY 4.0, code under Apache-2.0; see LICENSE and NOTICE.
 compatibility: Python 3.11+ and Node 18+. Requires the `model` skill (diagram-model repository) and the `markdown-deck` skill (markdown-deck repository), installed wherever the agent reads skills. draw.io desktop is optional; without it, views are exported by hand from draw.io desktop or online and stamped. PDF export needs playwright.
 metadata:
-  version: "0.11.0"
+  version: "0.11.1"
   homepage: https://github.com/dermot-obrien/architecture-pattern
   x-skill-requires: "pkg:generic/dermot-obrien/diagram-model/model ^0.9.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
   x-derived-from: "https://github.com/dermot-obrien/ai-assisted-architecture/tree/5a1c13860ad5093125afb3c41a82793e084cc0b7/skills/pattern"
@@ -22,7 +22,7 @@ People learning the skill, rather than agents running it, start from the documen
 
 1. Read `/workspace/docs/RELEASING.md` for complete instructions
 2. Verify all dependency versions exist as tags in their repositories
-3. Check version compatibility: pattern v0.11.0 requires model >= v0.9.0
+3. Check version compatibility: pattern v0.11.1 requires model >= v0.9.0
 4. Update CHANGELOG.md, commit, then tag with: `pattern--v0.X.Y`
 5. Push both the commit AND the tag: `git push origin pattern--v0.X.Y`
 6. Verify tag is clonable remotely
@@ -103,7 +103,7 @@ references:
 
 ## Structure
 
-The section list is not arbitrary; each answers a documented failure mode or a standards requirement. It is the same whether you use the generic `assets/template.md` or a repository's own bound template.
+The section list is not arbitrary; each answers a documented failure mode or a standards requirement. It is the same whether you use the generic `assets/template.md` or a repository's own bound template; the type templates under `assets/templates/` add the last two rows.
 
 | Section | Why it is there |
 |---|---|
@@ -115,6 +115,8 @@ The section list is not arbitrary; each answers a documented failure mode or a s
 | Cross-Cutting Concerns | Identity, security, observability and retry belong to no single component, so a components-and-interfaces structure loses them |
 | Variation Points | A path with no escape hatch for legitimate edge cases gets abandoned |
 | Decisions, Risks | ISO/IEC/IEEE 42010 requires decisions and rationale. A document claiming no gaps is not believed |
+| Related Patterns, Known Uses | Every pattern form from Alexander to TOGAF ends with both: the alternatives and complements a reader should weigh, and the applications that make a pattern proven rather than proposed. Type templates only |
+| Reference Implementation | Reference architecture template only. RUP defines a reference architecture as patterns instantiated and shipped with the artefacts that enable their use, and the cloud catalogues ship an example implementation; this lists them |
 
 Target at most about ten pages, and far less for a problem-scope pattern. Tables carry the volume; prose is for the architecturally significant minority. Unmaintained detail is the documented decay mode for this artefact.
 

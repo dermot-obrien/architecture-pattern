@@ -4,10 +4,11 @@ status: Draft
 # The pattern type, as your repository binds it. A technology-specific pattern: mainly solution
 # building blocks (SBBs) and products.
 pattern_type: reference-architecture
-# The architecture pattern this makes concrete. Every ABB there is realised by an SBB here.
+# The architecture patterns this makes concrete, one or more. Every ABB of each is realised
+# by a block in Building Blocks, named in its Realises column.
 implements: [AP-NNN]
-version: "0.4"
-last_modified: 2026-09-26
+version: "0.5"
+last_modified: 2026-10-16
 author: "<your name>"
 # Optional. The capabilities this pattern realises, so a capability model can count it as
 # evidence of how far each capability has been defined. Add flows to scope it to some of a capability's flows; omit flows to
@@ -38,22 +39,32 @@ HOW TO USE THIS TEMPLATE
 - Copy this file into the directory your repository binds as `outputDir`, as
   <slug>/index.md, and add your repository's standard front matter, including
   pattern_scope: problem, domain, capability-area, platform, hosting-profile or epic.
-- Every architecture model is a pattern. Patterns differ by semantic type: the scope you
-  author, and the abstraction model validate derives. A problem-scope pattern answers ONE
-  recurring problem: rename ## Context to ## Intent (the problem, its forces, the
-  invariant enforced) and delete the sections marked WIDER SCOPE. What is often called a
-  reference architecture is a wide-scope pattern, unless your repository binds pattern
-  types that name it otherwise, such as a reference architecture for a technology-specific
-  pattern of SBBs and an architecture pattern for a technology-agnostic one of ABBs.
+- Every architecture model is a pattern. Patterns differ by semantic type: the type your
+  repository binds (this one), the scope you author, and the abstraction model validate
+  derives. A reference architecture is usually wider than one problem, a platform,
+  hosting profile or domain, so it keeps ## Context and ### Non-Goals. At problem scope,
+  one problem solved in named technology, rename ## Context to ## Intent and delete the
+  sections marked WIDER SCOPE.
+- The literature's test for a reference architecture (RUP and Kruchten; Bass; Muller;
+  Cloutier) is that it is a pattern, or a set of patterns, instantiated towards
+  technology, designed and proven for a particular business and technical context, and
+  shipped with the artefacts a team needs to build from it. So this template adds to the
+  architecture pattern's: a Realises column tying each box to the ABB it makes concrete,
+  a Reference Implementation section for those artefacts, and Known Uses for where it
+  has run. The published catalogues (AWS, Azure, Google Cloud) file reference
+  architectures by hosting profile, domain and industry; TOGAF calls that generality,
+  and it is a property of the catalogue this document is published in, not a field here.
 - Boxes may be any mix of local roles (01 Gateway), catalogued logical building blocks,
   catalogued products and external context. model validate derives the abstraction from
   them: all local is conceptual, logical blocks is logical, every box a product is
   physical, anything else is mixed. Only a physical one is something a team builds from.
-- Identifiers below are written as COMP-NNN for components, IF-NN for interfaces and
-  PAT-NNN for patterns. Your repository's own series come from its binding file; if it
-  declares a template of its own, use that instead of this one, because a house template
-  carries the series, the deliverable code and the palette that belong to the repository
-  rather than to a published skill.
+- Identifiers below are written as SBB-NNN for solution building blocks, ABB-NNN for the
+  architecture building blocks they realise, IF-NN for interfaces, RA-NNN for reference
+  architectures and AP-NNN for the architecture patterns one implements. Your
+  repository's own series come from its binding file; if it declares a template of its
+  own, use that instead of this one, because a house template carries the series, the
+  deliverable code and the palette that belong to the repository rather than to a
+  published skill.
 - Never hyperlink identifiers in body text. Write the plain identifier and its name
   together; publishing rewrites them into links.
 - If your repository binds an `ontologySchema`, the section order below is what that
@@ -72,11 +83,17 @@ HOW TO USE THIS TEMPLATE
 ## Context
 
 <!--
-MANDATORY. For a problem scope, rename to ## Intent: the problem, its forces and the
-invariant enforced. For a wider scope: the domain, capability area, platform, hosting
-profile or epic covered, the drivers, and the target-state problem space this pattern
-addresses. Say what "done" looks like for the domain.
-Name the audience: who is expected to build against this.
+MANDATORY. A reference architecture is designed and proven for a particular business
+and technical context (RUP; Kruchten), so name that context before anything else: the
+hosting profile (provider, regions, landing zone), the regulatory, data-residency and
+tenancy constraints, the scale band it is sized for, and the business drivers behind
+it, which Muller and Cloutier call the customer context and the why. Say what "done"
+looks like: the workload a team can stand up from this document. For a problem scope,
+rename to ## Intent: the problem, its forces and the invariant enforced.
+Name the audience: who is expected to build against this, and which architecture
+pattern(s) in implements it makes concrete. The catalogue it is published in says how
+general it is (foundation, common systems, industry or organisation-specific, in
+TOGAF's terms); this document does not.
 -->
 
 ### Non-Goals
@@ -94,11 +111,21 @@ RECOMMENDED. The quality attributes this architecture is designed to meet, each 
 response measure so conformance is testable. Use the six-part form: source, stimulus,
 environment, artifact, response, response measure. Reference QualityAttribute entities
 where they exist rather than restating them.
+
+A reference architecture is reviewed by the pillars of the framework its hosting
+profile is judged by: the AWS, Azure and Google Cloud Well-Architected pillars
+(reliability, security, cost optimisation, operational excellence, performance
+efficiency, and sustainability at AWS). The cloud catalogues give every reference
+architecture a Considerations section per pillar; here each pillar gets at least one
+row, and the response measure is the figure the chosen technology commits to (its SLA,
+quota or tier), within the bound the implemented architecture pattern set. Cost
+optimisation's measure comes from the cost model in front matter.
 -->
 
-| Quality attribute | Scenario | Response measure |
-|---|---|---|
-| Availability | Retrieval service loses its primary index | Degraded answer served within 2s, no error to the caller |
+| Pillar | Quality attribute | Scenario | Response measure |
+|---|---|---|---|
+| Reliability | Availability | The zone hosting the primary index is lost | Zone-redundant replica serves within 2s; 99.95% monthly, the tier's SLA |
+| Cost optimisation | Cost | Steady state at the sizing in the cost model | Within the monthly figure in the cost model, alerting at 80% |
 
 ### Principles Realised
 
@@ -138,7 +165,7 @@ Edit Data (Ctrl+M): the catalogue identifier, or local_id for a local role such 
 Generating the diagram from the tables with model emit sets them for you. The attribute
 wraps the shape in an object element:
 
-    <object id="COMP-024" label="Identity Provider" component_id="COMP-024">
+    <object id="SBB-024" label="Identity Provider" component_id="SBB-024">
       <mxCell style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
         <mxGeometry x="200" y="100" width="160" height="60" as="geometry" />
       </mxCell>
@@ -167,7 +194,7 @@ tooltip, link, linkTarget, tags, treeRoot.
 - Nodes: every building block from ## Building Blocks, plus external actors and domain
   boundaries. Overlay the applied patterns as labelled bands so the reader sees which
   pattern owns which region, and which building blocks are the connective tissue.
-- Box label: line 1 bold "COMP-NNN Official Name"; line 2 the short role in THIS
+- Box label: line 1 bold "SBB-NNN Official Name"; line 2 the short role in THIS
   pattern. Do not invent names; use the catalogue's official name.
 - Every connector is labelled with what flows and carries an iface_id. No unlabeled arrows.
 - Include a KEY on the canvas explaining colours, shapes and line semantics. A diagram
@@ -189,30 +216,42 @@ base components. This is a UML communication diagram, which C4 calls a dynamic d
 
 Embed the exported views under ## Diagram and in each scenario:
 
-    ![PAT-NNN components](./components.svg)
+    ![RA-NNN components](./components.svg)
 -->
 
 ## Applicability
 
-<!-- MANDATORY. When to use this pattern. -->
+<!--
+MANDATORY. When to build from this reference architecture: the use cases it fits, as
+the catalogues list them (Google Cloud's Use cases; Azure's Scenario details), each a
+condition a reader can check against their workload, and the use cases UC-NNN in this
+repository it realises, if any. Three to five bullets.
+-->
 
 ## Not Applicable
 
-<!-- MANDATORY. When NOT to adopt it; the boundary cases it explicitly excludes. -->
+<!--
+MANDATORY. When NOT to build from it; the boundary cases it explicitly excludes: a
+scale, a residency constraint or a tenancy model it was not proven for, and the sibling
+reference architecture to use there, named in Related Patterns.
+-->
 
 ## Patterns Applied
 
 <!--
-WIDER SCOPE. OPTIONAL FACET, expected wherever a published pattern covers part of the
-design. The narrower patterns this pattern composes. Use plain PAT-NNN identifiers; do not
-restate each pattern's body, summarise its role here. A conceptual pattern drawn before
-its narrower patterns exist may say so in one line. A composite pattern lists here every
-participating pattern its scenarios run through their Uses column.
+MANDATORY for a reference architecture. First the architecture pattern(s) named in
+implements, one row each: this is the "set of patterns" every definition of a
+reference architecture rests on (RUP; Muller), and the Realises column in Building
+Blocks accounts for each of their ABBs. Then any narrower reference architecture this
+one composes, and every participating pattern its scenarios run through their Uses
+column. Use plain identifiers; do not restate each pattern's body, summarise its role
+here.
 -->
 
 | Pattern | Role in this pattern |
 |---|---|
-| PAT-NNN Pattern Name | What this pattern contributes to the end-to-end design |
+| AP-NNN Architecture Pattern Name | Implemented: every ABB of it is realised by a block below |
+| RA-NNN Reference Architecture Name | What this reference architecture contributes to the end-to-end design |
 
 <!-- deck:slide label="Building Blocks" -->
 
@@ -228,10 +267,15 @@ identifier where an entry exists, a local number such as 07 where it does not.
 Both pattern-owned AND loose building blocks belong here. Loose ones are the connective
 tissue that no single pattern owns. Mark which is which in Source.
 
-REFERENCE ARCHITECTURE: mainly SBBs and products. Realises names the ABB of the
-implemented architecture pattern that each one makes concrete, so every ABB there is
-accounted for here. A local role is allowed where no product is chosen yet; say why in
-Decisions.
+REFERENCE ARCHITECTURE: mainly SBBs and technologies, as the cloud catalogues'
+Components and Products used sections are: every box a named service. Write the role
+as they do, "in this architecture, it ...". Realises names the ABB of an implemented
+architecture pattern that the block makes concrete. Bass's reference architecture is
+exactly this mapping of a reference model's functions onto software elements, and it
+need not be one to one: one block may realise two ABBs, and one ABB may take two
+blocks. Walk every ABB of every pattern in implements: each appears in Realises, or
+Risks and Trade-offs says it is a gap. A local role is allowed where no technology is
+chosen yet; say why in Decisions.
 
 Write prose beneath this table ONLY for the architecturally significant components, as a
 ### subsection each. Most components need nothing beyond the row.
@@ -256,10 +300,15 @@ Every row must have a connector on the base layer carrying the matching iface_id
 every connector must have a row.
 
 Write Provider and Consumer as the building block's identifier followed by its name, as in
-Building Blocks: "COMP-NNN Official Name" or "07 Local role name", and the same for Actor
+Building Blocks: "SBB-NNN Official Name" or "07 Local role name", and the same for Actor
 and Target in each scenario's steps. A bare identifier makes the reader, and every deck
 slide of the table, look the name up. The model reads only the
 leading identifier, so the name costs nothing. scripts/name-endpoints.py fills it in.
+
+Technology-specific: Protocol and Payload are the chosen service's actual contract
+(the API and its version, the wire protocol, the SDK), Errors and retry its documented
+error codes and backoff, and NFRs the figures its SLA, quotas and limits give, within
+the bounds the implemented architecture pattern set on the same interface.
 
 Expand to a ### subsection only for interfaces that are externally contracted or carry
 non-obvious failure semantics. For those, add: resources provided with syntax and
@@ -268,7 +317,7 @@ semantics, pre- and post-conditions, data types, variability, and rationale.
 
 | Interface | Provider | Consumer | Purpose | Protocol | Payload | Sync | Errors and retry | NFRs |
 |---|---|---|---|---|---|---|---|---|
-| IF-01 | COMP-NNN Official Name | 07 Local role name | What flows and why | HTTPS / JSON-RPC | Schema ref | Sync | Timeout 5s, retry 3x on 503, non-retryable on 4xx | p95 200ms, 99.9% |
+| IF-01 | SBB-NNN Official Name | 07 Local role name | What flows and why | HTTPS / JSON-RPC | Schema ref | Sync | Timeout 5s, retry 3x on 503, non-retryable on 4xx | p95 200ms, 99.9% |
 
 ## Scenarios
 
@@ -304,16 +353,16 @@ Start and Finish are OPTIONAL, and worth writing on any scenario another pattern
 Each goes on its own line, as a separate paragraph, before the steps table: the box's id
 and name. Start is the first step's Actor; Finish is the last step's Actor or Target.
 
-    Start: COMP-NNN Official Name
+    Start: SBB-NNN Official Name
 
     Finish: 07 Local role name
 
 Uses is OPTIONAL. Delete the column unless this is a composite pattern, one whose steps
 run other patterns' flows. A participation step's Uses names the participating pattern's
-id and scenario key, PAT-NNN S1, and stands for that pattern's whole flow: its Actor is
+id and scenario key, RA-NNN S1, and stands for that pattern's whole flow: its Actor is
 where the flow enters, its Target where it leaves, both required, and its Interface is
 optional. A role binding may follow the key, participating pattern's box = this
-pattern's box: PAT-NNN S1 (02=07). It is how a local box joins across patterns. Write TBD
+pattern's box: RA-NNN S1 (02=07). It is how a local box joins across patterns. Write TBD
 and a name for an open participating pattern, not yet written, never with a binding; it
 is reported as open, and an approved pattern cannot keep one. Leave Uses empty on every
 other step. Check the composition with model composition index.md, and list each
@@ -322,8 +371,8 @@ participating pattern in Patterns Applied.
 
 | Step | Actor | Target | Action | Interface | Uses |
 |---:|---|---|---|---|---|
-| 1 | COMP-NNN Official Name | 07 Local role name | What happens | IF-01 | |
-| 2 | 07 Local role name | COMP-NNN Official Name | What the participating pattern's flow achieves | | PAT-NNN S1 (02=07) |
+| 1 | SBB-NNN Official Name | 07 Local role name | What happens | IF-01 | |
+| 2 | 07 Local role name | SBB-NNN Official Name | What the participating pattern's flow achieves | | RA-NNN S1 (02=07) |
 
 <!-- deck:skip -->
 <!--
@@ -372,20 +421,46 @@ discharged.
 
 <!--
 RECOMMENDED. What is mandatory, what is guidance, and where a team may legitimately
-deviate and how, for a wider scope. A pattern with no escape hatch for legitimate edge cases
-gets abandoned rather than followed.
+deviate and how. A pattern with no escape hatch for legitimate edge cases gets
+abandoned rather than followed. For a reference architecture these are the points
+where a solution design tailors it (RUP) or concretises it further (Muller): another
+technology for the same ABB, a different region, zone, tier or sizing, a block omitted
+at a smaller scale. Cloutier lists variability among what a reference architecture
+must state. Name the alternative technology per block where one is accepted, so a
+consumer does not have to reopen the decision.
 -->
 
 | Element | Mandatory or guidance | Permitted deviation and route |
 |---|---|---|
 
+## Reference Implementation
+
+<!--
+OPTIONAL FACET, expected for a reference architecture. The artefacts a team builds
+from, beyond this document: RUP's supporting artefacts that enable a reference
+architecture's use, the example implementation Azure's reference architectures ship,
+the deployment Google Cloud's carry. One row each: the infrastructure as code, the
+deployment pipeline or guide, the test plan or evaluation that produced the evidence
+reference, the cost model, the runbook. The cost-model and evidence references in
+front matter point at two of these; this table says what the rest are and where. A
+reference architecture with no row here is a design, not yet something a team can
+stand up.
+-->
+
+| Artefact | What it is | Where |
+|---|---|---|
+| Infrastructure as code | The Terraform, Bicep or CDK that deploys the structure above | <repository path> |
+| Evaluation | The trial the evidence reference records, and what it measured | <path> |
+
 ## Decisions
 
 <!--
-RECOMMENDED. The decisions this pattern rests on, with the alternative
+RECOMMENDED. The decisions this architecture rests on, with the alternative
 rejected in one clause. Link to the ADR rather than restating it; the Decision entity
 already points at this pattern from its side, so this list is a
-convenience for the reader, not a second source of truth.
+convenience for the reader, not a second source of truth. The technology choice for
+each block is a decision: the catalogues' Alternatives sections are this table, one
+row per block where another service could realise the same ABB, saying why it did not.
 -->
 
 | Decision | What was chosen, and what was rejected |
@@ -394,10 +469,46 @@ convenience for the reader, not a second source of truth.
 
 ## Risks and Trade-offs
 
-<!-- MANDATORY. Residual risks, known gaps and accepted design trade-offs, each with a
-mitigation. State the gaps honestly; a pattern that claims no gaps is not
-believed. -->
+<!--
+MANDATORY. Residual risks, known gaps and accepted design trade-offs, each with a
+mitigation. State the gaps honestly; a pattern that claims no gaps is not believed.
+For a reference architecture: every ABB of an implemented pattern that no block
+realises, the service limits and quotas the sizing runs up against, the lock-in each
+technology choice carries, and the conditions it was not proven under.
+-->
 
 | Risk/Trade-off | Mitigation |
 |---|---|
 | Risk statement | Mitigation |
+
+## Related Patterns
+
+<!--
+OPTIONAL FACET. The architecture patterns this document implements are in implements
+and Patterns Applied, not here. Here: sibling reference architectures for the same
+patterns on another hosting profile or at another scale (alternative); the one this
+baseline extends or that extends it (predecessor, successor, as Azure's baselines build
+on a basic architecture); the lens or framework it conforms to (co-dependent). Use
+plain identifiers.
+-->
+
+| Pattern | Relationship | Why |
+|---|---|---|
+| RA-NNN Reference Architecture Name | alternative | The same patterns on <another hosting profile> |
+
+## Known Uses
+
+<!--
+OPTIONAL FACET, expected before the status is approved. Where this reference
+architecture has run: the products and services built from it, with their identifiers
+where the repository registers them (PRD-NNN, a service id), the environment, and what
+each showed. RUP's definition asks for "proven for use in particular business and
+technical contexts" and says reference architectures are harvested from previous
+projects; Muller mines them from existing systems. A reference architecture extracted
+from a built system names that system here. With none, the evidence reference is the
+only proof, and the status should say so.
+-->
+
+| Known use | What it showed |
+|---|---|
+| PRD-NNN Product Name | Ran in <environment> since <date>; met the response measures above |

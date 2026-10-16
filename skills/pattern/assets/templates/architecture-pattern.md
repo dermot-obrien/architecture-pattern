@@ -4,8 +4,8 @@ status: Draft
 # The pattern type, as your repository binds it. A technology-agnostic pattern: architecture
 # building blocks (ABBs) and local roles, no products.
 pattern_type: architecture-pattern
-version: "0.4"
-last_modified: 2026-09-26
+version: "0.5"
+last_modified: 2026-10-16
 author: "<your name>"
 # Optional. The capabilities this pattern realises, so a capability model can count it as
 # evidence of how far each capability has been defined. Add flows to scope it to some of a capability's flows; omit flows to
@@ -32,22 +32,27 @@ HOW TO USE THIS TEMPLATE
 - Copy this file into the directory your repository binds as `outputDir`, as
   <slug>/index.md, and add your repository's standard front matter, including
   pattern_scope: problem, domain, capability-area, platform, hosting-profile or epic.
-- Every architecture model is a pattern. Patterns differ by semantic type: the scope you
-  author, and the abstraction model validate derives. A problem-scope pattern answers ONE
+- Every architecture model is a pattern. Patterns differ by semantic type: the type your
+  repository binds (this one), the scope you author, and the abstraction model validate
+  derives. An architecture pattern is most often at problem scope, answering ONE
   recurring problem: rename ## Context to ## Intent (the problem, its forces, the
-  invariant enforced) and delete the sections marked WIDER SCOPE. What is often called a
-  reference architecture is a wide-scope pattern, unless your repository binds pattern
-  types that name it otherwise, such as a reference architecture for a technology-specific
-  pattern of SBBs and an architecture pattern for a technology-agnostic one of ABBs.
+  invariant enforced) and delete the sections marked WIDER SCOPE. A wider scope, such as
+  a domain or a capability area drawn in ABBs, keeps ## Context and composes narrower
+  patterns in Patterns Applied.
+- The literature's test for a pattern (Bass; TOGAF's pattern content; Buschmann) is that
+  it names element types and the constraints on their interaction, not an architecture:
+  the boxes here are roles, and a reader instantiates them. A reference architecture
+  that names the technology for each role records this pattern in its implements, and
+  appears here under Known Uses.
 - Boxes may be any mix of local roles (01 Gateway), catalogued logical building blocks,
   catalogued products and external context. model validate derives the abstraction from
   them: all local is conceptual, logical blocks is logical, every box a product is
   physical, anything else is mixed. Only a physical one is something a team builds from.
-- Identifiers below are written as COMP-NNN for components, IF-NN for interfaces and
-  PAT-NNN for patterns. Your repository's own series come from its binding file; if it
-  declares a template of its own, use that instead of this one, because a house template
-  carries the series, the deliverable code and the palette that belong to the repository
-  rather than to a published skill.
+- Identifiers below are written as ABB-NNN for architecture building blocks, IF-NN for
+  interfaces and AP-NNN for architecture patterns. Your repository's own series come from
+  its binding file; if it declares a template of its own, use that instead of this one,
+  because a house template carries the series, the deliverable code and the palette that
+  belong to the repository rather than to a published skill.
 - Never hyperlink identifiers in body text. Write the plain identifier and its name
   together; publishing rewrites them into links.
 - If your repository binds an `ontologySchema`, the section order below is what that
@@ -66,11 +71,18 @@ HOW TO USE THIS TEMPLATE
 ## Context
 
 <!--
-MANDATORY. For a problem scope, rename to ## Intent: the problem, its forces and the
-invariant enforced. For a wider scope: the domain, capability area, platform, hosting
-profile or epic covered, the drivers, and the target-state problem space this pattern
-addresses. Say what "done" looks like for the domain.
-Name the audience: who is expected to build against this.
+MANDATORY. For a problem scope, rename to ## Intent and write it in the pattern form
+the literature agrees on (Alexander; Buschmann; TOGAF's pattern content): the problem,
+the context it recurs in, the forces that make it hard, each named and marked as
+complementary or in tension with the others, the solution in one sentence, and the
+invariant the pattern enforces. Which forces the solution resolves and which it leaves
+open is the resulting context; record it in Risks and Trade-offs. For a wider scope:
+the domain, capability area, platform, hosting profile or epic covered, the drivers,
+and the target-state problem space this pattern addresses. Say what "done" looks like
+for the domain.
+Name the audience: who is expected to build against this, and that it is technology-
+agnostic, so the reader builds a reference architecture or a solution design from it,
+not a system.
 -->
 
 ### Non-Goals
@@ -84,15 +96,24 @@ and stating the non-goals is the cheapest mitigation. Three to five bullets.
 ### Quality Attributes
 
 <!--
-RECOMMENDED. The quality attributes this architecture is designed to meet, each with a
+RECOMMENDED. The quality attributes this pattern is designed to meet, each with a
 response measure so conformance is testable. Use the six-part form: source, stimulus,
 environment, artifact, response, response measure. Reference QualityAttribute entities
 where they exist rather than restating them.
+
+Pillar names the Well-Architected pillar (reliability, security, cost optimisation,
+operational excellence, performance efficiency, sustainability) or ISO/IEC 25010
+characteristic the scenario exercises. The cloud catalogues index every pattern by the
+pillars it serves (Azure's Workload design table; AWS's well-architected best
+practices), and a pattern that serves one pillar usually costs another: give the pillar
+it trades against its own row, with the measure it is allowed to degrade to, and the
+rationale in Risks and Trade-offs. A technology-agnostic measure is a bound a reference
+architecture must meet, not the figure a product publishes.
 -->
 
-| Quality attribute | Scenario | Response measure |
-|---|---|---|
-| Availability | Retrieval service loses its primary index | Degraded answer served within 2s, no error to the caller |
+| Pillar | Quality attribute | Scenario | Response measure |
+|---|---|---|---|
+| Reliability | Availability | Retrieval service loses its primary index | Degraded answer served within 2s, no error to the caller |
 
 ### Principles Realised
 
@@ -132,7 +153,7 @@ Edit Data (Ctrl+M): the catalogue identifier, or local_id for a local role such 
 Generating the diagram from the tables with model emit sets them for you. The attribute
 wraps the shape in an object element:
 
-    <object id="COMP-024" label="Identity Provider" component_id="COMP-024">
+    <object id="ABB-024" label="Identity Provider" component_id="ABB-024">
       <mxCell style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
         <mxGeometry x="200" y="100" width="160" height="60" as="geometry" />
       </mxCell>
@@ -161,7 +182,7 @@ tooltip, link, linkTarget, tags, treeRoot.
 - Nodes: every building block from ## Building Blocks, plus external actors and domain
   boundaries. Overlay the applied patterns as labelled bands so the reader sees which
   pattern owns which region, and which building blocks are the connective tissue.
-- Box label: line 1 bold "COMP-NNN Official Name"; line 2 the short role in THIS
+- Box label: line 1 bold "ABB-NNN Official Name"; line 2 the short role in THIS
   pattern. Do not invent names; use the catalogue's official name.
 - Every connector is labelled with what flows and carries an iface_id. No unlabeled arrows.
 - Include a KEY on the canvas explaining colours, shapes and line semantics. A diagram
@@ -183,30 +204,40 @@ base components. This is a UML communication diagram, which C4 calls a dynamic d
 
 Embed the exported views under ## Diagram and in each scenario:
 
-    ![PAT-NNN components](./components.svg)
+    ![AP-NNN components](./components.svg)
 -->
 
 ## Applicability
 
-<!-- MANDATORY. When to use this pattern. -->
+<!--
+MANDATORY. When to use this pattern: the conditions under which its forces arise, as
+the catalogues write "Use this pattern when" (Azure) and "Applicability" (AWS). Three
+to five bullets, each a condition a reader can check against their workload.
+-->
 
 ## Not Applicable
 
-<!-- MANDATORY. When NOT to adopt it; the boundary cases it explicitly excludes. -->
+<!--
+MANDATORY. When NOT to adopt it; the boundary cases it explicitly excludes, and the
+simpler mechanism that suffices there ("might not be suitable when", in the catalogues'
+form). Name the pattern to use instead where there is one, in Related Patterns.
+-->
 
 ## Patterns Applied
 
 <!--
 WIDER SCOPE. OPTIONAL FACET, expected wherever a published pattern covers part of the
-design. The narrower patterns this pattern composes. Use plain PAT-NNN identifiers; do not
-restate each pattern's body, summarise its role here. A conceptual pattern drawn before
-its narrower patterns exist may say so in one line. A composite pattern lists here every
-participating pattern its scenarios run through their Uses column.
+design. The narrower architecture patterns this pattern composes. Use plain AP-NNN
+identifiers; do not restate each pattern's body, summarise its role here. A conceptual
+pattern drawn before its narrower patterns exist may say so in one line. A composite
+pattern lists here every participating pattern its scenarios run through their Uses
+column. Alternatives and complements are not applied patterns: they go in Related
+Patterns.
 -->
 
 | Pattern | Role in this pattern |
 |---|---|
-| PAT-NNN Pattern Name | What this pattern contributes to the end-to-end design |
+| AP-NNN Pattern Name | What this pattern contributes to the end-to-end design |
 
 <!-- deck:slide label="Building Blocks" -->
 
@@ -222,9 +253,12 @@ identifier where an entry exists, a local number such as 07 where it does not.
 Both pattern-owned AND loose building blocks belong here. Loose ones are the connective
 tissue that no single pattern owns. Mark which is which in Source.
 
-ARCHITECTURE PATTERN: ABBs and local roles only. If a row can only be filled with a
-product, the design has reached a technology choice: that belongs in a reference
-architecture that implements this pattern.
+ARCHITECTURE PATTERN: ABBs and local roles only. Each row is a role: an element type
+with its responsibility and the constraints on its interaction, which is what Bass's
+definition of a pattern consists of, never an assignment to a product. Name it by what
+it is responsible for. If a row can only be filled with a product, the design has
+reached a technology choice: that belongs in a reference architecture that implements
+this pattern.
 
 Write prose beneath this table ONLY for the architecturally significant components, as a
 ### subsection each. Most components need nothing beyond the row.
@@ -249,10 +283,16 @@ Every row must have a connector on the base layer carrying the matching iface_id
 every connector must have a row.
 
 Write Provider and Consumer as the building block's identifier followed by its name, as in
-Building Blocks: "COMP-NNN Official Name" or "07 Local role name", and the same for Actor
+Building Blocks: "ABB-NNN Official Name" or "07 Local role name", and the same for Actor
 and Target in each scenario's steps. A bare identifier makes the reader, and every deck
 slide of the table, look the name up. The model reads only the
 leading identifier, so the name costs nothing. scripts/name-endpoints.py fills it in.
+
+Technology-agnostic: Protocol is the interaction style (request-response,
+publish-subscribe, stream, file transfer) and Payload the kind of thing exchanged,
+never a product's wire protocol or SDK. Errors and retry and NFRs are the bounds a
+reference architecture must meet. The constraints on these interactions are what make
+this a pattern rather than a picture.
 
 Expand to a ### subsection only for interfaces that are externally contracted or carry
 non-obvious failure semantics. For those, add: resources provided with syntax and
@@ -261,7 +301,7 @@ semantics, pre- and post-conditions, data types, variability, and rationale.
 
 | Interface | Provider | Consumer | Purpose | Protocol | Payload | Sync | Errors and retry | NFRs |
 |---|---|---|---|---|---|---|---|---|
-| IF-01 | COMP-NNN Official Name | 07 Local role name | What flows and why | HTTPS / JSON-RPC | Schema ref | Sync | Timeout 5s, retry 3x on 503, non-retryable on 4xx | p95 200ms, 99.9% |
+| IF-01 | ABB-NNN Official Name | 07 Local role name | What flows and why | HTTPS / JSON-RPC | Schema ref | Sync | Timeout 5s, retry 3x on 503, non-retryable on 4xx | p95 200ms, 99.9% |
 
 ## Scenarios
 
@@ -297,16 +337,16 @@ Start and Finish are OPTIONAL, and worth writing on any scenario another pattern
 Each goes on its own line, as a separate paragraph, before the steps table: the box's id
 and name. Start is the first step's Actor; Finish is the last step's Actor or Target.
 
-    Start: COMP-NNN Official Name
+    Start: ABB-NNN Official Name
 
     Finish: 07 Local role name
 
 Uses is OPTIONAL. Delete the column unless this is a composite pattern, one whose steps
 run other patterns' flows. A participation step's Uses names the participating pattern's
-id and scenario key, PAT-NNN S1, and stands for that pattern's whole flow: its Actor is
+id and scenario key, AP-NNN S1, and stands for that pattern's whole flow: its Actor is
 where the flow enters, its Target where it leaves, both required, and its Interface is
 optional. A role binding may follow the key, participating pattern's box = this
-pattern's box: PAT-NNN S1 (02=07). It is how a local box joins across patterns. Write TBD
+pattern's box: AP-NNN S1 (02=07). It is how a local box joins across patterns. Write TBD
 and a name for an open participating pattern, not yet written, never with a binding; it
 is reported as open, and an approved pattern cannot keep one. Leave Uses empty on every
 other step. Check the composition with model composition index.md, and list each
@@ -315,8 +355,8 @@ participating pattern in Patterns Applied.
 
 | Step | Actor | Target | Action | Interface | Uses |
 |---:|---|---|---|---|---|
-| 1 | COMP-NNN Official Name | 07 Local role name | What happens | IF-01 | |
-| 2 | 07 Local role name | COMP-NNN Official Name | What the participating pattern's flow achieves | | PAT-NNN S1 (02=07) |
+| 1 | ABB-NNN Official Name | 07 Local role name | What happens | IF-01 | |
+| 2 | 07 Local role name | ABB-NNN Official Name | What the participating pattern's flow achieves | | AP-NNN S1 (02=07) |
 
 <!-- deck:skip -->
 <!--
@@ -365,8 +405,12 @@ discharged.
 
 <!--
 RECOMMENDED. What is mandatory, what is guidance, and where a team may legitimately
-deviate and how, for a wider scope. A pattern with no escape hatch for legitimate edge cases
-gets abandoned rather than followed.
+deviate and how. A pattern with no escape hatch for legitimate edge cases gets
+abandoned rather than followed. For an architecture pattern these are its variants in
+Buschmann's sense: the forms the same solution takes under a different weighting of
+the forces (synchronous or asynchronous, one store or one per consumer), each a row,
+with the condition that selects it. A reference architecture picks one variant and says
+which in its Decisions.
 -->
 
 | Element | Mandatory or guidance | Permitted deviation and route |
@@ -379,6 +423,8 @@ RECOMMENDED. The decisions this pattern rests on, with the alternative
 rejected in one clause. Link to the ADR rather than restating it; the Decision entity
 already points at this pattern from its side, so this list is a
 convenience for the reader, not a second source of truth.
+Together with the forces in Intent this is TOGAF's rationale: why the pattern works,
+and why its outcome is a good one.
 -->
 
 | Decision | What was chosen, and what was rejected |
@@ -387,10 +433,43 @@ convenience for the reader, not a second source of truth.
 
 ## Risks and Trade-offs
 
-<!-- MANDATORY. Residual risks, known gaps and accepted design trade-offs, each with a
-mitigation. State the gaps honestly; a pattern that claims no gaps is not
-believed. -->
+<!--
+MANDATORY. Residual risks, known gaps and accepted design trade-offs, each with a
+mitigation. State the gaps honestly; a pattern that claims no gaps is not believed.
+This is the pattern's resulting context (TOGAF) or consequences (Buschmann): the
+forces from Intent it leaves unresolved, and the pillar it trades against, from Quality
+Attributes.
+-->
 
 | Risk/Trade-off | Mitigation |
 |---|---|
 | Risk statement | Mitigation |
+
+## Related Patterns
+
+<!--
+OPTIONAL FACET. The patterns a reader should weigh beside this one, in TOGAF's four
+relationships: predecessor (its resulting context is this one's starting context),
+successor, alternative (solves the same problem under a different weighting of the
+forces) and co-dependent (usually applied together, as the catalogues pair Retry with
+Circuit Breaker). Patterns this one composes are in Patterns Applied, not here. Use
+plain identifiers.
+-->
+
+| Pattern | Relationship | Why |
+|---|---|---|
+| AP-NNN Pattern Name | alternative | Which force has to dominate for it to be the better choice |
+
+## Known Uses
+
+<!--
+OPTIONAL FACET, expected before the status is approved. Where this pattern has been
+applied: the reference architectures that name it in their implements, and the systems
+that run it, each with what it showed. Known uses are what make a pattern proven
+rather than proposed, which is why every pattern form from Alexander to TOGAF ends
+with them. A pattern with none is a proposal, and its status should say so.
+-->
+
+| Known use | What it showed |
+|---|---|
+| RA-NNN Reference Architecture Name | Implements this pattern on <hosting profile>; met the response measures above |

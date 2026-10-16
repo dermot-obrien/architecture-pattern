@@ -29,7 +29,7 @@ PowerShell:
 ```powershell
 New-Item -ItemType Directory pattern-quickstart | Out-Null
 Set-Location pattern-quickstart
-git clone --depth 1 --branch pattern--v0.11.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
+git clone --depth 1 --branch pattern--v0.11.1 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
 git clone --depth 1 --branch model--v0.9.0 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
 git clone --depth 1 --branch markdown-deck--v0.6.8 https://github.com/dermot-obrien/markdown-deck.git _src/markdown-deck
 New-Item -ItemType Directory -Force .agents/skills | Out-Null
@@ -43,7 +43,7 @@ bash:
 
 ```bash
 mkdir pattern-quickstart && cd pattern-quickstart
-git clone --depth 1 --branch pattern--v0.11.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
+git clone --depth 1 --branch pattern--v0.11.1 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
 git clone --depth 1 --branch model--v0.9.0 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
 git clone --depth 1 --branch markdown-deck--v0.6.8 https://github.com/dermot-obrien/markdown-deck.git _src/markdown-deck
 mkdir -p .agents/skills

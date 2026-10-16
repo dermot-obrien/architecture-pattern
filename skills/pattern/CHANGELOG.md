@@ -2,6 +2,18 @@
 
 # Changelog
 
+## [0.11.1] - 2026-10-16
+
+### Added
+
+- The type templates carry what the pattern and reference architecture literature asks for and the generic template leaves out. Both: a `Pillar` column on Quality Attributes, naming the Well-Architected pillar or ISO/IEC 25010 characteristic a scenario exercises, as the Azure and AWS catalogues index their patterns; `## Related Patterns`, with TOGAF's predecessor, successor, alternative and co-dependent relationships; and `## Known Uses`, the applications that make a pattern proven rather than proposed, which every pattern form from Alexander to TOGAF ends with. The reference architecture template also gains `## Reference Implementation`: the supporting artefacts RUP's definition includes and the example implementations the cloud catalogues ship, as infrastructure as code, deployment guide, evaluation, cost model and runbook.
+
+### Changed
+
+- The guidance in each type template is written for its type, from the continuum's definitions and the sources behind them. Architecture pattern: Intent in the pattern form (problem, context, forces marked complementary or in tension, solution, invariant), with the resulting context in Risks and Trade-offs; Building Blocks as roles, element types with constraints on their interaction, after Bass; Interfaces technology-agnostic, an interaction style rather than a wire protocol; Variation Points as Buschmann's variants; Known Uses naming the reference architectures that implement it. Reference architecture: Context names the business and technical context it is proven for, after RUP, Kruchten, Muller and Cloutier; Patterns Applied is mandatory and leads with the implemented architecture patterns; Building Blocks follows Bass's mapping of functions onto elements, not necessarily one to one, and asks that every ABB of every implemented pattern appear in Realises or be declared a gap; Interfaces carry the chosen service's actual contract and SLA; Quality Attributes take at least one row per pillar with the figure the technology commits to; Variation Points are the tailoring points, another technology for the same ABB, a region, tier or sizing; Decisions carry the alternatives per block; `implements` is one or more.
+- Each type template's identifier examples use its own series throughout: `ABB-NNN` and `AP-NNN` in the architecture pattern template, `SBB-NNN`, `RA-NNN` and `AP-NNN` in the reference architecture template, in place of the generic `COMP-NNN` and `PAT-NNN`. The hedge that what is often called a reference architecture is a wide-scope pattern is gone from both: with the type bound, each template says what its type is.
+- Template front matter `version` 0.5.
+
 ## [0.11.0] - 2026-10-15
 
 ### Added

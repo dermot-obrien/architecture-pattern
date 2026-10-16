@@ -128,7 +128,7 @@ A pattern may name the capabilities it realises in front matter, `realises: [CAP
 
 ## The section structure
 
-Each section of the template answers a documented failure mode or a standards requirement:
+Each section of the template answers a documented failure mode or a standards requirement. The type templates, for an architecture pattern and a reference architecture, add the last two rows:
 
 | Section | Why it is there |
 |---|---|
@@ -140,5 +140,7 @@ Each section of the template answers a documented failure mode or a standards re
 | Cross-Cutting Concerns | Identity, security, observability and retry belong to no single component, so a components-and-interfaces structure loses them |
 | Variation Points | A path with no escape hatch for legitimate edge cases is abandoned |
 | Decisions, Risks | ISO/IEC/IEEE 42010 requires decisions and rationale. A document claiming no gaps is not believed |
+| Related Patterns, Known Uses | Every pattern form from Alexander to TOGAF ends with both: the alternatives and complements a reader should weigh, and the applications that make a pattern proven rather than proposed. Type templates only |
+| Reference Implementation | Reference architecture template only. RUP defines a reference architecture as patterns instantiated and shipped with the artefacts that enable their use, and the cloud catalogues ship an example implementation; this lists them |
 
 Aim for at most about ten pages, far less for a problem-scope pattern. Tables carry the volume; prose is for the architecturally significant minority.
