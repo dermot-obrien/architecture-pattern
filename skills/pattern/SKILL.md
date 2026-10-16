@@ -16,6 +16,20 @@ One document is the source. The diagram is generated from its tables, the deck i
 
 People learning the skill, rather than agents running it, start from the documentation at https://github.com/dermot-obrien/architecture-pattern/tree/main/docs: a quick start, concepts, every binding and flag, and every error message with its fix.
 
+## For Maintainers: Creating Releases
+
+**When asked to create a release or tag a version:**
+
+1. Read `/workspace/docs/RELEASING.md` for complete instructions
+2. Verify all dependency versions exist as tags in their repositories
+3. Check version compatibility: pattern v0.11.0 requires model >= v0.9.0
+4. Update CHANGELOG.md, commit, then tag with: `pattern--v0.X.Y`
+5. Push both the commit AND the tag: `git push origin pattern--v0.X.Y`
+6. Verify tag is clonable remotely
+7. Update quick-start.md if version pins changed
+
+**Critical:** Model v0.9.0 must be tagged in diagram-model repository before releasing pattern versions that depend on it.
+
 ## Step 0, before anything else
 
 Run the resolver and use only the paths it prints:

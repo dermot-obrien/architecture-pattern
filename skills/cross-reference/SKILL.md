@@ -23,6 +23,16 @@ The code and the identifier are separated by a colon, with no spaces. This is a 
 
 Never write a full URL to another catalogue's page in place of a reference, and never renumber an identifier to carry its catalogue (ABB-OPS-024).
 
+## For Maintainers: Creating Releases
+
+**When asked to create a release or tag a version:**
+
+1. Read `/workspace/docs/RELEASING.md` for complete instructions
+2. Verify model dependency version exists as a tag in diagram-model repository
+3. Update CHANGELOG if it exists, commit, then tag with: `cross-reference--v0.X.Y`
+4. Push both the commit AND the tag: `git push origin cross-reference--v0.X.Y`
+5. Verify tag is clonable remotely
+
 ## Step 0, before anything else
 
 Run the post-install check from the workspace root, and stop on a problem:

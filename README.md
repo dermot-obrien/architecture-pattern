@@ -40,6 +40,7 @@ Or ask your agent for a pattern and it does the same. The [quick start](docs/qui
 |---|---|
 | [Quick start](docs/quick-start.md) | From nothing to a published pattern, its view, walkthrough, deck and PDF, and a composite pattern |
 | [Concepts](docs/concepts.md) | What a pattern is, and the ideas behind the tables, the diagram, the walkthrough and the deck |
+| [Releasing](docs/RELEASING.md) | **For maintainers:** How to create releases, manage version dependencies, and coordinate tags across repositories |
 | [Everyday workflow](docs/workflow.md) | Authoring, syncing, adopting a hand-drawn diagram, promoting local ids, working without draw.io, publishing, CI |
 | [Composing patterns](docs/composing.md) | Composite patterns: the Uses column, Start and Finish, role bindings, the approval gate |
 | [Configuration](docs/configuration.md) | Every binding key, front matter key and environment variable |

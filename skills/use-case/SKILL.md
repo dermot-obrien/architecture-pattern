@@ -29,6 +29,17 @@ Write a use case local by default. Make it endorsed only when the user says it h
 
 People learning the skill, rather than agents running it, start from https://github.com/dermot-obrien/architecture-pattern/blob/main/docs/use-cases.md.
 
+## For Maintainers: Creating Releases
+
+**When asked to create a release or tag a version:**
+
+1. Read `/workspace/docs/RELEASING.md` for complete instructions
+2. Verify model dependency version exists as a tag in diagram-model repository
+3. Check version compatibility: use-case requires model >= v0.9.0
+4. Update CHANGELOG if it exists, commit, then tag with: `use-case--v0.X.Y`
+5. Push both the commit AND the tag: `git push origin use-case--v0.X.Y`
+6. Verify tag is clonable remotely
+
 ## Step 0, before anything else
 
 Run the resolver and use only the paths it prints:
