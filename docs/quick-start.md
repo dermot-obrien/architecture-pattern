@@ -63,19 +63,34 @@ You should see `added 13 packages`, give or take. This installs Playwright for t
 
 **If you already have the skills installed and need to update to a newer version**, the easiest approach is to use the automated update scripts from the [architecture-pattern repository](https://github.com/dermot-obrien/architecture-pattern):
 
+PowerShell:
+
+```powershell
+# Clone the repository temporarily to get the scripts
+git clone --depth 1 https://github.com/dermot-obrien/architecture-pattern.git _update
+Set-Location _update
+
+# Run the update script
+.\scripts\update-skills.ps1
+
+# Clean up
+Set-Location ..
+Remove-Item -Recurse -Force _update
+```
+
+bash:
+
 ```bash
 # Clone the repository temporarily to get the scripts
 git clone --depth 1 https://github.com/dermot-obrien/architecture-pattern.git _update
 cd _update
 
-# Run the update script (bash or PowerShell)
-./scripts/update-skills.sh              # bash
-.\scripts\update-skills.ps1             # PowerShell
+# Run the update script
+./scripts/update-skills.sh
 
 # Clean up
 cd ..
-rm -rf _update                          # bash
-Remove-Item -Recurse -Force _update     # PowerShell
+rm -rf _update
 ```
 
 The script will automatically backup your current installation, download the latest versions, and verify everything works.
