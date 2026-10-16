@@ -16,10 +16,10 @@ $REPO_DECK = "https://github.com/dermot-obrien/markdown-deck.git"
 # Determine installation directory
 if ($User) {
     $SKILLS_DIR = "$env:USERPROFILE\.agents\skills"
-    Write-Host "📦 Updating user-level skills at: $SKILLS_DIR" -ForegroundColor Cyan
+    Write-Host "Updating user-level skills at: $SKILLS_DIR" -ForegroundColor Cyan
 } else {
     $SKILLS_DIR = ".agents\skills"
-    Write-Host "📦 Updating workspace-level skills at: $SKILLS_DIR" -ForegroundColor Cyan
+    Write-Host "Updating workspace-level skills at: $SKILLS_DIR" -ForegroundColor Cyan
 }
 
 # Function to get current version
@@ -48,7 +48,7 @@ function Get-LatestTag {
 }
 
 Write-Host ""
-Write-Host "🔍 Checking current versions..." -ForegroundColor Yellow
+Write-Host "Checking current versions..." -ForegroundColor Yellow
 Write-Host "  pattern:          $(Get-SkillVersion "$SKILLS_DIR\pattern")"
 Write-Host "  use-case:         $(Get-SkillVersion "$SKILLS_DIR\use-case")"
 Write-Host "  cross-reference:  $(Get-SkillVersion "$SKILLS_DIR\cross-reference")"
@@ -56,7 +56,7 @@ Write-Host "  model:            $(Get-SkillVersion "$SKILLS_DIR\model")"
 Write-Host "  markdown-deck:    $(Get-SkillVersion "$SKILLS_DIR\markdown-deck")"
 
 Write-Host ""
-Write-Host "🌐 Fetching latest versions from GitHub..." -ForegroundColor Yellow
+Write-Host "Fetching latest versions from GitHub..." -ForegroundColor Yellow
 $LATEST_PATTERN = Get-LatestTag $REPO_PATTERN "pattern"
 $LATEST_USE_CASE = Get-LatestTag $REPO_PATTERN "use-case"
 $LATEST_XREF = Get-LatestTag $REPO_PATTERN "cross-reference"
@@ -71,22 +71,22 @@ Write-Host "  Latest markdown-deck:    $LATEST_DECK"
 
 if ($CheckOnly) {
     Write-Host ""
-    Write-Host "✅ Check complete. Run without -CheckOnly to update." -ForegroundColor Green
+    Write-Host "Check complete. Run without -CheckOnly to update." -ForegroundColor Green
     exit 0
 }
 
 # Confirm update
 Write-Host ""
-$response = Read-Host "🔄 Update skills to latest versions? (y/N)"
+$response = Read-Host "Update skills to latest versions? (y/N)"
 if ($response -ne 'y' -and $response -ne 'Y') {
-    Write-Host "❌ Update cancelled." -ForegroundColor Red
+    Write-Host "Update cancelled." -ForegroundColor Red
     exit 0
 }
 
 # Create temp directory
 $TEMP_DIR = Join-Path $env:TEMP "skill-update-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
 Write-Host ""
-Write-Host "📥 Downloading latest versions to $TEMP_DIR..." -ForegroundColor Cyan
+Write-Host "Downloading latest versions to $TEMP_DIR..." -ForegroundColor Cyan
 New-Item -ItemType Directory -Force -Path $TEMP_DIR | Out-Null
 
 # Clone repositories at latest tags
@@ -101,7 +101,7 @@ Pop-Location
 
 # Backup old installations
 Write-Host ""
-Write-Host "💾 Backing up current installations..." -ForegroundColor Yellow
+Write-Host "Backing up current installations..." -ForegroundColor Yellow
 $BACKUP_DIR = ".skill-backups\$(Get-Date -Format 'yyyyMMdd-HHmmss')"
 New-Item -ItemType Directory -Force -Path $BACKUP_DIR | Out-Null
 $skills = @("pattern", "use-case", "cross-reference", "model", "markdown-deck")
@@ -116,7 +116,7 @@ Write-Host "  Backups saved to: $BACKUP_DIR"
 
 # Remove old installations
 Write-Host ""
-Write-Host "🗑️  Removing old installations..." -ForegroundColor Yellow
+Write-Host "Removing old installations..." -ForegroundColor Yellow
 foreach ($skill in $skills) {
     $skillPath = "$SKILLS_DIR\$skill"
     if (Test-Path $skillPath) {
@@ -127,7 +127,7 @@ foreach ($skill in $skills) {
 
 # Install new versions
 Write-Host ""
-Write-Host "📋 Installing new versions..." -ForegroundColor Cyan
+Write-Host "Installing new versions..." -ForegroundColor Cyan
 New-Item -ItemType Directory -Force -Path $SKILLS_DIR | Out-Null
 
 Write-Host "  Installing pattern..."
@@ -147,17 +147,17 @@ Copy-Item -Recurse "$TEMP_DIR\markdown-deck\skills\markdown-deck" "$SKILLS_DIR\"
 
 # Install npm dependencies for markdown-deck
 Write-Host ""
-Write-Host "📦 Installing npm dependencies for markdown-deck..." -ForegroundColor Cyan
+Write-Host "Installing npm dependencies for markdown-deck..." -ForegroundColor Cyan
 npm install --prefix "$SKILLS_DIR\markdown-deck" --no-audit --no-fund
 
 # Clean up
 Write-Host ""
-Write-Host "🧹 Cleaning up..." -ForegroundColor Yellow
+Write-Host "Cleaning up..." -ForegroundColor Yellow
 Remove-Item -Recurse -Force $TEMP_DIR
 
 # Verify installation
 Write-Host ""
-Write-Host "✅ Verifying installation..." -ForegroundColor Green
+Write-Host "Verifying installation..." -ForegroundColor Green
 Write-Host ""
 Write-Host "pattern:"
 python "$SKILLS_DIR\pattern\scripts\check.py"
@@ -172,16 +172,16 @@ Write-Host "model:"
 python "$SKILLS_DIR\model\bin\model.py" doctor
 
 Write-Host ""
-Write-Host "🎉 Update complete!" -ForegroundColor Green
+Write-Host "Update complete!" -ForegroundColor Green
 Write-Host ""
-Write-Host "📊 Installed versions:" -ForegroundColor Cyan
+Write-Host "Installed versions:" -ForegroundColor Cyan
 Write-Host "  pattern:          $(Get-SkillVersion "$SKILLS_DIR\pattern")"
 Write-Host "  use-case:         $(Get-SkillVersion "$SKILLS_DIR\use-case")"
 Write-Host "  cross-reference:  $(Get-SkillVersion "$SKILLS_DIR\cross-reference")"
 Write-Host "  model:            $(Get-SkillVersion "$SKILLS_DIR\model")"
 Write-Host "  markdown-deck:    $(Get-SkillVersion "$SKILLS_DIR\markdown-deck")"
 Write-Host ""
-Write-Host "💡 Next steps:" -ForegroundColor Yellow
+Write-Host "Next steps:" -ForegroundColor Yellow
 Write-Host "  1. Re-validate your patterns: python $SKILLS_DIR\model\bin\model.py scan patterns --recursive"
 Write-Host "  2. Republish any existing patterns: python $SKILLS_DIR\pattern\scripts\publish.py <folder>"
 Write-Host "  3. Check your bindings: python $SKILLS_DIR\model\bin\model.py doctor --skill pattern"
