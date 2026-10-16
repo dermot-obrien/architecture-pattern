@@ -32,20 +32,36 @@ The script will:
 
 ### `list-patterns.sh` / `list-patterns.ps1`
 
-List all patterns, use cases, and reference architectures in a directory.
+List all patterns, use cases, and reference architectures in a directory with validation status.
 
 **Usage:**
 ```bash
 # Bash
-./scripts/list-patterns.sh              # List in current directory
-./scripts/list-patterns.sh patterns     # List in patterns/ directory
+./scripts/list-patterns.sh                    # List in current directory
+./scripts/list-patterns.sh patterns           # List in patterns/ directory
+./scripts/list-patterns.sh patterns --verbose # Show validation warnings
 
 # PowerShell
-.\scripts\list-patterns.ps1             # List in current directory
-.\scripts\list-patterns.ps1 -Path patterns  # List in patterns/ directory
+.\scripts\list-patterns.ps1                   # List in current directory
+.\scripts\list-patterns.ps1 -Path patterns    # List in patterns/ directory
+.\scripts\list-patterns.ps1 -Path patterns -Verbose  # Show validation warnings
 ```
 
 The script will:
 1. Search for all `index.md` files with pattern metadata
 2. Display ID, title, version, and path for each pattern
-3. Optionally run `model.py scan` for validation if model skill is installed
+3. Show validation status (✓ valid, ✗ has issues) if model skill is installed
+4. In verbose mode: show detailed validation warnings and full scan results
+
+**Example output:**
+```
+[PAT-001] ✓ Order Intake Pattern
+  Version: 1.0
+  Path: ./patterns/PAT-001-order-intake
+
+[PAT-002] ✗ Event-Driven Architecture
+  Version: 2.1
+  Path: ./patterns/PAT-002-event-driven
+  Validation:
+    warning: diagram drift detected in components.drawio
+```
