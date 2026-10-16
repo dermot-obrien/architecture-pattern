@@ -99,7 +99,8 @@ if ($response -ne 'y' -and $response -ne 'Y') {
 }
 
 # Create temp directory
-$TEMP_DIR = Join-Path $env:TEMP "skill-update-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+$timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
+$TEMP_DIR = Join-Path $env:TEMP "skill-update-$timestamp"
 Write-Host ""
 Write-Host "Downloading latest versions to $TEMP_DIR..." -ForegroundColor Cyan
 New-Item -ItemType Directory -Force -Path $TEMP_DIR | Out-Null
