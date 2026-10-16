@@ -235,17 +235,20 @@ Remove-Item -Recurse -Force $TEMP_DIR
 Write-Host ""
 Write-Host "Verifying installation..." -ForegroundColor Green
 Write-Host ""
+Write-Host "Note: Warnings about bindings or catalogue mappings are normal" -ForegroundColor Cyan
+Write-Host "      if you haven't set up .agents\skill-bindings.toml yet" -ForegroundColor Cyan
+Write-Host ""
 Write-Host "pattern:"
-python "$SKILLS_DIR\pattern\scripts\check.py"
+python "$SKILLS_DIR\pattern\scripts\check.py" 2>&1 | Select-Object -First 10
 Write-Host ""
 Write-Host "use-case:"
-python "$SKILLS_DIR\use-case\scripts\check.py"
+python "$SKILLS_DIR\use-case\scripts\check.py" 2>&1 | Select-Object -First 10
 Write-Host ""
 Write-Host "cross-reference:"
-node "$SKILLS_DIR\cross-reference\scripts\check.cjs"
+node "$SKILLS_DIR\cross-reference\scripts\check.cjs" 2>&1 | Select-Object -First 10
 Write-Host ""
 Write-Host "model:"
-python "$SKILLS_DIR\model\bin\model.py" doctor
+python "$SKILLS_DIR\model\bin\model.py" doctor 2>&1 | Select-Object -First 10
 
 Write-Host ""
 Write-Host "Update complete!" -ForegroundColor Green
