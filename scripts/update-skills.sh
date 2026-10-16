@@ -42,7 +42,7 @@ get_version() {
 get_latest_tag() {
     local repo=$1
     local skill=$2
-    git ls-remote --tags "$repo" | grep "$skill--v" | sed 's/.*refs\/tags\///' | sort -V | tail -1
+    git ls-remote --tags "$repo" | grep "$skill--v" | sed 's/.*refs\/tags\///' | grep -v '\^{}' | sort -V | tail -1
 }
 
 echo ""
