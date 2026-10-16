@@ -141,6 +141,20 @@ cp -r "$TEMP_DIR/diagram-model/skills/model" "$SKILLS_DIR/"
 echo "  Installing markdown-deck..."
 cp -r "$TEMP_DIR/markdown-deck/skills/markdown-deck" "$SKILLS_DIR/"
 
+# Copy helper scripts to workspace
+echo ""
+echo "📋 Installing helper scripts..."
+mkdir -p scripts
+if [ -f "$TEMP_DIR/architecture-pattern/scripts/list-patterns.sh" ]; then
+    cp "$TEMP_DIR/architecture-pattern/scripts/list-patterns.sh" scripts/
+    chmod +x scripts/list-patterns.sh
+    echo "  Installed list-patterns.sh"
+fi
+if [ -f "$TEMP_DIR/architecture-pattern/scripts/list-patterns.ps1" ]; then
+    cp "$TEMP_DIR/architecture-pattern/scripts/list-patterns.ps1" scripts/
+    echo "  Installed list-patterns.ps1"
+fi
+
 # Install npm dependencies for markdown-deck
 echo ""
 echo "📦 Installing npm dependencies for markdown-deck..."
