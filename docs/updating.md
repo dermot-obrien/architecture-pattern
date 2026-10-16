@@ -11,11 +11,14 @@ The repository includes scripts that automatically fetch the latest versions, ba
 ### bash
 
 ```bash
+# IMPORTANT: Run from your repository root directory
+cd /path/to/your/repository
+
 # Download the update script
 curl -o update-skills.sh https://raw.githubusercontent.com/dermot-obrien/architecture-pattern/main/scripts/update-skills.sh
 chmod +x update-skills.sh
 
-# Update workspace skills (.agents/skills)
+# Update workspace skills (.agents/skills in current directory)
 ./update-skills.sh
 
 # Update user-level skills (~/.agents/skills)

@@ -25,7 +25,23 @@ if [ "$SCOPE" = "user" ]; then
     echo "📦 Updating user-level skills at: $SKILLS_DIR"
 else
     SKILLS_DIR=".agents/skills"
-    echo "📦 Updating workspace-level skills at: $SKILLS_DIR"
+    WORKSPACE_SKILLS_PATH="$(pwd)/$SKILLS_DIR"
+    echo "📦 Updating workspace-level skills at: $WORKSPACE_SKILLS_PATH"
+    
+    # Warn if not in a repository root
+    if [ ! -d ".git" ]; then
+        echo ""
+        echo "⚠️  WARNING: No .git directory found in current location."
+        echo "   Skills will be installed in: $WORKSPACE_SKILLS_PATH"
+        echo "   Make sure you are in your repository root directory."
+        echo ""
+        read -p "Continue anyway? (y/N) " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            echo "❌ Update cancelled."
+            exit 0
+        fi
+    fi
 fi
 
 # Function to get current version

@@ -19,7 +19,22 @@ if ($User) {
     Write-Host "Updating user-level skills at: $SKILLS_DIR" -ForegroundColor Cyan
 } else {
     $SKILLS_DIR = ".agents\skills"
-    Write-Host "Updating workspace-level skills at: $SKILLS_DIR" -ForegroundColor Cyan
+    $workspaceSkillsPath = Join-Path (Get-Location) $SKILLS_DIR
+    Write-Host "Updating workspace-level skills at: $workspaceSkillsPath" -ForegroundColor Cyan
+    
+    # Warn if not in a repository root
+    if (-not (Test-Path ".git")) {
+        Write-Host ""
+        Write-Host "WARNING: No .git directory found in current location." -ForegroundColor Yellow
+        Write-Host "         Skills will be installed in: $workspaceSkillsPath" -ForegroundColor Yellow
+        Write-Host "         Make sure you are in your repository root directory." -ForegroundColor Yellow
+        Write-Host ""
+        $response = Read-Host "Continue anyway? (y/N)"
+        if ($response -ne 'y' -and $response -ne 'Y') {
+            Write-Host "Update cancelled." -ForegroundColor Red
+            exit 0
+        }
+    }
 }
 
 # Function to get current version
