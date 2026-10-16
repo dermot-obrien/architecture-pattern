@@ -89,12 +89,26 @@ If dependency versions changed, update:
 
 ## Creating a Release
 
-### Step 1: Commit all changes
+### Step 1: Update version and documentation
 
 ```bash
+# 1. Update version in skills/pattern/SKILL.md
+# 2. Update CHANGELOG.md
+# 3. Update docs/quick-start.md with new version tags (if changed)
+
+# Run version sync check
+bash scripts/check-version-sync.sh  # or .\scripts\check-version-sync.ps1
+
+# If sync check passes, commit
 git add -A
 git commit -m "chore: prepare pattern v0.12.0 release"
 ```
+
+**The version sync checker verifies:**
+- SKILL.md versions match what's in quick-start.md
+- Dependency versions in SKILL.md have corresponding tags
+- Repository URLs in update scripts are correct
+- Tags exist locally for current versions
 
 ### Step 2: Create and push the tag
 
@@ -251,12 +265,13 @@ When asked to create a release:
 1. Check CHANGELOG for version number and changes
 2. Verify version in SKILL.md matches
 3. Check that all dependency versions exist as pushed tags
-4. Run tests/checks
-5. Update documentation if versions changed
-6. Create annotated tag with summary
-7. Push tag AND commits
-8. Verify tag is accessible remotely
-9. Update any cross-repo documentation
+4. Run tests/checks (`check.py`, `doctor`, etc.)
+5. **Run version sync checker:** `./scripts/check-version-sync.sh` or `check-version-sync.ps1`
+6. Update documentation if versions changed (then rerun sync checker)
+7. Create annotated tag with summary
+8. Push tag AND commits
+9. Verify tag is accessible remotely
+10. Update any cross-repo documentation
 
 When asked to check version compatibility:
 

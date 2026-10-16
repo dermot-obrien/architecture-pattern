@@ -2,6 +2,58 @@
 
 Helper scripts for working with architecture patterns.
 
+## Version Sync Checker
+
+### `check-version-sync.sh` / `check-version-sync.ps1`
+
+**Purpose:** Prevent version drift between SKILL.md, documentation, and examples.
+
+Verifies that version references are consistent across:
+- SKILL.md files (source of truth for versions)
+- docs/quick-start.md (installation examples)
+- Repository URLs in update scripts
+- Local git tags (warns if version not yet tagged)
+
+**Usage:**
+```bash
+# bash
+bash scripts/check-version-sync.sh
+
+# PowerShell
+.\scripts\check-version-sync.ps1
+```
+
+**When to run:**
+- Before committing version bumps in SKILL.md
+- Before creating a release tag
+- As part of CI/PR checks
+- When updating dependency versions
+
+**Exit codes:**
+- `0` - All versions are consistent ✓
+- `1` - Found inconsistencies (details printed)
+
+**Example output:**
+```
+Checking version consistency across repository...
+
+Current skill versions:
+  pattern:          v0.11.0
+  use-case:         v0.3.0
+  cross-reference:  v0.3.0
+
+Required dependencies (from pattern SKILL.md):
+  model:            >= v0.9.0
+  markdown-deck:    >= v0.6.0
+
+Checking docs/quick-start.md...
+  ✓ pattern version matches
+  ✓ model version matches
+  ✓ markdown-deck version compatible (>= v0.6.0)
+
+== All version references are consistent
+```
+
 ## Update Scripts
 
 ### `update-skills.sh` / `update-skills.ps1`
