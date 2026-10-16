@@ -106,12 +106,26 @@ New-Item -ItemType Directory -Force -Path $TEMP_DIR | Out-Null
 
 # Clone repositories at latest tags
 Push-Location $TEMP_DIR
-Write-Host "  Cloning architecture-pattern..."
-git clone --depth 1 --branch $LATEST_PATTERN $REPO_PATTERN architecture-pattern 2>&1 | Out-Null
-Write-Host "  Cloning diagram-model..."
-git clone --depth 1 --branch $LATEST_MODEL $REPO_MODEL diagram-model 2>&1 | Out-Null
-Write-Host "  Cloning markdown-deck..."
-git clone --depth 1 --branch $LATEST_DECK $REPO_DECK markdown-deck 2>&1 | Out-Null
+try {
+    Write-Host "  Cloning architecture-pattern..."
+    git clone --depth 1 --branch $LATEST_PATTERN $REPO_PATTERN architecture-pattern 2>&1 | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "Failed to clone architecture-pattern" }
+    
+    Write-Host "  Cloning diagram-model..."
+    git clone --depth 1 --branch $LATEST_MODEL $REPO_MODEL diagram-model 2>&1 | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "Failed to clone diagram-model" }
+    
+    Write-Host "  Cloning markdown-deck..."
+    git clone --depth 1 --branch $LATEST_DECK $REPO_DECK markdown-deck 2>&1 | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "Failed to clone markdown-deck" }
+} catch {
+    Pop-Location
+    Remove-Item -Recurse -Force $TEMP_DIR -ErrorAction SilentlyContinue
+    Write-Host ""
+    Write-Host "Error: $_" -ForegroundColor Red
+    Write-Host "Clone failed. Please check the error and try again." -ForegroundColor Red
+    exit 1
+}
 Pop-Location
 
 # Backup old installations
