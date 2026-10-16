@@ -98,9 +98,9 @@ if ($response -ne 'y' -and $response -ne 'Y') {
     exit 0
 }
 
-# Create temp directory
+# Create temp directory in the current location (avoids long paths and spaces in AppData)
 $timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
-$TEMP_DIR = Join-Path $env:TEMP "skill-update-$timestamp"
+$TEMP_DIR = ".skill-update-temp-$timestamp"
 Write-Host ""
 Write-Host "Downloading latest versions to $TEMP_DIR..." -ForegroundColor Cyan
 New-Item -ItemType Directory -Force -Path $TEMP_DIR | Out-Null
@@ -109,16 +109,25 @@ New-Item -ItemType Directory -Force -Path $TEMP_DIR | Out-Null
 Push-Location $TEMP_DIR
 try {
     Write-Host "  Cloning architecture-pattern..."
-    git clone --depth 1 --branch $LATEST_PATTERN $REPO_PATTERN architecture-pattern 2>&1 | Out-Null
-    if ($LASTEXITCODE -ne 0) { throw "Failed to clone architecture-pattern" }
+    $cloneOutput = git clone --depth 1 --branch $LATEST_PATTERN $REPO_PATTERN architecture-pattern 2>&1
+    if ($LASTEXITCODE -ne 0) { 
+        Write-Host $cloneOutput -ForegroundColor Red
+        throw "Failed to clone architecture-pattern" 
+    }
     
     Write-Host "  Cloning diagram-model..."
-    git clone --depth 1 --branch $LATEST_MODEL $REPO_MODEL diagram-model 2>&1 | Out-Null
-    if ($LASTEXITCODE -ne 0) { throw "Failed to clone diagram-model" }
+    $cloneOutput = git clone --depth 1 --branch $LATEST_MODEL $REPO_MODEL diagram-model 2>&1
+    if ($LASTEXITCODE -ne 0) { 
+        Write-Host $cloneOutput -ForegroundColor Red
+        throw "Failed to clone diagram-model" 
+    }
     
     Write-Host "  Cloning markdown-deck..."
-    git clone --depth 1 --branch $LATEST_DECK $REPO_DECK markdown-deck 2>&1 | Out-Null
-    if ($LASTEXITCODE -ne 0) { throw "Failed to clone markdown-deck" }
+    $cloneOutput = git clone --depth 1 --branch $LATEST_DECK $REPO_DECK markdown-deck 2>&1
+    if ($LASTEXITCODE -ne 0) { 
+        Write-Host $cloneOutput -ForegroundColor Red
+        throw "Failed to clone markdown-deck" 
+    }
 } catch {
     Pop-Location
     Remove-Item -Recurse -Force $TEMP_DIR -ErrorAction SilentlyContinue
