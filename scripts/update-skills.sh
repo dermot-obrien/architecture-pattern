@@ -144,7 +144,10 @@ cp -r "$TEMP_DIR/markdown-deck/skills/markdown-deck" "$SKILLS_DIR/"
 # Install npm dependencies for markdown-deck
 echo ""
 echo "📦 Installing npm dependencies for markdown-deck..."
-npm install --prefix "$SKILLS_DIR/markdown-deck" --no-audit --no-fund
+if ! npm install --prefix "$SKILLS_DIR/markdown-deck" --no-audit --no-fund; then
+    echo "  ⚠️  npm install failed. You may need to run it manually:"
+    echo "  npm install --prefix $SKILLS_DIR/markdown-deck"
+fi
 
 # Clean up
 echo ""
