@@ -64,7 +64,7 @@ jobs:
           # With pattern types bound, each numbers in its own series and --type is required.
           printf '\n[suite.pattern.types.architecture-pattern]\nidSeries = "AP"\n\n[suite.pattern.types.reference-architecture]\nidSeries = "RA"\n' >> .agents/skill-bindings.toml
           if $R next; then echo "::error::next numbered a pattern with types bound and no --type"; exit 1; fi
-          test "$($R next --type architecture-pattern)" = AP-001
+          test "$($R next --type architecture-pattern)" = AP-003
           $R add RA-001 --name "Kong gateway"
           grep -q '^RA-001,reference-architecture,Kong gateway,' catalogue.csv
           test "$($R next --type reference-architecture)" = RA-002
