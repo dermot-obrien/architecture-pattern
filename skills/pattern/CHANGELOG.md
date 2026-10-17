@@ -2,6 +2,12 @@
 
 # Changelog
 
+## [0.12.0] - 2026-10-17
+
+### Changed
+
+- The default identifier series is `AP`, the architecture pattern's, where it was `PAT`; with the two types bound, `AP` names an architecture pattern and `RA` a reference architecture, so the kind is read from the identifier. The shipped template and the configuration guide say so. The `PAT` and `REF` series are retired; a repository that used them renumbers its documents into `AP` and `RA`.
+
 ## [0.11.0] - 2026-10-15
 
 ### Added

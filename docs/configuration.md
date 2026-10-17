@@ -105,10 +105,10 @@ template = "../templates/reference-architecture.md"   # ours, checked against th
 
 ### idSeries
 
-The identifier prefix for new patterns: `PAT` gives `PAT-001`. No script reads it; the agent uses it to name the next pattern. For a Uses cell to recognise the series, it must also match `[model] pattern_id` (default `[A-Z]{2,5}-[0-9]{3}`), so a four-digit series needs `pattern_id` set too.
+The identifier prefix for new patterns when no types are bound: `AP` gives `AP-001`, an architecture pattern. No script reads it; the agent uses it to name the next pattern. With the two types bound, each has its own: `AP` for an architecture pattern, `RA` for a reference architecture. For a Uses cell to recognise the series, it must also match `[model] pattern_id` (default `[A-Z]{2,5}-[0-9]{3}`), so a four-digit series needs `pattern_id` set too.
 
 ```toml
-idSeries = "REF"
+idSeries = "AP"
 ```
 
 ### deckTheme

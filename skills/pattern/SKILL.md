@@ -4,7 +4,7 @@ description: Author an architecture pattern as one Markdown document that is als
 license: CC-BY-4.0 AND Apache-2.0. Content under CC BY 4.0, code under Apache-2.0; see LICENSE and NOTICE.
 compatibility: Python 3.11+ and Node 18+. Requires the `model` skill (diagram-model repository) and the `markdown-deck` skill (markdown-deck repository), installed wherever the agent reads skills. draw.io desktop is optional; without it, views are exported by hand from draw.io desktop or online and stamped. PDF export needs playwright.
 metadata:
-  version: "0.11.0"
+  version: "0.12.0"
   homepage: https://github.com/dermot-obrien/architecture-pattern
   x-skill-requires: "pkg:generic/dermot-obrien/diagram-model/model ^0.9.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
   x-derived-from: "https://github.com/dermot-obrien/ai-assisted-architecture/tree/5a1c13860ad5093125afb3c41a82793e084cc0b7/skills/pattern"
@@ -49,7 +49,7 @@ Do not proceed on an error, and do not guess a path. Every path this skill needs
 | `siblings.model` | The model CLI, at `<that>/bin/model.py` |
 | `siblings.markdown-deck` | The deck CLI, at `<that>/bin/markdown-deck.mjs` |
 | `outputDir` | Where a new pattern folder is created by default. Unset, `patterns/` at the repository root: `register.py outdir` prints the folder in use |
-| `idSeries` | The prefix for a new pattern's id, `PAT` by default, when no `types` are bound |
+| `idSeries` | The prefix for a new pattern's id, `AP` by default (an architecture pattern), when no `types` are bound. With the two types bound, `AP` is the architecture pattern's series and `RA` the reference architecture's |
 | `types` | The repository's kinds of pattern, if bound, each with its `label`, its own `idSeries` and how physical it may be. Use the labels as the repository's names for them |
 | `register` | The register of minted ids, if bound. `register.py next` gives the next free number, from it and from the folders, and `register.py add` gives the pattern its row |
 | `template` | The repository's own template for every pattern, if it declares one. A type's own `template` wins over it. `scripts/template.py which [--type <type>]` prints the one to use |

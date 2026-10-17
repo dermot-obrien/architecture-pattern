@@ -65,7 +65,7 @@ if sys.version_info < (3, 11):
 import tomllib  # noqa: E402
 
 BINDING_NAMES = (".agents/skill-bindings.toml", "skill-bindings.toml", "model.toml", ".model.toml")
-SUITES = {"pattern": "PAT", "use-case": "UC"}
+SUITES = {"pattern": "AP", "use-case": "UC"}
 # Where new documents go when a suite binds no outputDir, relative to the repository root.
 DEFAULT_OUTPUT = {"pattern": "patterns", "use-case": "use-cases"}
 SKIP_DIRS = {"node_modules", "dist", "build"}
