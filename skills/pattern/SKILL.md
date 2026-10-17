@@ -4,7 +4,7 @@ description: Author an architecture pattern as one Markdown document that is als
 license: CC-BY-4.0 AND Apache-2.0. Content under CC BY 4.0, code under Apache-2.0; see LICENSE and NOTICE.
 compatibility: Python 3.11+ and Node 18+. Requires the `model` skill (diagram-model repository) and the `markdown-deck` skill (markdown-deck repository), installed wherever the agent reads skills. draw.io desktop is optional; without it, views are exported by hand from draw.io desktop or online and stamped. PDF export needs playwright.
 metadata:
-  version: "0.11.0"
+  version: "0.12.0"
   homepage: https://github.com/dermot-obrien/architecture-pattern
   x-skill-requires: "pkg:generic/dermot-obrien/diagram-model/model ^0.9.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
   x-derived-from: "https://github.com/dermot-obrien/ai-assisted-architecture/tree/5a1c13860ad5093125afb3c41a82793e084cc0b7/skills/pattern"
@@ -49,7 +49,7 @@ Do not proceed on an error, and do not guess a path. Every path this skill needs
 | `siblings.model` | The model CLI, at `<that>/bin/model.py` |
 | `siblings.markdown-deck` | The deck CLI, at `<that>/bin/markdown-deck.mjs` |
 | `outputDir` | Where a new pattern folder is created by default. Unset, `patterns/` at the repository root: `register.py outdir` prints the folder in use |
-| `idSeries` | The prefix for a new pattern's id, `PAT` by default, when no `types` are bound |
+| `idSeries` | The prefix for a new pattern's id when no `types` are bound: `AP`, the architecture pattern's series |
 | `types` | The repository's kinds of pattern, if bound, each with its `label`, its own `idSeries` and how physical it may be. Use the labels as the repository's names for them |
 | `register` | The register of minted ids, if bound. `register.py next` gives the next free number, from it and from the folders, and `register.py add` gives the pattern its row |
 | `template` | The repository's own template for every pattern, if it declares one. A type's own `template` wins over it. `scripts/template.py which [--type <type>]` prints the one to use |
@@ -71,11 +71,11 @@ The model skill's own bindings in the same file, `[model] link_site` and `link_t
 | `model` | Generates and validates the diagram from the document's tables, and resolves the bindings above |
 | `markdown-deck` | Turns tagged sections into HTML slides and a PDF |
 
-If `doctor` does not list both under `siblings`, stop and tell the user to install the missing one: `model` from https://github.com/dermot-obrien/diagram-model, `markdown-deck` from https://github.com/dermot-obrien/markdown-deck. Do not improvise a substitute: the identifier conventions in the diagram and the tag vocabulary in the document are what make the three parts agree, and a hand-rolled version of either will diverge silently.
+If `doctor` does not list both under `siblings`, stop and tell the user to install the missing one: `model` from https://github.com/dermot-obrien/diagram-model, `markdown-deck` from https://github.com/dermot-obrien/markdown-deck. Do not improvise a substitute: the diagram's identifier conventions and the document's tag vocabulary are what make the three parts agree, and a hand-rolled version of either diverges silently.
 
 ## What a pattern is
 
-Every architecture model is a pattern: building blocks, the interfaces between them and the scenarios that walk across them. Reusable as a reference, unlike a solution design, which instantiates one for one consumer. What a practice calls its kinds of pattern, such as an architecture pattern (technology-agnostic, ABBs) and a reference architecture (technology-specific, mainly SBBs), is the repository's to say, in `types`; this skill authors every kind the same way.
+Every architecture model is a pattern: building blocks, the interfaces between them and the scenarios that walk across them. Reusable as a reference, where a solution design instantiates one for one consumer. What a practice calls its kinds of pattern, such as an architecture pattern (technology-agnostic, ABBs) and a reference architecture (technology-specific, mainly SBBs), is the repository's to say, in `types`; this skill authors every kind the same way.
 
 Patterns differ by semantic type, which has up to three parts:
 
@@ -85,7 +85,7 @@ Patterns differ by semantic type, which has up to three parts:
 | Scope | `problem` for one recurring problem; `domain`, `capability-area`, `platform`, `hosting-profile` or `epic` for a composed design | The author, in front matter as `pattern_scope` |
 | Abstraction | `conceptual`, `logical`, `physical`, `mixed` | Derived by `model validate` from the kinds of box, never declared |
 
-A problem-scope pattern opens with Intent: the problem, the forces it balances and the invariant it enforces, and is usually short. A wider-scope pattern opens with Context and names the narrower patterns it applies. Any mix of boxes is allowed: local roles, catalogued logical building blocks, catalogued products, and external context. Report the derived abstraction. A conceptual pattern explains and scopes; one that a team will build from must be physical.
+A problem-scope pattern opens with Intent: the problem, the forces it balances and the invariant it enforces, and is usually short. A wider-scope pattern opens with Context and names the narrower patterns it applies. Any mix of boxes is allowed: local roles, catalogued logical building blocks and products, and external context. Report the derived abstraction. A conceptual pattern explains and scopes; one that a team will build from must be physical.
 
 ## Tying a pattern to capabilities
 
@@ -99,7 +99,7 @@ references:
   - { type: evidence, path: "../../evaluations/order-intake-trial/" }
 ```
 
-`realises` is optional, and a pattern without it is still a valid pattern. It just counts toward no capability. This skill records the fields and does not interpret them; a capability model that reads them decides what they are worth. What it has to go on is the derived abstraction together with the references: a logical pattern, every box an ABB, shows the capability's building blocks have been decided; a physical pattern, every box an SBB, with a `cost-model` reference shows it can be built and costed; an `evidence` reference on that physical pattern shows it has been tried.
+`realises` is optional; a pattern without it is valid and counts toward no capability. This skill records the fields and does not interpret them; a capability model that reads them decides what they are worth. What it has to go on is the derived abstraction together with the references: a logical pattern, every box an ABB, shows the capability's building blocks have been decided; a physical pattern, every box an SBB, with a `cost-model` reference shows it can be built and costed; an `evidence` reference on that physical pattern shows it has been tried.
 
 ## Structure
 
@@ -122,14 +122,14 @@ Target at most about ten pages, and far less for a problem-scope pattern. Tables
 
 ### 1. Create the document
 
-When `types` are bound, settle the type first, asking the user if the request does not make it plain: a design in ABBs that names no technology is one kind, a design in SBBs and products another. Set `pattern_type` in the front matter, and for a technology-specific pattern that makes a technology-agnostic one concrete, `implements: [<its id>]`. Number it first: `python <skills>/pattern/scripts/register.py next --type <type>` (with no `types` bound, plain `next`) prints the next free id in `idSeries`, from the register when one is bound and from the folder names under `patternsRoot` and `outputDir` either way, so a pattern filed into a category folder still counts. Never number a pattern by looking in `outputDir` alone. With no register, `patternsRoot` or `outputDir` bound it scans every folder in the repository and says so on stderr; pass that warning on to the user once. Copy the template `python <skills>/pattern/scripts/template.py which --type <type>` prints (no `--type` without types) into `<ID>-<slug>/index.md` in the folder the user names, else in the folder `register.py outdir` prints: `outputDir`, or the default `patterns/` at the repository root, creating it if need be. When it prints a note that the folder is the default, tell the user once where the pattern went and that `outputDir` changes it. It is the type's own template, else the repository's, else one this skill ships for the type, else `assets/template.md`. Never edit a shipped template; a repository replaces one by binding its own, which `template.py check` holds to the construct the binding reads. Fill it in this order, which is not document order:
+When `types` are bound, settle the type first, asking the user if the request does not make it plain: a design in ABBs naming no technology is one kind, a design in SBBs and products another. Set `pattern_type` in the front matter, and on a technology-specific pattern `implements: [<its id>]` for the technology-agnostic one it makes concrete. Number it first: `python <skills>/pattern/scripts/register.py next --type <type>` (with no `types` bound, plain `next`) prints the next free id in `idSeries`, from the register when one is bound and from the folder names under `patternsRoot` and `outputDir` either way, so a pattern filed into a category folder still counts. Never number a pattern by looking in `outputDir` alone. With no register, `patternsRoot` or `outputDir` bound it scans every folder in the repository and says so on stderr; pass that warning on to the user once. Copy the template `python <skills>/pattern/scripts/template.py which --type <type>` prints (no `--type` without types) into `<ID>-<slug>/index.md` in the folder the user names, else in the folder `register.py outdir` prints: `outputDir`, or the default `patterns/` at the repository root, creating it if need be. When it prints a note that the folder is the default, tell the user once where the pattern went and that `outputDir` changes it. It is the type's own template, else the repository's, else one this skill ships for the type, else `assets/template.md`. Never edit a shipped template; a repository replaces one by binding its own, which `template.py check` holds to the construct the binding reads. Fill it in this order, which is not document order:
 
-Intent, or Context and Non-Goals for a wider scope, then Patterns Applied where published patterns cover part of the design, including every participating pattern a composite pattern's scenarios run (see step 6), then Building Blocks, then Interfaces. Interfaces is where most of the real thinking happens and it usually sends you back to revise Building Blocks. Write each Provider and Consumer, and each Actor and Target in a scenario's steps, as the identifier followed by the name, as Building Blocks has it (`ABB-901 Retrieval Service`, `04 Identity provider`), never the bare identifier: the table is read on the page and on its deck slide, and a reader should not have to look names up. The model reads only the leading identifier. `python <skills>/pattern/scripts/name-endpoints.py <file-or-folder>` fills in names from the Building Blocks table, and `--check` reports without changing anything; `publish.py` notes any document that still needs it. Only then the diagram, then Scenarios, then the controls and decisions, which are the residue of everything above.
+Intent, or Context and Non-Goals for a wider scope, then Patterns Applied where published patterns cover part of the design, including every participating pattern a composite pattern's scenarios run (see step 6), then Building Blocks, then Interfaces. Interfaces is where most of the thinking happens, and it usually sends you back to revise Building Blocks. Write each Provider and Consumer, and each Actor and Target in a scenario's steps, as the identifier followed by the name, as Building Blocks has it (`ABB-901 Retrieval Service`, `04 Identity provider`), never the bare identifier: the table is read on the page and on its deck slide, and a reader should not have to look names up. The model reads only the leading identifier. `python <skills>/pattern/scripts/name-endpoints.py <file-or-folder>` fills in names from the Building Blocks table, and `--check` reports without changing anything; `publish.py` notes any document that still needs it. Only then the diagram, then Scenarios, then the controls and decisions, which are the residue of everything above.
 
 When `register` is bound, give the pattern its row as soon as the folder exists, so no one else takes the number:
 
 ```bash
-python <skills>/pattern/scripts/register.py add <ID> --name "Order intake" --status Draft --path <outputDir>/PAT-007-order-intake --summary "<one line>"
+python <skills>/pattern/scripts/register.py add <ID> --name "Order intake" --status Draft --path <outputDir>/AP-007-order-intake --summary "<one line>"
 ```
 
 It appends the row and refuses an id already there. Appending is deliberate: two branches that each take the next number both change the end of the file, so git reports a conflict where it would otherwise merge a duplicate. After a pattern folder is moved, into a category folder say, `register.py check --fix` corrects its `path`, and its `name` and `status` from the document. `register.py check` alone reports, and fails on a duplicate id.
@@ -205,7 +205,7 @@ The document keeps its detail; the deck shows a selection of it. Untagged sectio
 
 A composite pattern is one whose scenario steps run other patterns' flows, its participating patterns. Sketch it top down with open participating patterns, `TBD <name>`, and solve each as its own pattern, or compose approved patterns bottom up.
 
-In the scenario's step table, a `Uses` column names on a participation step the participating pattern's id and scenario key, `PAT-905 S1`, optionally with a role binding of its boxes to this pattern's, `PAT-905 S1 (01=03)`. The step's Actor and Target are where that flow enters and leaves. A scenario another pattern may run declares `Start: <box>` and `Finish: <box>` as separate paragraphs under its heading. List every participating pattern in Patterns Applied, check with `model composition index.md` and `model validate index.md`, and approve the participating patterns before the composite pattern: an approved pattern cannot rest on unapproved or unwritten ones.
+In the scenario's step table, a `Uses` column names on a participation step the participating pattern's id and scenario key, `AP-905 S1`, optionally with a role binding of its boxes to this pattern's, `AP-905 S1 (01=03)`. The step's Actor and Target are where that flow enters and leaves. A scenario another pattern may run declares `Start: <box>` and `Finish: <box>` as separate paragraphs under its heading. List every participating pattern in Patterns Applied, check with `model composition index.md` and `model validate index.md`, and approve the participating patterns before the composite pattern: an approved pattern cannot rest on unapproved or unwritten ones.
 
 Read [references/compose.md](references/compose.md) before composing: it has the notation and its grounding in UML 2.5.1 and BPMN 2.0.2, the join rules, the approval gate, and how the diagram's `Participating patterns` regions, the `[+]` marker and the walkthrough's drill-in work.
 

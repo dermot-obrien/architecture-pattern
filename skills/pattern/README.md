@@ -55,17 +55,17 @@ From an empty workspace with the skill installed:
 python .agents/skills/pattern/scripts/check.py
 
 # 2. Create a pattern from the template
-mkdir -p patterns/PAT-001-order-intake
-cp .agents/skills/pattern/assets/template.md patterns/PAT-001-order-intake/index.md
+mkdir -p patterns/AP-001-order-intake
+cp .agents/skills/pattern/assets/template.md patterns/AP-001-order-intake/index.md
 
 # 3. Fill in the document, then generate the diagram
-python .agents/skills/model/bin/model.py emit patterns/PAT-001-order-intake/index.md --to drawio --out patterns/PAT-001-order-intake/components.drawio
+python .agents/skills/model/bin/model.py emit patterns/AP-001-order-intake/index.md --to drawio --out patterns/AP-001-order-intake/components.drawio
 
 # 4. Arrange the diagram in draw.io, then validate
-python .agents/skills/model/bin/model.py validate patterns/PAT-001-order-intake/index.md
+python .agents/skills/model/bin/model.py validate patterns/AP-001-order-intake/index.md
 
 # 5. Publish: view, walkthrough, deck and PDF
-python .agents/skills/pattern/scripts/publish.py patterns/PAT-001-order-intake
+python .agents/skills/pattern/scripts/publish.py patterns/AP-001-order-intake
 ```
 
 The [quick start guide](https://github.com/dermot-obrien/architecture-pattern/blob/main/docs/quick-start.md) goes step by step with a complete example.
@@ -137,14 +137,14 @@ The script will:
 
 5. **Republish existing patterns** to verify they still build:
    ```bash
-   python .agents/skills/pattern/scripts/publish.py patterns/PAT-001-order-intake
+   python .agents/skills/pattern/scripts/publish.py patterns/AP-001-order-intake
    ```
 
 **Always update all three skills together** (`pattern`, `model`, `markdown-deck`) because they have coordinated version dependencies.
 
 ## Composing patterns
 
-A composite pattern's scenario steps run other patterns' flows through an optional Uses column, `PAT-905 S1`, or mark an open participating pattern, not yet written, `TBD <name>`, and may bind its boxes to the composite pattern's, `PAT-905 S1 (01=03)`. A scenario declares where its flow starts and finishes with `Start:` and `Finish:` lines. Each participating pattern is drawn as a dashed region on the diagram's `Participating patterns` layer, and a participation step carries BPMN's `[+]` call-activity marker. The notation follows UML 2.5.1 collaboration use and ports and BPMN 2.0.2 call activity and start and end events. Sketch a composite pattern top down with open participating patterns and solve each as its own pattern, or compose approved patterns. `model composition index.md` prints the composition tree, `validate` checks it and its approval gate, and the walkthrough drills into each participating pattern's. [examples/composite](./examples/composite) runs the knowledge-retrieval example. See `SKILL.md`, step 6.
+A composite pattern's scenario steps run other patterns' flows through an optional Uses column, `AP-905 S1`, or mark an open participating pattern, not yet written, `TBD <name>`, and may bind its boxes to the composite pattern's, `AP-905 S1 (01=03)`. A scenario declares where its flow starts and finishes with `Start:` and `Finish:` lines. Each participating pattern is drawn as a dashed region on the diagram's `Participating patterns` layer, and a participation step carries BPMN's `[+]` call-activity marker. The notation follows UML 2.5.1 collaboration use and ports and BPMN 2.0.2 call activity and start and end events. Sketch a composite pattern top down with open participating patterns and solve each as its own pattern, or compose approved patterns. `model composition index.md` prints the composition tree, `validate` checks it and its approval gate, and the walkthrough drills into each participating pattern's. [examples/composite](./examples/composite) runs the knowledge-retrieval example. See `SKILL.md`, step 6.
 
 ## Tying it to capabilities
 

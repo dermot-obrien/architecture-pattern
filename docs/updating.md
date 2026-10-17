@@ -101,7 +101,7 @@ python .agents/skills/model/bin/model.py doctor --skill pattern --json
 Verify they still build with the updated skills:
 
 ```bash
-python .agents/skills/pattern/scripts/publish.py patterns/PAT-001-order-intake
+python .agents/skills/pattern/scripts/publish.py patterns/AP-001-order-intake
 ```
 
 **Always update all three skills together** (`pattern`, `model`, `markdown-deck`) because they have coordinated version dependencies.

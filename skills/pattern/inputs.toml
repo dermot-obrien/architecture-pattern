@@ -57,7 +57,7 @@ belongs to the repository, not to a published skill."""
 type = "str"
 required = false
 default = "PAT"
-description = "Identifier prefix for patterns, e.g. PAT gives PAT-001"
+description = "Identifier prefix for patterns, e.g. PAT gives AP-001"
 
 [inputs.options.deckTheme]
 type = "str"

@@ -29,7 +29,7 @@ PowerShell:
 ```powershell
 New-Item -ItemType Directory pattern-quickstart | Out-Null
 Set-Location pattern-quickstart
-git clone --depth 1 --branch pattern--v0.11.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
+git clone --depth 1 --branch pattern--v0.12.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
 git clone --depth 1 --branch model--v0.9.0 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
 git clone --depth 1 --branch markdown-deck--v0.6.8 https://github.com/dermot-obrien/markdown-deck.git _src/markdown-deck
 New-Item -ItemType Directory -Force .agents/skills | Out-Null
@@ -43,7 +43,7 @@ bash:
 
 ```bash
 mkdir pattern-quickstart && cd pattern-quickstart
-git clone --depth 1 --branch pattern--v0.11.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
+git clone --depth 1 --branch pattern--v0.12.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
 git clone --depth 1 --branch model--v0.9.0 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
 git clone --depth 1 --branch markdown-deck--v0.6.8 https://github.com/dermot-obrien/markdown-deck.git _src/markdown-deck
 mkdir -p .agents/skills
@@ -130,18 +130,18 @@ A `warning:` line about draw.io desktop is fine if you do not have it.
 
 ## 4. Write a small pattern
 
-Create `patterns/PAT-001-order-intake/index.md`. PowerShell: `New-Item -ItemType Directory -Force patterns/PAT-001-order-intake | Out-Null`; bash: `mkdir -p patterns/PAT-001-order-intake`. Then give it this content:
+Create `patterns/AP-001-order-intake/index.md`. PowerShell: `New-Item -ItemType Directory -Force patterns/AP-001-order-intake | Out-Null`; bash: `mkdir -p patterns/AP-001-order-intake`. Then give it this content:
 
 ```markdown
 ---
-title: "PAT-001 Order Intake"
+title: "AP-001 Order Intake"
 pattern_scope: problem
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-001 Order Intake
+# AP-001 Order Intake
 
 <!-- deck:cover subtitle="Take an order once, store it once" -->
 
@@ -155,7 +155,7 @@ An order submitted twice must be stored once. The web shop retries on a timeout,
 
 ## Diagram
 
-![PAT-001 components](./components.svg)
+![AP-001 components](./components.svg)
 
 <!-- deck:slide label="Building blocks" -->
 
@@ -220,7 +220,7 @@ This is a trimmed copy of the full template, `.agents/skills/pattern/assets/temp
 ## 5. Generate the diagram and check it
 
 ```
-cd patterns/PAT-001-order-intake
+cd patterns/AP-001-order-intake
 python ../../.agents/skills/model/bin/model.py emit index.md --to drawio --out components.drawio
 python ../../.agents/skills/model/bin/model.py validate index.md
 cd ../..
@@ -240,7 +240,7 @@ You should see:
 `emit` lays the boxes out on a plain grid. Open `components.drawio` in draw.io, move the boxes, and save. From now on use `sync`, never `emit`, so your layout is kept:
 
 ```
-python .agents/skills/model/bin/model.py sync patterns/PAT-001-order-intake/index.md patterns/PAT-001-order-intake/components.drawio
+python .agents/skills/model/bin/model.py sync patterns/AP-001-order-intake/index.md patterns/AP-001-order-intake/components.drawio
 ```
 
 It prints `rebuild  scen  S1  2 step(s)`: scenario layers are always regenerated from the steps tables, while the boxes and connectors keep the places you gave them.
@@ -248,7 +248,7 @@ It prints `rebuild  scen  S1  2 step(s)`: scenario layers are always regenerated
 ## 7. Publish it
 
 ```
-python .agents/skills/pattern/scripts/publish.py patterns/PAT-001-order-intake
+python .agents/skills/pattern/scripts/publish.py patterns/AP-001-order-intake
 ```
 
 With draw.io desktop installed you should see, in five seconds or so:
@@ -258,40 +258,40 @@ With draw.io desktop installed you should see, in five seconds or so:
   ok       index.md
            rendered components.svg
            animated scenarios.html
-           built dist\PAT-001-order-intake\deck.html
-           built dist\PAT-001-order-intake\deck.pdf
+           built dist\AP-001-order-intake\deck.html
+           built dist\AP-001-order-intake\deck.pdf
   1 model(s), theme 'default'
 ```
 
-(`/` rather than `\` on macOS and Linux.) In `patterns/PAT-001-order-intake/` you now have:
+(`/` rather than `\` on macOS and Linux.) In `patterns/AP-001-order-intake/` you now have:
 
 | File | What it is |
 |---|---|
 | `components.svg` | The component view, rendered from the diagram's Structure layer |
 | `components.svg.render.json` | What the view was rendered from, so a stale view is caught |
 | `scenarios.html` | The animated walkthrough: arrow keys step, space plays. Opens from disk |
-| `dist/PAT-001-order-intake/deck.html` | The HTML slides, one per tagged section plus the cover and the walkthrough |
-| `dist/PAT-001-order-intake/deck.pdf` | The same slides as a PDF, one 16:9 page each |
+| `dist/AP-001-order-intake/deck.html` | The HTML slides, one per tagged section plus the cover and the walkthrough |
+| `dist/AP-001-order-intake/deck.pdf` | The same slides as a PDF, one 16:9 page each |
 
 Without draw.io desktop, publish stops with `failed` and says `components.svg is missing ... Export the 'Structure' layer(s) by hand`. Open `components.drawio` in draw.io (desktop or https://app.diagrams.net), hide every layer but Structure, export as SVG to `components.svg` beside it, then record it and publish again:
 
 ```
-python .agents/skills/model/bin/model.py stamp patterns/PAT-001-order-intake/components.svg --diagram patterns/PAT-001-order-intake/components.drawio --layer Structure
-python .agents/skills/pattern/scripts/publish.py patterns/PAT-001-order-intake
+python .agents/skills/model/bin/model.py stamp patterns/AP-001-order-intake/components.svg --diagram patterns/AP-001-order-intake/components.drawio --layer Structure
+python .agents/skills/pattern/scripts/publish.py patterns/AP-001-order-intake
 ```
 
 Open the walkthrough and the deck. PowerShell:
 
 ```powershell
-Start-Process patterns/PAT-001-order-intake/scenarios.html
-Start-Process patterns/PAT-001-order-intake/dist/PAT-001-order-intake/deck.html
+Start-Process patterns/AP-001-order-intake/scenarios.html
+Start-Process patterns/AP-001-order-intake/dist/AP-001-order-intake/deck.html
 ```
 
 bash (use `xdg-open` on Linux, `start` in Git Bash):
 
 ```bash
-open patterns/PAT-001-order-intake/scenarios.html
-open patterns/PAT-001-order-intake/dist/PAT-001-order-intake/deck.html
+open patterns/AP-001-order-intake/scenarios.html
+open patterns/AP-001-order-intake/dist/AP-001-order-intake/deck.html
 ```
 
 ## 8. See validation catch a drift
@@ -299,7 +299,7 @@ open patterns/PAT-001-order-intake/dist/PAT-001-order-intake/deck.html
 Add a row to Building Blocks, `| 04 Audit log | Records every order | loose |`, and validate without syncing:
 
 ```
-python .agents/skills/model/bin/model.py validate patterns/PAT-001-order-intake/index.md
+python .agents/skills/model/bin/model.py validate patterns/AP-001-order-intake/index.md
 ```
 
 ```
@@ -311,20 +311,20 @@ The document says a box exists that the diagram does not show. Delete the row ag
 
 ## 9. Compose: a pattern that runs another
 
-A composite pattern's scenario steps run other patterns' flows. Here, checkout runs PAT-001's S1 to take the order, and leaves the customer notification as an open participating pattern, not written yet.
+A composite pattern's scenario steps run other patterns' flows. Here, checkout runs AP-001's S1 to take the order, and leaves the customer notification as an open participating pattern, not written yet.
 
-Create `patterns/PAT-002-checkout/index.md` (make the folder as in step 4) with:
+Create `patterns/AP-002-checkout/index.md` (make the folder as in step 4) with:
 
 ```markdown
 ---
-title: "PAT-002 Checkout"
+title: "AP-002 Checkout"
 pattern_scope: capability-area
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-002 Checkout
+# AP-002 Checkout
 
 <!-- deck:cover subtitle="A composite pattern: checkout runs order intake" -->
 
@@ -332,13 +332,13 @@ model:
 
 ## Context
 
-A customer checks out and is told the order is placed. Taking the order is already solved by PAT-001 Order Intake, so this pattern runs it rather than repeating it. Telling the customer is not solved yet.
+A customer checks out and is told the order is placed. Taking the order is already solved by AP-001 Order Intake, so this pattern runs it rather than repeating it. Telling the customer is not solved yet.
 
 <!-- deck:slide label="Component view" -->
 
 ## Diagram
 
-![PAT-002 components](./components.svg)
+![AP-002 components](./components.svg)
 
 <!-- deck:slide label="Patterns applied" -->
 
@@ -346,7 +346,7 @@ A customer checks out and is told the order is placed. Taking the order is alrea
 
 | Pattern | Role in this pattern |
 |---|---|
-| PAT-001 Order Intake | Stores the order once; run by S1 step 1 |
+| AP-001 Order Intake | Stores the order once; run by S1 step 1 |
 | TBD customer notification | Tells the customer; S1 step 3, not yet written |
 
 ## Building Blocks
@@ -354,7 +354,7 @@ A customer checks out and is told the order is placed. Taking the order is alrea
 | Building Block | Role in this pattern | Source |
 |---|---|---|
 | 01 Checkout page | Where the customer confirms the basket | loose |
-| 02 Order records | Every placed order | PAT-001 |
+| 02 Order records | Every placed order | AP-001 |
 | 03 Notifier | Sends the confirmation | loose |
 
 ## Interfaces
@@ -381,17 +381,17 @@ Step through them in the [animated scenario walkthrough](./scenarios.html).
 
 | Step | Actor | Target | Action | Interface | Uses |
 |---:|---|---|---|---|---|
-| 1 | 01 Checkout page | 02 Order records | place the order once | | PAT-001 S1 (01=01, 03=02) |
+| 1 | 01 Checkout page | 02 Order records | place the order once | | AP-001 S1 (01=01, 03=02) |
 | 2 | 02 Order records | 03 Notifier | announce the order | IF-10 | |
 | 3 | 03 Notifier | 01 Checkout page | confirm to the customer | | TBD customer notification |
 ```
 
-Step 1's Uses cell, `PAT-001 S1 (01=01, 03=02)`, says: this step is the whole of PAT-001's S1. The role binding in brackets joins the two patterns' local boxes, PAT-001's box on the left and this pattern's on the right: PAT-001's `01 Web shop` is played here by `01 Checkout page`, and its `03 Order store` by `02 Order records`. So the flow enters at the step's Actor and leaves at its Target, matching PAT-001 S1's declared Start and Finish. Step 3's `TBD customer notification` is an open participating pattern.
+Step 1's Uses cell, `AP-001 S1 (01=01, 03=02)`, says: this step is the whole of AP-001's S1. The role binding in brackets joins the two patterns' local boxes, AP-001's box on the left and this pattern's on the right: AP-001's `01 Web shop` is played here by `01 Checkout page`, and its `03 Order store` by `02 Order records`. So the flow enters at the step's Actor and leaves at its Target, matching AP-001 S1's declared Start and Finish. Step 3's `TBD customer notification` is an open participating pattern.
 
 Print the composition, then generate and check the diagram:
 
 ```
-cd patterns/PAT-002-checkout
+cd patterns/AP-002-checkout
 python ../../.agents/skills/model/bin/model.py composition index.md
 python ../../.agents/skills/model/bin/model.py emit index.md --to drawio --out components.drawio
 python ../../.agents/skills/model/bin/model.py validate index.md
@@ -402,8 +402,8 @@ cd ../..
 
 ```
   warn  S1 step 3: open participating pattern TBD customer notification: write it as its own pattern, then replace TBD with its id and scenario key  [participant_open]
-  PAT-002 Checkout [Draft]
-    S1 step 1 runs S1 of PAT-001 Order Intake [Draft]  (joined at its declared start and finish)  (bound 01=01, 03=02)
+  AP-002 Checkout [Draft]
+    S1 step 1 runs S1 of AP-001 Order Intake [Draft]  (joined at its declared start and finish)  (bound 01=01, 03=02)
     S1 step 3 runs TBD customer notification  (open participating pattern)
   composition: 2 participation step(s) running 1 participating pattern(s), depth 1, 1 open (TBD)
 ```
@@ -415,36 +415,36 @@ cd ../..
   0 error(s), 1 warning(s)
 ```
 
-Now publish both patterns together, so the walkthrough's drill-in from PAT-002 step 1 opens PAT-001's walkthrough:
+Now publish both patterns together, so the walkthrough's drill-in from AP-002 step 1 opens AP-001's walkthrough:
 
 ```
 python .agents/skills/pattern/scripts/publish.py patterns --recursive
 ```
 
-Both report `ok`, and PAT-002's notes start with its composition. Its `components.svg` shows a dashed region labelled PAT-001 Order Intake round the two boxes that play PAT-001's part, and one labelled `Open: customer notification`. In its `scenarios.html`, step 1 carries a boxed-plus badge: click it, or press D, to open PAT-001's walkthrough at S1.
+Both report `ok`, and AP-002's notes start with its composition. Its `components.svg` shows a dashed region labelled AP-001 Order Intake round the two boxes that play AP-001's part, and one labelled `Open: customer notification`. In its `scenarios.html`, step 1 carries a boxed-plus badge: click it, or press D, to open AP-001's walkthrough at S1.
 
 ## 10. See the approval gate
 
-An approved pattern cannot rest on an unapproved or unwritten one. Change PAT-002's front matter to `status: Approved` and validate:
+An approved pattern cannot rest on an unapproved or unwritten one. Change AP-002's front matter to `status: Approved` and validate:
 
 ```
-python .agents/skills/model/bin/model.py validate patterns/PAT-002-checkout/index.md
+python .agents/skills/model/bin/model.py validate patterns/AP-002-checkout/index.md
 ```
 
 ```
-  error  S1 step 1: PAT-002 is Approved but rests on the participating pattern PAT-001, which is Draft; approved statuses are Final, Approved, Active, Published  [participant_unapproved]
-  error  S1 step 3: PAT-002 is Approved but rests on the open participating pattern TBD customer notification  [participant_unapproved]
+  error  S1 step 1: AP-002 is Approved but rests on the participating pattern AP-001, which is Draft; approved statuses are Final, Approved, Active, Published  [participant_unapproved]
+  error  S1 step 3: AP-002 is Approved but rests on the open participating pattern TBD customer notification  [participant_unapproved]
 ```
 
-It exits 1, and `publish.py` would skip PAT-002 until it is fixed. Set the status back to `Draft`.
+It exits 1, and `publish.py` would skip AP-002 until it is fixed. Set the status back to `Draft`.
 
 ## 11. Let your agent do it
 
 Everything above is what the `pattern` skill tells an agent to do. Open the workspace in VS Code with GitHub Copilot, Cursor, Claude Code, Codex, Gemini CLI or any agent that reads `.agents/skills/`, and ask, for example:
 
-> Create a pattern for sending the order confirmation email, as PAT-003, and replace the TBD in PAT-002 with it. Publish both.
+> Create a pattern for sending the order confirmation email, as AP-003, and replace the TBD in AP-002 with it. Publish both.
 
-The agent runs `doctor` first, copies the template into `patterns/PAT-003-<slug>/index.md`, fills it, generates and validates the diagram, updates PAT-002's Uses cell, and publishes. In some agents you can also type `/pattern`.
+The agent runs `doctor` first, copies the template into `patterns/AP-003-<slug>/index.md`, fills it, generates and validates the diagram, updates AP-002's Uses cell, and publishes. In some agents you can also type `/pattern`.
 
 ## 12. Helper scripts
 
@@ -469,13 +469,13 @@ PowerShell:
 Output shows each pattern with validation status:
 
 ```
-[PAT-001] ✓ Order Intake Pattern
+[AP-001] ✓ Order Intake Pattern
   Version: 1.0
-  Path: ./patterns/PAT-001-order-intake
+  Path: ./patterns/AP-001-order-intake
 
-[PAT-002] ✗ Checkout Composite
+[AP-002] ✗ Checkout Composite
   Version: 1.0
-  Path: ./patterns/PAT-002-checkout
+  Path: ./patterns/AP-002-checkout
 ```
 
 In verbose mode, see detailed validation warnings for patterns that need attention.

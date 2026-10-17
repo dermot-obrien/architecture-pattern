@@ -6,6 +6,24 @@ Releases of the architecture-pattern plugin. Each skill keeps its own changelog 
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [pattern 0.12.0] - 2026-10-17
+
+### Changed
+
+- The default identifier series is `AP`, the architecture pattern's, where it was `PAT`; with the two types bound, `AP` names an architecture pattern and `RA` a reference architecture, so the kind is read from the identifier. The shipped template and the configuration guide say so. The `PAT` and `REF` series are retired; a repository that used them renumbers its documents into `AP` and `RA`.
+
+## [use-case 0.3.1] - 2026-10-17
+
+### Changed
+
+- `realised_by` names architecture patterns (`AP-NNN`) and reference architectures (`RA-NNN`), the two series the pattern skill 0.12.0 mints; the retired `PAT-NNN` is gone from the template and the skill text.
+
+## [cross-reference 0.3.1] - 2026-10-17
+
+### Changed
+
+- The example catalogue, the specification's example and the tests use the `AP` series, the architecture pattern's, in place of the retired `PAT`.
+
 ## [pattern 0.11.0] - 2026-10-15
 
 ### Added

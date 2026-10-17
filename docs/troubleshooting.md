@@ -213,9 +213,9 @@ With `--scenario-images` and no draw.io desktop, per-scenario images are skipped
 
 ## Composite patterns
 
-### `Uses '<cell>': it is neither a pattern id and scenario key, such as PAT-905 S1, nor TBD and a name  [uses_invalid]`
+### `Uses '<cell>': it is neither a pattern id and scenario key, such as AP-905 S1, nor TBD and a name  [uses_invalid]`
 
-Write `PAT-001 S1`. The id must match `[model] pattern_id` (by default two to five capitals, a hyphen, three digits). The same rule reports `the binding after the scenario key must be comma-separated id=id pairs`, and `an open participating pattern, TBD, cannot carry a binding: it has no boxes to bind yet`.
+Write `AP-001 S1`. The id must match `[model] pattern_id` (by default two to five capitals, a hyphen, three digits). The same rule reports `the binding after the scenario key must be comma-separated id=id pairs`, and `an open participating pattern, TBD, cannot carry a binding: it has no boxes to bind yet`.
 
 ### `runs <id> <key> but has no Target; a participation step needs both, ...  [uses_step_endpoints]`
 
@@ -235,7 +235,7 @@ The left side of a binding names the participating pattern's boxes, the right si
 
 ### `<id> <key> enters at its declared Start, <box> there, which cannot be matched to <box> here. ...  [participant_join]`
 
-And `leaves at its declared Finish`. The step's Actor must correspond to the participating scenario's start, and its Target to its finish. Local ids never match across patterns on their own. Do what the message suggests: bind them, `PAT-001 S1 (01=01)`; or map the local box to a shared catalogue id in Catalogue Mapping; or use the same catalogue id in both.
+And `leaves at its declared Finish`. The step's Actor must correspond to the participating scenario's start, and its Target to its finish. Local ids never match across patterns on their own. Do what the message suggests: bind them, `AP-001 S1 (01=01)`; or map the local box to a shared catalogue id in Catalogue Mapping; or use the same catalogue id in both.
 
 ### `open participating pattern TBD <name>: write it as its own pattern, then replace TBD with its id and scenario key  [participant_open]`
 

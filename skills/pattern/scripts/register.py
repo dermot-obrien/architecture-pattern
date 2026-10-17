@@ -17,7 +17,7 @@ working directory, and both may name the same file. Its identifier column is `id
 its first column when none is named `id`. Every other column is optional:
 
     id,type,name,status,path,url,summary
-    PAT-001,pattern,Order intake,Approved,../patterns/integration/PAT-001-order-intake,,...
+    AP-001,pattern,Order intake,Approved,../patterns/integration/AP-001-order-intake,,...
     UC-004,use-case,Track an order,Draft,../use-cases/UC-004-track-an-order,,...
 
 `type` is a pattern type's name, such as architecture-pattern or reference-architecture,
@@ -65,7 +65,7 @@ if sys.version_info < (3, 11):
 import tomllib  # noqa: E402
 
 BINDING_NAMES = (".agents/skill-bindings.toml", "skill-bindings.toml", "model.toml", ".model.toml")
-SUITES = {"pattern": "PAT", "use-case": "UC"}
+SUITES = {"pattern": "AP", "use-case": "UC"}
 # Where new documents go when a suite binds no outputDir, relative to the repository root.
 DEFAULT_OUTPUT = {"pattern": "patterns", "use-case": "use-cases"}
 SKIP_DIRS = {"node_modules", "dist", "build"}

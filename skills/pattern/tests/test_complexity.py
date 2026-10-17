@@ -15,18 +15,18 @@ from pathlib import Path
 
 def test_simple_pattern_minimal(temp_workspace):
     """Test minimal valid pattern with 3 building blocks."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-010-simple"
+    pattern_dir = temp_workspace / "patterns" / "AP-010-simple"
     pattern_dir.mkdir(parents=True)
     
     pattern_content = """---
-title: "PAT-010 Minimal Pattern"
+title: "AP-010 Minimal Pattern"
 pattern_scope: problem
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-010 Minimal Pattern
+# AP-010 Minimal Pattern
 
 ## Building Blocks
 
@@ -71,18 +71,18 @@ Finish: 03 Output
 
 def test_medium_pattern_with_branches(temp_workspace):
     """Test medium complexity pattern with branching flows."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-011-medium"
+    pattern_dir = temp_workspace / "patterns" / "AP-011-medium"
     pattern_dir.mkdir(parents=True)
     
     pattern_content = """---
-title: "PAT-011 Medium Complexity"
+title: "AP-011 Medium Complexity"
 pattern_scope: solution
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-011 Medium Complexity
+# AP-011 Medium Complexity
 
 ## Building Blocks
 
@@ -159,19 +159,19 @@ Finish: 08 Message Queue
 
 def test_complex_pattern_mesh_topology(temp_workspace):
     """Test complex pattern with mesh topology (many-to-many)."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-012-complex"
+    pattern_dir = temp_workspace / "patterns" / "AP-012-complex"
     pattern_dir.mkdir(parents=True)
     
     # Create a complex pattern with 12 building blocks and multiple interconnections
     pattern_content = """---
-title: "PAT-012 Complex Mesh"
+title: "AP-012 Complex Mesh"
 pattern_scope: domain
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-012 Complex Mesh
+# AP-012 Complex Mesh
 
 ## Building Blocks
 
@@ -278,18 +278,18 @@ Finish: 09 Analytics Service
 
 def test_hub_and_spoke_topology(temp_workspace):
     """Test pattern with hub-and-spoke topology."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-013-hub"
+    pattern_dir = temp_workspace / "patterns" / "AP-013-hub"
     pattern_dir.mkdir(parents=True)
     
     pattern_content = """---
-title: "PAT-013 Hub and Spoke"
+title: "AP-013 Hub and Spoke"
 pattern_scope: capability-area
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-013 Hub and Spoke
+# AP-013 Hub and Spoke
 
 ## Building Blocks
 

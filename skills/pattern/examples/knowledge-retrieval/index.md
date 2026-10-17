@@ -1,6 +1,6 @@
 ---
-title: "PAT-900 Knowledge Retrieval"
-sidebar_label: "PAT-900 Knowledge Retrieval"
+title: "AP-900 Knowledge Retrieval"
+sidebar_label: "AP-900 Knowledge Retrieval"
 description: "Grounded, permission-aware answers over enterprise knowledge, through one retrieval contract"
 document_type: pattern
 pattern_scope: domain
@@ -14,7 +14,7 @@ model:
   diagram: components.drawio
 ---
 
-# PAT-900 Knowledge Retrieval
+# AP-900 Knowledge Retrieval
 
 <!-- deck:cover subtitle="Grounded, permission-aware answers through one retrieval contract" date="25 September 2026" footnote="Worked example. Illustrative only, not an approved architecture." -->
 
@@ -51,7 +51,7 @@ Done, for this domain, means a second consumer can integrate against the retriev
 
 ## Diagram
 
-![PAT-900 components](./components.svg)
+![AP-900 components](./components.svg)
 
 The structure. Retrieval sits behind one contract at ABB-901 Retrieval Service, so everything behind that seam is replaceable and everything in front of it is reusable.
 
@@ -73,9 +73,9 @@ Do not adopt it for content that is open to everyone in the organisation and nee
 
 | Pattern | Role in this pattern |
 |---|---|
-| PAT-901 Data source onboarding | How a source class is connected, and what the connector guarantees about permissions and change events |
-| PAT-902 Retrieval and grounding | The query path, the citation contract and the no-answer case |
-| PAT-903 Embedding and vector lifecycle | How content becomes vectors, and how they are versioned and retired |
+| AP-901 Data source onboarding | How a source class is connected, and what the connector guarantees about permissions and change events |
+| AP-902 Retrieval and grounding | The query path, the citation contract and the no-answer case |
+| AP-903 Embedding and vector lifecycle | How content becomes vectors, and how they are versioned and retired |
 
 <!-- deck:slide label="Building blocks" -->
 
@@ -83,10 +83,10 @@ Do not adopt it for content that is open to everyone in the organisation and nee
 
 | Building Block | Role in this pattern | Source |
 |---|---|---|
-| ABB-901 Retrieval Service | The seam. Accepts a query plus caller identity, returns cited passages or an explicit no-answer | PAT-902 |
-| ABB-902 Embedding Service | Turns chunks into vectors, and holds the embedding model version | PAT-903 |
-| ABB-903 Vector Store | Stores vectors with their permission labels and source references | PAT-903 |
-| ABB-904 Knowledge Graph | Holds relationships between entities that vector similarity alone cannot express | PAT-902 |
+| ABB-901 Retrieval Service | The seam. Accepts a query plus caller identity, returns cited passages or an explicit no-answer | AP-902 |
+| ABB-902 Embedding Service | Turns chunks into vectors, and holds the embedding model version | AP-903 |
+| ABB-903 Vector Store | Stores vectors with their permission labels and source references | AP-903 |
+| ABB-904 Knowledge Graph | Holds relationships between entities that vector similarity alone cannot express | AP-902 |
 | ABB-905 Policy Decision Point | Evaluates the caller's entitlements at query time, inside the retrieval boundary | loose |
 | ABB-906 Identity Provider | Establishes who is asking, and issues the token retrieval evaluates | loose |
 | ABB-907 Audit Log | Records every query, every decision and every passage returned | loose |

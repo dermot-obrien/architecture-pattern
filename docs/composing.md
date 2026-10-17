@@ -22,7 +22,7 @@ Add a `Uses` column to the scenario's steps table. The header is `[markdown.scen
 
 | Step | Actor | Target | Action | Interface | Uses |
 |---:|---|---|---|---|---|
-| 1 | 01 Checkout page | 02 Order records | place the order once | | PAT-001 S1 (01=01, 03=02) |
+| 1 | 01 Checkout page | 02 Order records | place the order once | | AP-001 S1 (01=01, 03=02) |
 | 2 | 02 Order records | 03 Notifier | announce the order | IF-10 | |
 | 3 | 03 Notifier | 01 Checkout page | confirm to the customer | | TBD customer notification |
 
@@ -31,8 +31,8 @@ A Uses cell holds one of:
 | Form | Meaning |
 |---|---|
 | empty | An ordinary step |
-| `PAT-001 S1` | This step is the whole of PAT-001's scenario S1. Text after the key is prose and ignored |
-| `PAT-001 S1 (01=01, 03=02)` | The same, with a role binding directly after the key: comma-separated `id=id` pairs, the participating pattern's box on the left, this pattern's on the right |
+| `AP-001 S1` | This step is the whole of AP-001's scenario S1. Text after the key is prose and ignored |
+| `AP-001 S1 (01=01, 03=02)` | The same, with a role binding directly after the key: comma-separated `id=id` pairs, the participating pattern's box on the left, this pattern's on the right |
 | `TBD <name>` | An open participating pattern, not yet written. It cannot carry a binding |
 
 A participation step is one arrow standing for the participating pattern's whole flow. Its Actor is where that flow enters this pattern and its Target where it leaves; both are required. Its Interface is optional. The participating pattern's id must match `[model] pattern_id`, by default two to five capitals, a hyphen and three digits.
@@ -108,7 +108,7 @@ Once a composite pattern's front matter `status` is one of the approved statuses
 
 ## On the diagram
 
-`emit` and `sync` draw a participation step's overlay arrow heavier and dash-dotted, labelled `[+] 1: PAT-001 S1`; the `[+]` is BPMN's call-activity marker, in ASCII because a boxed-plus glyph falls back to an empty box in draw.io's export. They also keep a layer named `Participating patterns` just above Structure, with one dashed, rounded region per participating pattern, labelled with its id and name (`Open: <name>` for a TBD), round the boxes bound to it and the Actor and Target of every step that runs it.
+`emit` and `sync` draw a participation step's overlay arrow heavier and dash-dotted, labelled `[+] 1: AP-001 S1`; the `[+]` is BPMN's call-activity marker, in ASCII because a boxed-plus glyph falls back to an empty box in draw.io's export. They also keep a layer named `Participating patterns` just above Structure, with one dashed, rounded region per participating pattern, labelled with its id and name (`Open: <name>` for a TBD), round the boxes bound to it and the Actor and Target of every step that runs it.
 
 Regions are recomputed on every `sync` from where the boxes are, so move the boxes, not the regions. The structure view includes the regions by default; `publish.py --no-regions` or `model render --no-regions` leaves them out. A view exported by hand is stamped with both layers:
 
@@ -138,5 +138,5 @@ python <skills>/pattern/scripts/publish.py <folder holding both> --recursive
 
 ## Examples
 
-- The quick start's PAT-002 Checkout runs PAT-001 Order Intake S1 through a two-pair binding and has one open participating pattern.
-- [skills/pattern/examples/composite](../skills/pattern/examples/composite) runs the knowledge-retrieval example's S1 through a binding, `PAT-900 S1 (ABB-908=03)`, joining at that scenario's declared Start and Finish, and has one open participating pattern. CI checks its composition summary and its approval gate.
+- The quick start's AP-002 Checkout runs AP-001 Order Intake S1 through a two-pair binding and has one open participating pattern.
+- [skills/pattern/examples/composite](../skills/pattern/examples/composite) runs the knowledge-retrieval example's S1 through a binding, `AP-900 S1 (ABB-908=03)`, joining at that scenario's declared Start and Finish, and has one open participating pattern. CI checks its composition summary and its approval gate.

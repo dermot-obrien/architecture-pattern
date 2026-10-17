@@ -13,18 +13,18 @@ from pathlib import Path
 
 def test_conceptual_pattern_simple(temp_workspace):
     """Test a simple conceptual pattern with local building blocks."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-001-test"
+    pattern_dir = temp_workspace / "patterns" / "AP-001-test"
     pattern_dir.mkdir(parents=True)
     
     pattern_content = """---
-title: "PAT-001 Simple Conceptual"
+title: "AP-001 Simple Conceptual"
 pattern_scope: problem
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-001 Simple Conceptual
+# AP-001 Simple Conceptual
 
 ## Building Blocks
 
@@ -72,18 +72,18 @@ Finish: 03 Database
 
 def test_logical_pattern_with_abbrevs(temp_workspace):
     """Test a logical pattern with architecture building blocks."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-002-test"
+    pattern_dir = temp_workspace / "patterns" / "AP-002-test"
     pattern_dir.mkdir(parents=True)
     
     pattern_content = """---
-title: "PAT-002 Logical with ABBs"
+title: "AP-002 Logical with ABBs"
 pattern_scope: solution
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-002 Logical with ABBs
+# AP-002 Logical with ABBs
 
 ## Building Blocks
 
@@ -131,18 +131,18 @@ Finish: ABB-102 Data Store
 
 def test_physical_pattern_with_products(temp_workspace):
     """Test a physical pattern with specific technologies."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-003-test"
+    pattern_dir = temp_workspace / "patterns" / "AP-003-test"
     pattern_dir.mkdir(parents=True)
     
     pattern_content = """---
-title: "PAT-003 Physical Deployment"
+title: "AP-003 Physical Deployment"
 pattern_scope: platform
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-003 Physical Deployment
+# AP-003 Physical Deployment
 
 ## Building Blocks
 
@@ -197,18 +197,18 @@ Finish: COMP-001 NGINX Ingress
 
 def test_hybrid_pattern_mixed_abstraction(temp_workspace):
     """Test a pattern with mixed abstraction levels."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-004-test"
+    pattern_dir = temp_workspace / "patterns" / "AP-004-test"
     pattern_dir.mkdir(parents=True)
     
     pattern_content = """---
-title: "PAT-004 Hybrid Pattern"
+title: "AP-004 Hybrid Pattern"
 pattern_scope: capability-area
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-004 Hybrid Pattern
+# AP-004 Hybrid Pattern
 
 ## Building Blocks
 
@@ -263,11 +263,11 @@ Finish: COMP-002 Amazon RDS PostgreSQL
 def test_pattern_scope_variations(temp_workspace):
     """Test patterns with different scope levels."""
     scopes = [
-        ("problem", "PAT-005"),
-        ("solution", "PAT-006"),
-        ("capability-area", "PAT-007"),
-        ("domain", "PAT-008"),
-        ("platform", "PAT-009"),
+        ("problem", "AP-005"),
+        ("solution", "AP-006"),
+        ("capability-area", "AP-007"),
+        ("domain", "AP-008"),
+        ("platform", "AP-009"),
     ]
     
     for scope, pat_id in scopes:

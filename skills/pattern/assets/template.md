@@ -23,7 +23,7 @@ provenance:
   review_state: ai-raw
 ---
 
-# PAT-NNN Pattern Name
+# AP-NNN Pattern Name
 
 <!--
 HOW TO USE THIS TEMPLATE
@@ -46,7 +46,7 @@ HOW TO USE THIS TEMPLATE
   them: all local is conceptual, logical blocks is logical, every box a product is
   physical, anything else is mixed. Only a physical one is something a team builds from.
 - Identifiers below are written as COMP-NNN for components, IF-NN for interfaces and
-  PAT-NNN for patterns. Your repository's own series come from its binding file; if it
+  AP-NNN for patterns. Your repository's own series come from its binding file; if it
   declares a template of its own, use that instead of this one, because a house template
   carries the series, the deliverable code and the palette that belong to the repository
   rather than to a published skill.
@@ -185,7 +185,7 @@ base components. This is a UML communication diagram, which C4 calls a dynamic d
 
 Embed the exported views under ## Diagram and in each scenario:
 
-    ![PAT-NNN components](./components.svg)
+    ![AP-NNN components](./components.svg)
 -->
 
 ## Applicability
@@ -200,7 +200,7 @@ Embed the exported views under ## Diagram and in each scenario:
 
 <!--
 WIDER SCOPE. OPTIONAL FACET, expected wherever a published pattern covers part of the
-design. The narrower patterns this pattern composes. Use plain PAT-NNN identifiers; do not
+design. The narrower patterns this pattern composes. Use plain AP-NNN identifiers; do not
 restate each pattern's body, summarise its role here. A conceptual pattern drawn before
 its narrower patterns exist may say so in one line. A composite pattern lists here every
 participating pattern its scenarios run through their Uses column.
@@ -208,7 +208,7 @@ participating pattern its scenarios run through their Uses column.
 
 | Pattern | Role in this pattern |
 |---|---|
-| PAT-NNN Pattern Name | What this pattern contributes to the end-to-end design |
+| AP-NNN Pattern Name | What this pattern contributes to the end-to-end design |
 
 <!-- deck:slide label="Building Blocks" -->
 
@@ -230,7 +230,7 @@ Write prose beneath this table ONLY for the architecturally significant componen
 
 | Building Block | Role in this pattern | Source |
 |---|---|---|
-| COMP-NNN Official Name | What it does here, one clause | PAT-NNN / loose |
+| COMP-NNN Official Name | What it does here, one clause | AP-NNN / loose |
 | 07 Local role name | A role with no catalogue entry yet | loose |
 
 <!-- deck:slide label="Interfaces" -->
@@ -301,10 +301,10 @@ and name. Start is the first step's Actor; Finish is the last step's Actor or Ta
 
 Uses is OPTIONAL. Delete the column unless this is a composite pattern, one whose steps
 run other patterns' flows. A participation step's Uses names the participating pattern's
-id and scenario key, PAT-NNN S1, and stands for that pattern's whole flow: its Actor is
+id and scenario key, AP-NNN S1, and stands for that pattern's whole flow: its Actor is
 where the flow enters, its Target where it leaves, both required, and its Interface is
 optional. A role binding may follow the key, participating pattern's box = this
-pattern's box: PAT-NNN S1 (02=07). It is how a local box joins across patterns. Write TBD
+pattern's box: AP-NNN S1 (02=07). It is how a local box joins across patterns. Write TBD
 and a name for an open participating pattern, not yet written, never with a binding; it
 is reported as open, and an approved pattern cannot keep one. Leave Uses empty on every
 other step. Check the composition with model composition index.md, and list each
@@ -314,7 +314,7 @@ participating pattern in Patterns Applied.
 | Step | Actor | Target | Action | Interface | Uses |
 |---:|---|---|---|---|---|
 | 1 | COMP-NNN Official Name | 07 Local role name | What happens | IF-01 | |
-| 2 | 07 Local role name | COMP-NNN Official Name | What the participating pattern's flow achieves | | PAT-NNN S1 (02=07) |
+| 2 | 07 Local role name | COMP-NNN Official Name | What the participating pattern's flow achieves | | AP-NNN S1 (02=07) |
 
 <!-- deck:skip -->
 <!--

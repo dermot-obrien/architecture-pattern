@@ -1,25 +1,25 @@
 <mxfile host="model-skill" type="device" compressed="false">
-  <diagram id="p-pat-900-knowledge-retrieval" name="PAT-900 Knowledge Retrieval">
+  <diagram id="p-ap-900-knowledge-retrieval" name="AP-900 Knowledge Retrieval">
     <mxGraphModel dx="1422" dy="798" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" value="Structure" parent="0" />
-        <object id="ABB-901" label="Retrieval Service" abb_id="ABB-901" pattern="PAT-902" role_in_this_reference_architecture="The seam. Accepts a query plus caller identity, returns cited passages or an explicit no-answer">
+        <object id="ABB-901" label="Retrieval Service" abb_id="ABB-901" pattern="AP-902" role_in_this_reference_architecture="The seam. Accepts a query plus caller identity, returns cited passages or an explicit no-answer">
           <mxCell style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#25303F;fontColor=#25303F;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
             <mxGeometry x="580" y="470" width="290" height="90" as="geometry" />
           </mxCell>
         </object>
-        <object id="ABB-902" label="Embedding Service" abb_id="ABB-902" pattern="PAT-903" role_in_this_reference_architecture="Turns chunks into vectors, and holds the embedding model version">
+        <object id="ABB-902" label="Embedding Service" abb_id="ABB-902" pattern="AP-903" role_in_this_reference_architecture="Turns chunks into vectors, and holds the embedding model version">
           <mxCell style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#25303F;fontColor=#25303F;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
             <mxGeometry x="1160" y="900" width="290" height="90" as="geometry" />
           </mxCell>
         </object>
-        <object id="ABB-903" label="Vector Store" abb_id="ABB-903" pattern="PAT-903" role_in_this_reference_architecture="Stores vectors with their permission labels and source references">
+        <object id="ABB-903" label="Vector Store" abb_id="ABB-903" pattern="AP-903" role_in_this_reference_architecture="Stores vectors with their permission labels and source references">
           <mxCell style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#25303F;fontColor=#25303F;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
             <mxGeometry x="1160" y="470" width="290" height="90" as="geometry" />
           </mxCell>
         </object>
-        <object id="ABB-904" label="Knowledge Graph" abb_id="ABB-904" pattern="PAT-902" role_in_this_reference_architecture="Holds relationships between entities that vector similarity alone cannot express">
+        <object id="ABB-904" label="Knowledge Graph" abb_id="ABB-904" pattern="AP-902" role_in_this_reference_architecture="Holds relationships between entities that vector similarity alone cannot express">
           <mxCell style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#25303F;fontColor=#25303F;fontSize=14;align=center;verticalAlign=middle;" vertex="1" parent="1">
             <mxGeometry x="1160" y="680" width="290" height="90" as="geometry" />
           </mxCell>

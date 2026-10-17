@@ -16,18 +16,18 @@ from pathlib import Path
 
 def test_pattern_without_interfaces(temp_workspace):
     """Test pattern with no interfaces (single component)."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-040-noif"
+    pattern_dir = temp_workspace / "patterns" / "AP-040-noif"
     pattern_dir.mkdir(parents=True)
     
     pattern_content = """---
-title: "PAT-040 No Interfaces"
+title: "AP-040 No Interfaces"
 pattern_scope: problem
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-040 No Interfaces
+# AP-040 No Interfaces
 
 ## Building Blocks
 
@@ -65,18 +65,18 @@ Finish: 01 Standalone
 
 def test_pattern_with_many_catalogue_mappings(temp_workspace):
     """Test pattern with complex catalogue mapping relationships."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-041-mapping"
+    pattern_dir = temp_workspace / "patterns" / "AP-041-mapping"
     pattern_dir.mkdir(parents=True)
     
     pattern_content = """---
-title: "PAT-041 Complex Mapping"
+title: "AP-041 Complex Mapping"
 pattern_scope: solution
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-041 Complex Mapping
+# AP-041 Complex Mapping
 
 ## Building Blocks
 
@@ -126,18 +126,18 @@ Finish: ABB-100 Cache
 
 def test_pattern_with_bidirectional_interfaces(temp_workspace):
     """Test pattern with bidirectional communication."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-042-bidir"
+    pattern_dir = temp_workspace / "patterns" / "AP-042-bidir"
     pattern_dir.mkdir(parents=True)
     
     pattern_content = """---
-title: "PAT-042 Bidirectional"
+title: "AP-042 Bidirectional"
 pattern_scope: problem
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-042 Bidirectional
+# AP-042 Bidirectional
 
 ## Building Blocks
 
@@ -186,18 +186,18 @@ Finish: 01 Client
 
 def test_pattern_with_optional_sections(temp_workspace):
     """Test pattern with minimal required sections only."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-043-minimal"
+    pattern_dir = temp_workspace / "patterns" / "AP-043-minimal"
     pattern_dir.mkdir(parents=True)
     
     pattern_content = """---
-title: "PAT-043 Minimal Sections"
+title: "AP-043 Minimal Sections"
 pattern_scope: problem
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-043 Minimal Sections
+# AP-043 Minimal Sections
 
 ## Building Blocks
 
@@ -236,11 +236,11 @@ Finish: 01 Component
 def test_pattern_with_multiple_status_values(temp_workspace):
     """Test patterns with different status values."""
     statuses = [
-        ("Draft", "PAT-044"),
-        ("In Review", "PAT-045"),
-        ("Approved", "PAT-046"),
-        ("Active", "PAT-047"),
-        ("Deprecated", "PAT-048"),
+        ("Draft", "AP-044"),
+        ("In Review", "AP-045"),
+        ("Approved", "AP-046"),
+        ("Active", "AP-047"),
+        ("Deprecated", "AP-048"),
     ]
     
     for status, pat_id in statuses:
@@ -293,18 +293,18 @@ Finish: 01 Component
 
 def test_pattern_with_special_characters_in_names(temp_workspace):
     """Test pattern with special characters in component names."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-049-special"
+    pattern_dir = temp_workspace / "patterns" / "AP-049-special"
     pattern_dir.mkdir(parents=True)
     
     pattern_content = """---
-title: "PAT-049 Special Characters"
+title: "AP-049 Special Characters"
 pattern_scope: problem
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-049 Special Characters
+# AP-049 Special Characters
 
 ## Building Blocks
 
