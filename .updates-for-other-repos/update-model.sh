@@ -1,4 +1,6 @@
 #!/bin/bash
+# SPDX-FileCopyrightText: 2026 Dermot O'Brien
+# SPDX-License-Identifier: Apache-2.0
 # Update diagram-model skill
 # Usage: ./scripts/update-model.sh [--user] [--check-only]
 

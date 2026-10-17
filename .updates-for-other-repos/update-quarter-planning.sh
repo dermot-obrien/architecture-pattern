@@ -1,4 +1,6 @@
 #!/bin/bash
+# SPDX-FileCopyrightText: 2026 Dermot O'Brien
+# SPDX-License-Identifier: Apache-2.0
 # Update quarter-planning skill
 # Usage: ./scripts/update-quarter-planning.sh [--user] [--check-only]
 

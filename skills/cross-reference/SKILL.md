@@ -4,7 +4,7 @@ description: Refer to another catalogue's architecture identifiers, such as its 
 license: CC-BY-4.0 AND Apache-2.0. Content under CC BY 4.0, code under Apache-2.0; see LICENSE and NOTICE.
 compatibility: Node 18+. No other skills and no npm packages. The Docusaurus plugins work with Docusaurus 3; the registers, CLI and check work with any static site generator or none.
 metadata:
-  version: "0.3.0"
+  version: "0.3.1"
   homepage: https://github.com/dermot-obrien/architecture-pattern
 ---
 
