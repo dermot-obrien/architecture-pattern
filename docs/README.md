@@ -6,6 +6,7 @@ Documentation for the `pattern` skill, and the `use-case` skill that publishes w
 
 | Page | For |
 |---|---|
+| [Architect's guide](architect-guide.md) | The minimum for an architect: install the three skills, edit a pattern or reference architecture and its draw.io diagram, check it, and publish its page, walkthrough, slides and PDF locally |
 | [Quick start](quick-start.md) | Install the three skills and go from an empty folder to a published pattern and a composite pattern, in about ten minutes |
 | [Concepts](concepts.md) | What a pattern is, and the ideas behind the tables, the diagram, the walkthrough and the deck |
 | [Everyday workflow](workflow.md) | Authoring, arranging and syncing diagrams, adopting a hand-drawn diagram, promoting local ids, working without draw.io, publishing, CI |
