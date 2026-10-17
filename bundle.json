@@ -27,10 +27,10 @@
     {
       "name": "use-case",
       "path": "skills/use-case",
-      "version": "0.3.0",
-      "purl": "pkg:generic/dermot-obrien/architecture-pattern/use-case@0.3.0",
+      "version": "0.3.1",
+      "purl": "pkg:generic/dermot-obrien/architecture-pattern/use-case@0.3.1",
       "requires": [
-        { "purl": "pkg:generic/dermot-obrien/architecture-pattern/pattern", "range": "^0.11.0" },
+        { "purl": "pkg:generic/dermot-obrien/architecture-pattern/pattern", "range": "^0.12.0" },
         { "purl": "pkg:generic/dermot-obrien/diagram-model/model", "range": "^0.9.0" },
         { "purl": "pkg:generic/dermot-obrien/markdown-deck/markdown-deck", "range": "^0.6.0" }
       ],

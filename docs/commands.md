@@ -183,8 +183,8 @@ cd skills/pattern/examples/knowledge-retrieval
 python "../../../../$MODEL" validate index.md --against components.drawio
 for v in components scenario-s1 scenario-s2; do python "../../../../$MODEL" stamp --check "$v.svg"; done
 cd ../composite
-python "../../../../$MODEL" composition PAT-910-staff-assistant/index.md
-python "../../../../$MODEL" validate PAT-910-staff-assistant/index.md
+python "../../../../$MODEL" composition AP-910-staff-assistant/index.md
+python "../../../../$MODEL" validate AP-910-staff-assistant/index.md
 ```
 
 PowerShell:
@@ -197,9 +197,9 @@ Push-Location skills/pattern/examples/knowledge-retrieval
 python $MODEL validate index.md --against components.drawio
 foreach ($v in "components", "scenario-s1", "scenario-s2") { python $MODEL stamp --check "$v.svg" }
 Set-Location ../composite
-python $MODEL composition PAT-910-staff-assistant/index.md
-python $MODEL validate PAT-910-staff-assistant/index.md
+python $MODEL composition AP-910-staff-assistant/index.md
+python $MODEL validate AP-910-staff-assistant/index.md
 Pop-Location
 ```
 
-`doctor` reports a warning, because this repository has no binding file; CI ignores that and checks only that `siblings` lists `model` and `markdown-deck`. Everything after it should pass, with one `participant_open` warning for PAT-910's open participating pattern. [.github/workflows/ci.yml](../.github/workflows/ci.yml) has the rest: the model extract comparison, the sync round trip, the deck build and the approval-gate check.
+`doctor` reports a warning, because this repository has no binding file; CI ignores that and checks only that `siblings` lists `model` and `markdown-deck`. Everything after it should pass, with one `participant_open` warning for AP-910's open participating pattern. [.github/workflows/ci.yml](../.github/workflows/ci.yml) has the rest: the model extract comparison, the sync round trip, the deck build and the approval-gate check.

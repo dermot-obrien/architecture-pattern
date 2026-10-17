@@ -15,18 +15,18 @@ from pathlib import Path
 def test_simple_composite_single_participation(temp_workspace):
     """Test composite pattern with one participating pattern."""
     # First create the participating pattern
-    participating_dir = temp_workspace / "patterns" / "PAT-030-base"
+    participating_dir = temp_workspace / "patterns" / "AP-030-base"
     participating_dir.mkdir(parents=True)
     
     participating_content = """---
-title: "PAT-030 Base Pattern"
+title: "AP-030 Base Pattern"
 pattern_scope: solution
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-030 Base Pattern
+# AP-030 Base Pattern
 
 ## Building Blocks
 
@@ -68,31 +68,31 @@ Finish: 03 Output Handler
     (participating_dir / "index.md").write_text(participating_content)
     
     # Now create the composite pattern
-    composite_dir = temp_workspace / "patterns" / "PAT-031-composite"
+    composite_dir = temp_workspace / "patterns" / "AP-031-composite"
     composite_dir.mkdir(parents=True)
     
     composite_content = """---
-title: "PAT-031 Simple Composite"
+title: "AP-031 Simple Composite"
 pattern_scope: capability-area
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-031 Simple Composite
+# AP-031 Simple Composite
 
 ## Patterns Applied
 
 | Pattern | Role in this pattern |
 |---|---|
-| PAT-030 Base Pattern | Handles data processing; run by S1 step 2 |
+| AP-030 Base Pattern | Handles data processing; run by S1 step 2 |
 
 ## Building Blocks
 
 | Building Block | Role in this pattern | Source |
 |---|---|---|
 | 01 Coordinator | Orchestrates flow | loose |
-| 02 Data Processing | Core processing | PAT-030 |
+| 02 Data Processing | Core processing | AP-030 |
 | 03 Audit Log | Records operations | loose |
 
 ## Interfaces
@@ -121,7 +121,7 @@ Finish: 03 Audit Log
 | Step | Actor | Target | Action | Interface | Uses |
 |---:|---|---|---|---|---|
 | 1 | 01 Coordinator | 02 Data Processing | Initiate processing | IF-10 | |
-| 2 | 02 Data Processing | 02 Data Processing | Process data | | PAT-030 S1 (01=02, 03=02) |
+| 2 | 02 Data Processing | 02 Data Processing | Process data | | AP-030 S1 (01=02, 03=02) |
 | 3 | 01 Coordinator | 03 Audit Log | Record completion | IF-11 | |
 """
     
@@ -132,18 +132,18 @@ Finish: 03 Audit Log
 def test_multi_level_composition(temp_workspace):
     """Test 3-level deep composition (composite of composites)."""
     # Level 1: Base patterns
-    base1_dir = temp_workspace / "patterns" / "PAT-032-base1"
+    base1_dir = temp_workspace / "patterns" / "AP-032-base1"
     base1_dir.mkdir(parents=True)
     
     base1_content = """---
-title: "PAT-032 Base Level 1"
+title: "AP-032 Base Level 1"
 pattern_scope: problem
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-032 Base Level 1
+# AP-032 Base Level 1
 
 ## Building Blocks
 
@@ -181,31 +181,31 @@ Finish: 02 Component B
     (base1_dir / "index.md").write_text(base1_content)
     
     # Level 2: Composite using base
-    level2_dir = temp_workspace / "patterns" / "PAT-033-level2"
+    level2_dir = temp_workspace / "patterns" / "AP-033-level2"
     level2_dir.mkdir(parents=True)
     
     level2_content = """---
-title: "PAT-033 Composite Level 2"
+title: "AP-033 Composite Level 2"
 pattern_scope: solution
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-033 Composite Level 2
+# AP-033 Composite Level 2
 
 ## Patterns Applied
 
 | Pattern | Role in this pattern |
 |---|---|
-| PAT-032 Base Level 1 | Core operation; run by S1 step 1 |
+| AP-032 Base Level 1 | Core operation; run by S1 step 1 |
 
 ## Building Blocks
 
 | Building Block | Role in this pattern | Source |
 |---|---|---|
 | 01 Orchestrator | Coordinates | loose |
-| 02 Base Operation | Basic processing | PAT-032 |
+| 02 Base Operation | Basic processing | AP-032 |
 
 ## Interfaces
 
@@ -230,37 +230,37 @@ Finish: 02 Base Operation
 
 | Step | Actor | Target | Action | Interface | Uses |
 |---:|---|---|---|---|---|
-| 1 | 01 Orchestrator | 02 Base Operation | Execute | IF-10 | PAT-032 S1 (01=02, 02=02) |
+| 1 | 01 Orchestrator | 02 Base Operation | Execute | IF-10 | AP-032 S1 (01=02, 02=02) |
 """
     
     (level2_dir / "index.md").write_text(level2_content)
     
     # Level 3: Top-level composite
-    level3_dir = temp_workspace / "patterns" / "PAT-034-level3"
+    level3_dir = temp_workspace / "patterns" / "AP-034-level3"
     level3_dir.mkdir(parents=True)
     
     level3_content = """---
-title: "PAT-034 Composite Level 3"
+title: "AP-034 Composite Level 3"
 pattern_scope: capability-area
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-034 Composite Level 3
+# AP-034 Composite Level 3
 
 ## Patterns Applied
 
 | Pattern | Role in this pattern |
 |---|---|
-| PAT-033 Composite Level 2 | Mid-level operation; run by S1 step 1 |
+| AP-033 Composite Level 2 | Mid-level operation; run by S1 step 1 |
 
 ## Building Blocks
 
 | Building Block | Role in this pattern | Source |
 |---|---|---|
 | 01 Top Controller | Top-level control | loose |
-| 02 Mid Level | Mid-level processing | PAT-033 |
+| 02 Mid Level | Mid-level processing | AP-033 |
 
 ## Interfaces
 
@@ -285,7 +285,7 @@ Finish: 02 Mid Level
 
 | Step | Actor | Target | Action | Interface | Uses |
 |---:|---|---|---|---|---|
-| 1 | 01 Top Controller | 02 Mid Level | Initiate | IF-20 | PAT-033 S1 (01=02, 02=02) |
+| 1 | 01 Top Controller | 02 Mid Level | Initiate | IF-20 | AP-033 S1 (01=02, 02=02) |
 """
     
     (level3_dir / "index.md").write_text(level3_content)
@@ -294,18 +294,18 @@ Finish: 02 Mid Level
 
 def test_composite_with_open_participating_pattern(temp_workspace):
     """Test composite with TBD (open) participating pattern."""
-    composite_dir = temp_workspace / "patterns" / "PAT-035-open"
+    composite_dir = temp_workspace / "patterns" / "AP-035-open"
     composite_dir.mkdir(parents=True)
     
     composite_content = """---
-title: "PAT-035 Composite with TBD"
+title: "AP-035 Composite with TBD"
 pattern_scope: capability-area
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-035 Composite with TBD
+# AP-035 Composite with TBD
 
 ## Patterns Applied
 
@@ -354,18 +354,18 @@ Finish: 02 Application
 def test_approval_gate_enforcement(temp_workspace):
     """Test that approved patterns cannot reference unapproved patterns."""
     # Create unapproved base pattern
-    base_dir = temp_workspace / "patterns" / "PAT-036-base"
+    base_dir = temp_workspace / "patterns" / "AP-036-base"
     base_dir.mkdir(parents=True)
     
     base_content = """---
-title: "PAT-036 Unapproved Base"
+title: "AP-036 Unapproved Base"
 pattern_scope: problem
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-036 Unapproved Base
+# AP-036 Unapproved Base
 
 ## Building Blocks
 
@@ -400,31 +400,31 @@ Finish: 01 Component
     (base_dir / "index.md").write_text(base_content)
     
     # Create approved composite that shouldn't pass validation
-    composite_dir = temp_workspace / "patterns" / "PAT-037-approved"
+    composite_dir = temp_workspace / "patterns" / "AP-037-approved"
     composite_dir.mkdir(parents=True)
     
     composite_content = """---
-title: "PAT-037 Approved Composite"
+title: "AP-037 Approved Composite"
 pattern_scope: capability-area
 status: Approved
 model:
   diagram: components.drawio
 ---
 
-# PAT-037 Approved Composite
+# AP-037 Approved Composite
 
 ## Patterns Applied
 
 | Pattern | Role in this pattern |
 |---|---|
-| PAT-036 Unapproved Base | Should fail approval gate |
+| AP-036 Unapproved Base | Should fail approval gate |
 
 ## Building Blocks
 
 | Building Block | Role in this pattern | Source |
 |---|---|---|
 | 01 Wrapper | Wraps base | loose |
-| 02 Base | Base pattern | PAT-036 |
+| 02 Base | Base pattern | AP-036 |
 
 ## Interfaces
 
@@ -449,11 +449,11 @@ Finish: 02 Base
 
 | Step | Actor | Target | Action | Interface | Uses |
 |---:|---|---|---|---|---|
-| 1 | 01 Wrapper | 02 Base | Run | IF-01 | PAT-036 S1 (01=02) |
+| 1 | 01 Wrapper | 02 Base | Run | IF-01 | AP-036 S1 (01=02) |
 """
     
     (composite_dir / "index.md").write_text(composite_content)
     
     # This pattern should FAIL validation due to approval gate
-    # (Approved pattern PAT-037 references Draft pattern PAT-036)
+    # (Approved pattern AP-037 references Draft pattern AP-036)
     assert (composite_dir / "index.md").exists()

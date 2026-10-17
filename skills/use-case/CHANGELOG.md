@@ -2,6 +2,12 @@
 
 # Changelog
 
+## [0.3.1] - 2026-10-17
+
+### Changed
+
+- `realised_by` names architecture patterns (`AP-NNN`) and reference architectures (`RA-NNN`), the two series the pattern skill 0.12.0 mints; the retired `PAT-NNN` is gone from the template and the skill text.
+
 ## [0.3.0] - 2026-10-15
 
 ### Changed

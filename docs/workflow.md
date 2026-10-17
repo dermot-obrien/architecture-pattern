@@ -8,7 +8,7 @@ Most of this is what an agent does for you when you ask for it: the `pattern` sk
 
 ## Asking an agent
 
-Ask in plain words: "create a pattern for order intake", "review PAT-004 against its diagram", "publish the patterns in architecture/patterns", "compose PAT-010 from PAT-004 S1 and a TBD for notifications". In agents that support slash commands you can also type `/pattern`. The agent runs `doctor` first and stops if a binding or a dependency is missing, then reports what it produced, the derived abstraction, any composition and anything that failed, with paths.
+Ask in plain words: "create a pattern for order intake", "review AP-004 against its diagram", "publish the patterns in architecture/patterns", "compose AP-010 from AP-004 S1 and a TBD for notifications". In agents that support slash commands you can also type `/pattern`. The agent runs `doctor` first and stops if a binding or a dependency is missing, then reports what it produced, the derived abstraction, any composition and anything that failed, with paths.
 
 ## Author a new pattern
 

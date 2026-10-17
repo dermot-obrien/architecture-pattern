@@ -66,12 +66,12 @@ register     = "../registers/catalogue.csv"        # optional, see register belo
 
 ```
 architecture/patterns/
-  _inbox/PAT-012-new-idea/
-  integration/PAT-001-order-intake/
-  platform/PAT-002-event-backbone/
+  _inbox/AP-012-new-idea/
+  integration/AP-001-order-intake/
+  platform/AP-002-event-backbone/
 ```
 
-A pattern folder carries its diagram and views with it, so a move breaks nothing inside it, and composition finds a participating pattern anywhere under `patternsRoot`. `register.py next` numbers a new pattern from the whole tree, never from `outputDir` alone. Keep a `.gitkeep` in `_inbox` so the folder survives being emptied, since `doctor` fails on a bound folder that does not exist. A hand-written relative link to a moved pattern does break; a `PAT-001` linked through `cross-reference` does not.
+A pattern folder carries its diagram and views with it, so a move breaks nothing inside it, and composition finds a participating pattern anywhere under `patternsRoot`. `register.py next` numbers a new pattern from the whole tree, never from `outputDir` alone. Keep a `.gitkeep` in `_inbox` so the folder survives being emptied, since `doctor` fails on a bound folder that does not exist. A hand-written relative link to a moved pattern does break; a `AP-001` linked through `cross-reference` does not.
 
 ### template
 
@@ -174,12 +174,12 @@ With types bound, `register.py next` needs `--type`, so no pattern is numbered i
 
 ### register
 
-A CSV of every identifier the repository has minted, and where each lives. A new pattern takes its number from it and is given a row, composition finds a participating pattern through it before searching any folder, and `cross-reference` turns `PAT-001` in any document into a link from the same file. `use-case` may bind the same file, and so may your own building-block series: its `type` column says which is which.
+A CSV of every identifier the repository has minted, and where each lives. A new pattern takes its number from it and is given a row, composition finds a participating pattern through it before searching any folder, and `cross-reference` turns `AP-001` in any document into a link from the same file. `use-case` may bind the same file, and so may your own building-block series: its `type` column says which is which.
 
 ```csv
 id,type,name,status,path,url,summary
-PAT-001,pattern,Order intake,Approved,../architecture/patterns/integration/PAT-001-order-intake,,Accepts orders from every channel
-PAT-002,pattern,Event backbone,Draft,../architecture/patterns/platform/PAT-002-event-backbone,,Shared event streaming
+AP-001,pattern,Order intake,Approved,../architecture/patterns/integration/AP-001-order-intake,,Accepts orders from every channel
+AP-002,pattern,Event backbone,Draft,../architecture/patterns/platform/AP-002-event-backbone,,Shared event streaming
 UC-004,use-case,Track an order,Draft,../use-cases/UC-004-track-an-order,,
 ```
 
@@ -302,7 +302,7 @@ markdown-deck's repository defaults, documented in its [README](https://github.c
 
 ## A complete binding for the shipped template
 
-This binds the generic template: `COMP-NNN` building blocks, `IF-NN` interfaces, plain-number local ids, `PAT-NNN` patterns, with patterns in `architecture/patterns/`.
+This binds the generic template: `COMP-NNN` building blocks, `IF-NN` interfaces, plain-number local ids, `AP-NNN` patterns, with patterns in `architecture/patterns/`.
 
 ```toml
 bindingsVersion = "1.0"
@@ -362,7 +362,7 @@ Keys in a pattern document's YAML front matter.
 
 ```yaml
 ---
-title: "PAT-012 Order Intake"
+title: "AP-012 Order Intake"
 pattern_scope: problem
 status: Draft
 realises: [CAP-012]
@@ -379,7 +379,7 @@ model:
 | Where | Convention |
 |---|---|
 | Under a scenario heading, before its table | `Start: <id> <name>` and `Finish: <id> <name>`, each its own paragraph |
-| A steps table | A `Uses` column: `PAT-001 S1`, `PAT-001 S1 (a=b, c=d)`, or `TBD <name>` |
+| A steps table | A `Uses` column: `AP-001 S1`, `AP-001 S1 (a=b, c=d)`, or `TBD <name>` |
 | `## Catalogue Mapping` | One row per local id: Local ID, Maps To, Relationship (`realises`, `partial`, `gap`) |
 | HTML comments | `deck:cover`, `deck:slide`, `deck:html`, `deck:skip`, `deck:note` and the rest of markdown-deck's tags |
 

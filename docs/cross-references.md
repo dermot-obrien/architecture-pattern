@@ -34,7 +34,7 @@ scan          = ["../docs"]                                 # default: the whole
 
 Paths are relative to the bindings file, as for the other skills.
 
-`localManifest`, `localRegister` or `localMap` tells the skill which identifiers your own catalogue publishes and where. `localRegister` is the [register](configuration.md#register) the pattern skill numbers patterns from, so one CSV both hands out `PAT-007` and makes it a link. A built site's `id/index.json` is a valid manifest. A module given as `localMap` exports a function returning a Map or an object of identifier to page.
+`localManifest`, `localRegister` or `localMap` tells the skill which identifiers your own catalogue publishes and where. `localRegister` is the [register](configuration.md#register) the pattern skill numbers patterns from, so one CSV both hands out `AP-007` and makes it a link. A built site's `id/index.json` is a valid manifest. A module given as `localMap` exports a function returning a Map or an object of identifier to page.
 
 Then run the post-install check from the workspace root:
 
@@ -63,7 +63,7 @@ node .agents/skills/cross-reference/scripts/xref.cjs check --offline
 
 ## Docusaurus
 
-`remark-xref.cjs` turns references into links, with the block's name as a tooltip. `id-routes.cjs` writes `id/<ID>/` redirects for every identifier you publish, and the `id/index.json` manifest. Both take your catalogue's identifier map as an option; the wiring is in [SKILL.md](../skills/cross-reference/SKILL.md#docusaurus). `fromRegister('registers/catalogue.csv')` builds both options from the register. With `bare: true`, `remark-xref` also links an identifier written without a code, `PAT-004`, when the register knows it, so a mention in any page becomes a link to the published pattern.
+`remark-xref.cjs` turns references into links, with the block's name as a tooltip. `id-routes.cjs` writes `id/<ID>/` redirects for every identifier you publish, and the `id/index.json` manifest. Both take your catalogue's identifier map as an option; the wiring is in [SKILL.md](../skills/cross-reference/SKILL.md#docusaurus). `fromRegister('registers/catalogue.csv')` builds both options from the register. With `bare: true`, `remark-xref` also links an identifier written without a code, `AP-004`, when the register knows it, so a mention in any page becomes a link to the published pattern.
 
 ## Worked example
 

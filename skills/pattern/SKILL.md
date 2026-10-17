@@ -129,7 +129,7 @@ Intent, or Context and Non-Goals for a wider scope, then Patterns Applied where 
 When `register` is bound, give the pattern its row as soon as the folder exists, so no one else takes the number:
 
 ```bash
-python <skills>/pattern/scripts/register.py add <ID> --name "Order intake" --status Draft --path <outputDir>/PAT-007-order-intake --summary "<one line>"
+python <skills>/pattern/scripts/register.py add <ID> --name "Order intake" --status Draft --path <outputDir>/AP-007-order-intake --summary "<one line>"
 ```
 
 It appends the row and refuses an id already there. Appending is deliberate: two branches that each take the next number both change the end of the file, so git reports a conflict where it would otherwise merge a duplicate. After a pattern folder is moved, into a category folder say, `register.py check --fix` corrects its `path`, and its `name` and `status` from the document. `register.py check` alone reports, and fails on a duplicate id.
@@ -205,7 +205,7 @@ The document keeps its detail; the deck shows a selection of it. Untagged sectio
 
 A composite pattern is one whose scenario steps run other patterns' flows, its participating patterns. Sketch it top down with open participating patterns, `TBD <name>`, and solve each as its own pattern, or compose approved patterns bottom up.
 
-In the scenario's step table, a `Uses` column names on a participation step the participating pattern's id and scenario key, `PAT-905 S1`, optionally with a role binding of its boxes to this pattern's, `PAT-905 S1 (01=03)`. The step's Actor and Target are where that flow enters and leaves. A scenario another pattern may run declares `Start: <box>` and `Finish: <box>` as separate paragraphs under its heading. List every participating pattern in Patterns Applied, check with `model composition index.md` and `model validate index.md`, and approve the participating patterns before the composite pattern: an approved pattern cannot rest on unapproved or unwritten ones.
+In the scenario's step table, a `Uses` column names on a participation step the participating pattern's id and scenario key, `AP-905 S1`, optionally with a role binding of its boxes to this pattern's, `AP-905 S1 (01=03)`. The step's Actor and Target are where that flow enters and leaves. A scenario another pattern may run declares `Start: <box>` and `Finish: <box>` as separate paragraphs under its heading. List every participating pattern in Patterns Applied, check with `model composition index.md` and `model validate index.md`, and approve the participating patterns before the composite pattern: an approved pattern cannot rest on unapproved or unwritten ones.
 
 Read [references/compose.md](references/compose.md) before composing: it has the notation and its grounding in UML 2.5.1 and BPMN 2.0.2, the join rules, the approval gate, and how the diagram's `Participating patterns` regions, the `[+]` marker and the walkthrough's drill-in work.
 

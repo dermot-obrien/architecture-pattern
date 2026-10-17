@@ -105,7 +105,7 @@ const local = fromRegister('registers/catalogue.csv');     // relative to the si
 remarkPlugins: [[require(`./${skill}/remark-xref.cjs`), {
   namespaces: 'registers/identifier-namespaces.csv',
   localUrlFor: local.localUrlFor,     // links to the Markdown file, relative to the page
-  bare: true,                         // also link PAT-004 written without a code
+  bare: true,                         // also link AP-004 written without a code
 }]],
 plugins: [[require.resolve(`./${skill}/id-routes.cjs`), {localMap: local.localMap}]],
 ```

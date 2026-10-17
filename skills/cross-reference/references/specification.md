@@ -84,7 +84,7 @@ The manifest:
   "count": 2,
   "ids": {
     "ABB-024": "blocks/abb-024-identity-provider/",
-    "PAT-003": "patterns/pat-003-zero-trust-ingress/#scenarios"
+    "AP-003": "patterns/pat-003-zero-trust-ingress/#scenarios"
   }
 }
 ```

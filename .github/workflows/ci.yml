@@ -41,25 +41,25 @@ jobs:
       - name: register.py numbers, registers, follows a moved folder, and fails on a duplicate
         run: |
           R="python3 $GITHUB_WORKSPACE/skills/pattern/scripts/register.py"
-          W=/tmp/reg && mkdir -p $W/.agents $W/patterns/_inbox $W/patterns/integration/PAT-001-order-intake
+          W=/tmp/reg && mkdir -p $W/.agents $W/patterns/_inbox $W/patterns/integration/AP-001-order-intake
           printf '[suite.pattern]\noutputDir = "../patterns/_inbox"\npatternsRoot = "../patterns"\nregister = "../catalogue.csv"\n' > $W/.agents/skill-bindings.toml
-          printf -- '---\nstatus: Approved\n---\n# PAT-001 Order intake\n' > $W/patterns/integration/PAT-001-order-intake/index.md
+          printf -- '---\nstatus: Approved\n---\n# AP-001 Order intake\n' > $W/patterns/integration/AP-001-order-intake/index.md
           printf 'id,type,name,status,path,url,summary\n' > $W/catalogue.csv
           cd $W
           $R check --fix
-          grep -qx 'PAT-001,pattern,Order intake,Approved,patterns/integration/PAT-001-order-intake,,' catalogue.csv
-          test "$($R next)" = PAT-002
+          grep -qx 'AP-001,pattern,Order intake,Approved,patterns/integration/AP-001-order-intake,,' catalogue.csv
+          test "$($R next)" = AP-002
           # outputDir when bound, else the default at the repository root.
           test "$($R outdir 2>/dev/null)" = "$W/patterns/_inbox"
           test "$($R --suite use-case outdir 2>/dev/null)" = "$W/use-cases"
-          mkdir -p patterns/_inbox/PAT-002-x && echo '# PAT-002 X' > patterns/_inbox/PAT-002-x/index.md
-          $R add PAT-002 --name X --path patterns/_inbox/PAT-002-x
-          if $R add PAT-002 --name again; then echo "::error::add accepted a duplicate id"; exit 1; fi
-          mkdir patterns/platform && mv patterns/_inbox/PAT-002-x patterns/platform/
+          mkdir -p patterns/_inbox/AP-002-x && echo '# AP-002 X' > patterns/_inbox/AP-002-x/index.md
+          $R add AP-002 --name X --path patterns/_inbox/AP-002-x
+          if $R add AP-002 --name again; then echo "::error::add accepted a duplicate id"; exit 1; fi
+          mkdir patterns/platform && mv patterns/_inbox/AP-002-x patterns/platform/
           if $R check; then echo "::error::check passed over a moved folder"; exit 1; fi
           $R check --fix && $R check
-          grep -q '^PAT-002,pattern,X,,patterns/platform/PAT-002-x,,$' catalogue.csv
-          echo 'PAT-002,pattern,Clash,,,,' >> catalogue.csv
+          grep -q '^AP-002,pattern,X,,patterns/platform/AP-002-x,,$' catalogue.csv
+          echo 'AP-002,pattern,Clash,,,,' >> catalogue.csv
           if $R check; then echo "::error::check passed over a duplicate id"; exit 1; fi
           # With pattern types bound, each numbers in its own series and --type is required.
           printf '\n[suite.pattern.types.architecture-pattern]\nidSeries = "AP"\n\n[suite.pattern.types.reference-architecture]\nidSeries = "RA"\n' >> .agents/skill-bindings.toml
@@ -176,15 +176,15 @@ jobs:
         working-directory: skills/pattern/examples
         run: |
           MODEL="$GITHUB_WORKSPACE/.deps/diagram-model/skills/model/bin/model.py"
-          DOC=composite/PAT-910-staff-assistant/index.md
+          DOC=composite/AP-910-staff-assistant/index.md
           python "$MODEL" composition "$DOC"
           python "$MODEL" validate "$DOC"
-          # One participation step runs PAT-900, one is open, nothing missing, no cycle.
+          # One participation step runs AP-900, one is open, nothing missing, no cycle.
           python "$MODEL" composition "$DOC" --json > /tmp/composition.json
           python -c "import json,sys; s=json.load(open('/tmp/composition.json'))['summary']; print(s); sys.exit(0 if (s['participations'], s['patterns'], s['open'], s['missing'], s['cycles']) == (2, 1, 1, 0, 0) else 1)"
-          # Step 2 is bound, and joins at PAT-900 S1's declared Start and Finish.
+          # Step 2 is bound, and joins at AP-900 S1's declared Start and Finish.
           python -c "import json,sys; p=json.load(open('/tmp/composition.json'))['tree']['participations'][0]; print(p['binding'], p['join']); sys.exit(0 if p['binding'] == {'ABB-908': '03'} and p['join'] == {'start': 'declared', 'finish': 'declared'} else 1)"
-          # Approved, it must fail: PAT-900 is not approved and a TBD remains.
+          # Approved, it must fail: AP-900 is not approved and a TBD remains.
           cp -r . /tmp/examples
           sed -i 's/^status: Draft/status: Approved/' /tmp/examples/$DOC
           if python "$MODEL" validate /tmp/examples/$DOC; then

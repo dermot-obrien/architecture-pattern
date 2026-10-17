@@ -27,8 +27,8 @@ Install the three skills into a workspace (below), bind it in `.agents/skill-bin
 
 ```
 python .agents/skills/pattern/scripts/check.py
-python .agents/skills/model/bin/model.py emit patterns/PAT-001-order-intake/index.md --to drawio --out patterns/PAT-001-order-intake/components.drawio
-python .agents/skills/model/bin/model.py validate patterns/PAT-001-order-intake/index.md
+python .agents/skills/model/bin/model.py emit patterns/AP-001-order-intake/index.md --to drawio --out patterns/AP-001-order-intake/components.drawio
+python .agents/skills/model/bin/model.py validate patterns/AP-001-order-intake/index.md
 python .agents/skills/pattern/scripts/publish.py patterns --recursive
 ```
 

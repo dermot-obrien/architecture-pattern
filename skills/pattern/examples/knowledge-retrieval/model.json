@@ -1,12 +1,12 @@
 {
-  "name": "PAT-900 Knowledge Retrieval",
+  "name": "AP-900 Knowledge Retrieval",
   "version": "0.1",
   "source": "index.md",
   "nodes": [
     {
       "id": "ABB-901",
       "label": "Retrieval Service",
-      "group": "PAT-902",
+      "group": "AP-902",
       "attrs": {
         "role_in_this_pattern": "The seam. Accepts a query plus caller identity, returns cited passages or an explicit no-answer"
       }
@@ -14,7 +14,7 @@
     {
       "id": "ABB-902",
       "label": "Embedding Service",
-      "group": "PAT-903",
+      "group": "AP-903",
       "attrs": {
         "role_in_this_pattern": "Turns chunks into vectors, and holds the embedding model version"
       }
@@ -22,7 +22,7 @@
     {
       "id": "ABB-903",
       "label": "Vector Store",
-      "group": "PAT-903",
+      "group": "AP-903",
       "attrs": {
         "role_in_this_pattern": "Stores vectors with their permission labels and source references"
       }
@@ -30,7 +30,7 @@
     {
       "id": "ABB-904",
       "label": "Knowledge Graph",
-      "group": "PAT-902",
+      "group": "AP-902",
       "attrs": {
         "role_in_this_pattern": "Holds relationships between entities that vector similarity alone cannot express"
       }
@@ -163,12 +163,12 @@
   ],
   "groups": [
     {
-      "id": "PAT-902",
-      "label": "PAT-902"
+      "id": "AP-902",
+      "label": "AP-902"
     },
     {
-      "id": "PAT-903",
-      "label": "PAT-903"
+      "id": "AP-903",
+      "label": "AP-903"
     },
     {
       "id": "loose",
