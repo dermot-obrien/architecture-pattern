@@ -443,7 +443,7 @@ def draft_unit(u, places, cwd, force=False, ident=None, dry_run=False) -> dict:
         args = [sys.executable, skills.pattern_script("register.py")]
         if profile["suite"] == "use-case":
             args += ["--suite", "use-case"]
-        r = subprocess.run(args + ["add", ident, "--name", u["name"], "--status", "Draft",
+        r = subprocess.run(args + ["add", ident, "--name", u["name"], "--status", "draft",
                                    "--path", folder], cwd=cwd, capture_output=True, text=True)
         res["notes"].append("register row added" if r.returncode == 0 else
                             f"register row not added: {(r.stderr or r.stdout).strip()}")

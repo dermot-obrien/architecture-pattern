@@ -316,7 +316,8 @@ def signature(kind, ident, title, type_name="", scope="", portfolio=None) -> lis
         out += [f"pattern_type: {type_name}", f"pattern_scope: {scope}"]
     elif kind == "candidate" and type_name:
         out.append(f"candidate_type: {type_name}")
-    out.append("status: Draft")
+    # Lowercase, as the continuum envelope's status enum is.
+    out.append("status: draft")
     if kind == "use-case":
         out.append("document_type: use-case")
     if portfolio:

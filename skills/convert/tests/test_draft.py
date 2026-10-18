@@ -102,7 +102,7 @@ def test_every_template_takes_the_tables(type_name):
     assert "Box 02 Payment Gateway: the label was faint." in out
     assert "A key on the diagram was left out." in out
     fm = out.split("---", 2)[1]
-    assert "status: Draft" in fm and "last_modified: 2026-01-02" in fm
+    assert "status: draft" in fm and "last_modified: 2026-01-02" in fm
     assert "diagram: components.drawio" in fm and "origin: ai-generated" in fm
     assert '- "../src/a.drawio"' in fm
     assert "id: XX-001" in fm and 'title: "Order intake"' in fm and "portfolio:" not in fm

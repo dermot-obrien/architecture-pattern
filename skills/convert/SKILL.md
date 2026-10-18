@@ -63,7 +63,7 @@ It makes one conversion folder per run, `<workDir>/<date>-<name>/`, holding `sou
 5. Writes `components.drawio`: the source drawing itself with the document's identifiers adopted onto its shapes (`model sync --adopt`), so the layout is kept; for a plain SVG, a redrawing at the source's positions, adopted the same way; otherwise one generated from the tables. Then a view of its structure layer, rendered by draw.io desktop when installed, else a plain preview, stamped with `model stamp`.
 6. Checks the draft: `model validate`, then the diagram regenerated from the document's tables, compared with the source box by box and line by line. Differences are reported, never hidden.
 
-Every document carries the front matter signature the portfolio discovers it by, never its file or folder name: `kind` (`pattern` or `use-case`), `id`, `title`, and for a pattern `pattern_type` and `pattern_scope`, then `status: Draft` and `provenance`. A unit that needs you (step 3) gets a placeholder instead, `kind: candidate` with `portfolio.state: needs-conversion`, which `draft` removes once the real document is written.
+Every document carries the front matter signature the portfolio discovers it by, never its file or folder name: `kind` (`pattern` or `use-case`), `id`, `title`, and for a pattern `pattern_type` and `pattern_scope`, then `status: draft` and `provenance`. A unit that needs you (step 3) gets a placeholder instead, `kind: candidate` with `portfolio.state: needs-conversion`, which `draft` removes once the real document is written.
 
 Finally it archives, then writes `report.md`. Read the report in full before step 4.
 

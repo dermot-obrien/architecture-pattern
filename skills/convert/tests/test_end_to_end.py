@@ -279,7 +279,7 @@ def test_a_bound_workspace(git_repo, copy_sources):
     # The workspace's binding reads the tables, so no model.toml is written.
     assert not list(git_repo.glob("patterns/*/model.toml"))
     register = (git_repo / "register.csv").read_text(encoding="utf-8")
-    assert "CL-001,collaboration,Supplier onboarding,Draft,patterns/CL-001-supplier-onboarding" in register
+    assert "CL-001,collaboration,Supplier onboarding,draft,patterns/CL-001-supplier-onboarding" in register
     assert data["run"].startswith(str(git_repo / "work" / "conversions"))
     assert (git_repo / "work" / "archive" / "order-intake" / "order-intake.drawio").exists()
     pattern_check = os.path.join(SKILL, "..", "pattern", "scripts", "check.py")

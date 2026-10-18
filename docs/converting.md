@@ -106,7 +106,7 @@ A document is found by its front matter, never by its file or folder name, so ev
 | `kind` | `pattern`, or `use-case` |
 | `id`, `title` | The identifier and the name |
 | `pattern_type`, `pattern_scope` | For a pattern: its type, and its scope. The scope is `problem` for up to eight boxes and `domain` above, unless the unit sets it, and the conversion notes ask you to confirm it |
-| `status` | `Draft` |
+| `status` | `draft`, lowercase as the architecture continuum's schema has it |
 | `provenance`, `converted_from` | `origin: ai-generated`, `review_state: ai-raw`, and where each source is now kept |
 
 A source that cannot be converted yet, a picture waiting for the agent, gets a placeholder in its place: `kind: candidate`, `candidate_type` when the type is known, and `portfolio.state: needs-conversion` with the reason and the date, so a portfolio lists it as work outstanding. `convert.py draft` removes the placeholder when it writes the real document, unless someone has edited it.
