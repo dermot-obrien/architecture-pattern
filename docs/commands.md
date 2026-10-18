@@ -115,6 +115,16 @@ python <skills>/pattern/scripts/name-endpoints.py <file-or-folder>... [--check]
 
 A cell `02` becomes `02 Order service`. A cell that already has a name, or whose id has no Building Blocks row, is left alone; the second is reported on stderr. Line endings are preserved. `publish.py` runs it with `--check` and adds a note when a document needs it.
 
+## The convert skill's script
+
+`skills/convert/scripts/convert.py` turns existing diagrams and notes into documents; [converting](converting.md#commands) has every subcommand and flag. `skills/convert/scripts/check.py` is its post-install check.
+
+```bash
+python <skills>/convert/scripts/convert.py run <file-or-folder>... --dry-run
+python <skills>/convert/scripts/convert.py run <file-or-folder>... [--type T] [--out DIR] [--no-archive]
+python <skills>/convert/scripts/convert.py draft <conversion folder> [--unit U] [--force]
+```
+
 ## model commands a pattern uses
 
 The `model` skill's CLI, `python <skills>/model/bin/model.py <command>`. Every command that reads a document takes `--config <file>` to name the binding file instead of searching upward for it. Exit codes: 0 success; 1 validation found something at or above the fail threshold; 2 usage error or unreadable input; 3 an external tool (draw.io, PyYAML) missing or failed. [diagram-model](https://github.com/dermot-obrien/diagram-model) documents them in full.
@@ -200,6 +210,13 @@ Set-Location ../composite
 python $MODEL composition AP-910-staff-assistant/index.md
 python $MODEL validate AP-910-staff-assistant/index.md
 Pop-Location
+```
+
+The `convert` skill's tests convert every example and publish the results, so they need the same `AGENT_SKILLS_PATH`:
+
+```bash
+pip install -r skills/convert/tests/requirements-test.txt
+pytest skills/convert/tests
 ```
 
 `doctor` reports a warning, because this repository has no binding file; CI ignores that and checks only that `siblings` lists `model` and `markdown-deck`. Everything after it should pass, with one `participant_open` warning for AP-910's open participating pattern. [.github/workflows/ci.yml](../.github/workflows/ci.yml) has the rest: the model extract comparison, the sync round trip, the deck build and the approval-gate check.

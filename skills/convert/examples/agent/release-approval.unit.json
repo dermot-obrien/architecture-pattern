@@ -1,0 +1,23 @@
+{
+  "name": "Release approval",
+  "status": "ready",
+  "extraction": "agent",
+  "boxes": [
+    {"label": "Product owner", "kind": "person", "geom": [40, 60, 190, 70]},
+    {"label": "Change board", "kind": "board", "geom": [360, 60, 190, 70]},
+    {"label": "Release team", "kind": "team", "geom": [680, 60, 190, 70]},
+    {"label": "Service desk", "kind": "team", "geom": [360, 260, 190, 70]}
+  ],
+  "links": [
+    {"source": "Product owner", "target": "Change board", "label": "request release"},
+    {"source": "Change board", "target": "Release team", "label": "approve window"},
+    {"source": "Release team", "target": "Service desk", "label": "announce change"}
+  ],
+  "scenarios": [
+    {"name": "Approve a release", "steps": [
+      {"actor": "Product owner", "target": "Change board", "action": "requests a release window"},
+      {"actor": "Change board", "target": "Release team", "action": "approves the window"},
+      {"actor": "Release team", "target": "Service desk", "action": "announces the change"}
+    ]}
+  ]
+}

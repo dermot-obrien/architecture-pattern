@@ -4,7 +4,7 @@ description: Author an architecture pattern as one Markdown document that is als
 license: CC-BY-4.0 AND Apache-2.0. Content under CC BY 4.0, code under Apache-2.0; see LICENSE and NOTICE.
 compatibility: Python 3.11+ and Node 18+. Requires the `model` skill (diagram-model repository) and the `markdown-deck` skill (markdown-deck repository), installed wherever the agent reads skills. draw.io desktop is optional; without it, views are exported by hand from draw.io desktop or online and stamped. PDF export needs playwright.
 metadata:
-  version: "0.12.0"
+  version: "0.13.0"
   homepage: https://github.com/dermot-obrien/architecture-pattern
   x-skill-requires: "pkg:generic/dermot-obrien/diagram-model/model ^0.9.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
   x-derived-from: "https://github.com/dermot-obrien/ai-assisted-architecture/tree/5a1c13860ad5093125afb3c41a82793e084cc0b7/skills/pattern"
@@ -27,8 +27,6 @@ People learning the skill, rather than agents running it, start from the documen
 5. Push both the commit AND the tag: `git push origin pattern--v0.X.Y`
 6. Verify tag is clonable remotely
 7. Update quick-start.md if version pins changed
-
-**Critical:** Model v0.9.0 must be tagged in diagram-model repository before releasing pattern versions that depend on it.
 
 ## Step 0, before anything else
 
@@ -76,6 +74,8 @@ If `doctor` does not list both under `siblings`, stop and tell the user to insta
 ## What a pattern is
 
 Every architecture model is a pattern: building blocks, the interfaces between them and the scenarios that walk across them. Reusable as a reference, where a solution design instantiates one for one consumer. What a practice calls its kinds of pattern, such as an architecture pattern (technology-agnostic, ABBs) and a reference architecture (technology-specific, mainly SBBs), is the repository's to say, in `types`; this skill authors every kind the same way.
+
+Shipped templates: `architecture-pattern`, `reference-architecture`, `collaboration`; `convert` brings old diagrams in.
 
 Patterns differ by semantic type, which has up to three parts:
 

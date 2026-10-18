@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# What this skill needs from the repository it is installed into, and nothing about
+# where any of it lives. The consuming repository answers in [suite.convert]
+# of its .agents/skill-bindings.toml. Every option is optional.
+#
+# Where converted documents go, and how they are numbered, are the pattern and use-case
+# skills' bindings: [suite.pattern] and [suite.use-case] outputDir, register and types.
+
+[inputs]
+short_description = "Bindings for converting existing material into pattern documents"
+
+[inputs.options.workDir]
+type = "dir"
+required = false
+description = """Where each run's conversion folder is made: <workDir>/<date>-<name>/, holding
+the gathered sources, manifest.json, each unit's model and report.md. Unset, conversions/ at
+the root of the repository the run starts in, else beside the working directory."""
+
+[inputs.options.archiveDir]
+type = "dir"
+required = false
+description = """Where originals tracked by git are moved, with git mv, at the same path below it
+as below the repository root. Unset, archive/ at the root of the repository holding each
+source. Originals outside git, or untracked, are copied and left where they are."""
