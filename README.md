@@ -38,6 +38,7 @@ Or ask your agent for a pattern and it does the same. The [quick start](docs/qui
 
 | Page | For |
 |---|---|
+| [Architect's guide](docs/architect-guide.md) | The minimum steps to install the skills, then edit, check and publish architecture patterns and reference architectures, standalone |
 | [Quick start](docs/quick-start.md) | From nothing to a published pattern, its view, walkthrough, deck and PDF, and a composite pattern |
 | [Concepts](docs/concepts.md) | What a pattern is, and the ideas behind the tables, the diagram, the walkthrough and the deck |
 | [Releasing](docs/RELEASING.md) | **For maintainers:** How to create releases, manage version dependencies, and coordinate tags across repositories |
