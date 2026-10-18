@@ -161,7 +161,13 @@ physical = "none"
 label    = "Reference architecture"
 idSeries = "RA"
 physical = "most"
+
+[suite.pattern.types.collaboration]
+label    = "Collaboration"
+idSeries = "CL"
 ```
+
+The skill ships a template for each of these three: `collaboration` is participants working together, with Participants and Interactions tables read by the same bindings as a use case's, so bind those tables too (the [use cases](use-cases.md) page has them). [Converting](converting.md#the-collaboration-type) says more.
 
 | Key | Meaning |
 |---|---|
@@ -209,6 +215,15 @@ Precedence: `[model] approved_statuses` wins over `[suite.pattern] approvedStatu
 ```toml
 approvedStatuses = ["Approved", "Published"]
 ```
+
+## `[suite.convert]`
+
+Optional, for the `convert` skill; see [converting](converting.md#bindings).
+
+| Key | Default | Sets |
+|---|---|---|
+| `workDir` | `conversions/` at the repository root | Where each conversion run's folder is made |
+| `archiveDir` | `archive/` at the root of the repository holding each source | Where originals tracked by git are moved with `git mv` |
 
 ## `model` keys the pattern relies on
 
