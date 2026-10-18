@@ -1,4 +1,6 @@
 ---
+# The portfolio signature: the continuum front matter standard says what this document is.
+kind: use-case
 document_type: use-case
 status: Draft
 version: "0.1"

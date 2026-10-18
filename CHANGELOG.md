@@ -2,9 +2,33 @@
 
 # Changelog
 
-Releases of the architecture-pattern plugin. Each skill keeps its own changelog with the detail, [pattern](skills/pattern/CHANGELOG.md) and [use-case](skills/use-case/CHANGELOG.md), and a release takes the version of the skill it releases.
+Releases of the architecture-pattern plugin. Each skill keeps its own changelog with the detail, [pattern](skills/pattern/CHANGELOG.md), [use-case](skills/use-case/CHANGELOG.md), [portfolio](skills/portfolio/CHANGELOG.md) and [draft](skills/draft/CHANGELOG.md), and a release takes the version of the skill it releases.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+
+## [portfolio 0.1.0] - 2026-10-18
+
+### Added
+
+- The portfolio skill: finds every architecture pattern, reference architecture, collaboration, use case and candidate by the signature in its front matter, writes an inventory page, tags what needs conversion or deprecation, archives what is agreed with `git mv`, and matches a backlog of pattern names, making committed new rows into placeholders. See [its changelog](skills/portfolio/CHANGELOG.md).
+
+## [draft 0.1.0] - 2026-10-18
+
+### Added
+
+- The draft skill: writes a first draft of a placeholder from research in the repository and online, in the proper template, citing every source, and marks it as an AI-generated draft for review. See [its changelog](skills/draft/CHANGELOG.md).
+
+## [pattern 0.13.0] - 2026-10-18
+
+### Changed
+
+- The shipped templates carry `kind: pattern`, the signature the portfolio skill finds a pattern by.
+
+## [use-case 0.4.0] - 2026-10-18
+
+### Changed
+
+- The template carries `kind: use-case`, the signature the portfolio skill finds a use case by.
 
 ## [pattern 0.12.0] - 2026-10-17
 

@@ -2,6 +2,13 @@
 
 # Changelog
 
+## [0.4.0] - 2026-10-18
+
+### Changed
+
+- The template, and the worked example, carry `kind: use-case`, the signature by which the portfolio skill finds a use case. `document_type: use-case` stays for tools that read it.
+- Requires pattern 0.13.0.
+
 ## [0.3.1] - 2026-10-17
 
 ### Changed

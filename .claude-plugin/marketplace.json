@@ -15,7 +15,7 @@
       "source": "./",
       "strict": false,
       "description": "Author an architecture pattern at any scope as one Markdown document that is also the model and the deck: the draw.io diagram and scenario overlays are generated from its tables and validated against it, and its tagged sections publish as HTML slides and a PDF.",
-      "version": "0.12.0",
+      "version": "0.13.0",
       "author": {
         "name": "Dermot O'Brien",
         "url": "https://github.com/dermot-obrien"
@@ -54,7 +54,7 @@
       "source": "./",
       "strict": false,
       "description": "Author a use case as one Markdown document that is also the model and the deck: what a solution does for someone and what it needs, before anyone designs how it is built. Its participants and interactions generate the draw.io diagram and an animated walkthrough of the main flow, and its tagged sections publish as HTML slides and a PDF.",
-      "version": "0.3.1",
+      "version": "0.4.0",
       "author": {
         "name": "Dermot O'Brien",
         "url": "https://github.com/dermot-obrien"
@@ -76,7 +76,7 @@
       "dependencies": [
         {
           "name": "pattern",
-          "version": "^0.12.0"
+          "version": "^0.13.0"
         },
         {
           "name": "model",
@@ -114,6 +114,75 @@
       "category": "documentation",
       "skills": [
         "./skills/cross-reference"
+      ]
+    },
+    {
+      "name": "portfolio",
+      "source": "./",
+      "strict": false,
+      "description": "Keep a repository's architecture patterns current as a managed portfolio: find every pattern by the signature in its front matter, write an inventory page with links and summaries, tag what needs conversion or deprecation, archive what is agreed with git mv so history is kept, and turn a backlog of pattern names into placeholders.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Dermot O'Brien",
+        "url": "https://github.com/dermot-obrien"
+      },
+      "homepage": "https://github.com/dermot-obrien/architecture-pattern",
+      "repository": "https://github.com/dermot-obrien/architecture-pattern",
+      "license": "CC-BY-4.0 AND Apache-2.0",
+      "keywords": [
+        "architecture",
+        "pattern",
+        "portfolio",
+        "inventory",
+        "lifecycle",
+        "backlog",
+        "agent-skill"
+      ],
+      "category": "documentation",
+      "skills": [
+        "./skills/portfolio"
+      ],
+      "dependencies": [
+        {
+          "name": "pattern",
+          "version": "^0.13.0"
+        },
+        {
+          "name": "use-case",
+          "version": "^0.4.0"
+        }
+      ]
+    },
+    {
+      "name": "draft",
+      "source": "./",
+      "strict": false,
+      "description": "Write a first draft of a placeholder pattern from research in the repository and online, in the proper template, citing every source, and marked as an AI-generated draft for review.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Dermot O'Brien",
+        "url": "https://github.com/dermot-obrien"
+      },
+      "homepage": "https://github.com/dermot-obrien/architecture-pattern",
+      "repository": "https://github.com/dermot-obrien/architecture-pattern",
+      "license": "CC-BY-4.0 AND Apache-2.0",
+      "keywords": [
+        "architecture",
+        "pattern",
+        "draft",
+        "research",
+        "citations",
+        "agent-skill"
+      ],
+      "category": "documentation",
+      "skills": [
+        "./skills/draft"
+      ],
+      "dependencies": [
+        {
+          "name": "portfolio",
+          "version": "^0.1.0"
+        }
       ]
     }
   ]

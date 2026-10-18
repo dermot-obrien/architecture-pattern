@@ -1,0 +1,30 @@
+{
+  "recorded": "2026-10-18",
+  "note": "Web research recorded for the offline test: it stands in for the agent's online search, so the test needs no network.",
+  "sources": [
+    {
+      "kind": "web",
+      "url": "https://example.org/articles/event-sourcing",
+      "title": "Event sourcing: storing state as a sequence of events",
+      "publisher": "Example Engineering Notes",
+      "accessed": "2026-10-18",
+      "excerpt": "Instead of storing the current state, every change is stored as an immutable event; the current state is derived by replaying them."
+    },
+    {
+      "kind": "web",
+      "url": "https://example.org/articles/ledger-projections",
+      "title": "Projections over an append-only ledger",
+      "publisher": "Example Engineering Notes",
+      "accessed": "2026-10-18",
+      "excerpt": "Balances are projections of the ledger, rebuilt from the log when a projection's rules change."
+    },
+    {
+      "kind": "web",
+      "url": "https://example.org/articles/snapshots",
+      "title": "Snapshots for long event streams",
+      "publisher": "Example Engineering Notes",
+      "accessed": "2026-10-18",
+      "excerpt": "Replaying a long stream is slow; a periodic snapshot bounds the replay."
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 ---
+kind: pattern
 title: "AP-910 Staff Assistant"
 description: "A staff assistant that answers from permitted content and carries out confirmed actions"
 document_type: pattern
