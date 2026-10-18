@@ -180,8 +180,8 @@ def cmd_tag(a, b):
             d = by_path.get(ap)
             if d is None:
                 raise UsageError(f"{p} carries no portfolio signature in its front matter, so it cannot be tagged")
-            if d.is_candidate:
-                raise UsageError(f"{p} is a candidate: a candidate carries no state; promote it from the backlog")
+            if d.is_candidate and not (a.clear or a.state == "needs-conversion"):
+                raise UsageError(f"{p} is a candidate, whose only state is needs-conversion; promote it from the backlog")
             ch = {"state": None, "reason": None, "since": None} if a.clear else \
                 {"state": a.state, "reason": a.reason or None, "since": D.today()}
             plan.append((d, ch, a.reason or ("cleared" if a.clear else "set by hand")))

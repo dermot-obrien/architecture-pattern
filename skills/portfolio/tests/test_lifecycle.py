@@ -81,9 +81,14 @@ class Check(unittest.TestCase):
         errors, _ = L.check(bad, b)
         text = "\n".join(errors)
         for needle in ("not in the architecture-pattern series AP-NNN", "portfolio.state maybe", "portfolio.priority urgent",
-                       "target_quarter Q1", "committed is true or false", "is also the id of", "candidate carries no portfolio.state",
+                       "target_quarter Q1", "committed is true or false", "is also the id of", "a candidate's only portfolio.state is needs-conversion",
                        "candidate_type widget", "kind pattern with no pattern_type"):
             self.assertIn(needle, text)
+
+    def test_candidate_awaiting_conversion(self):
+        b = Bindings(REPO)
+        c = D.Doc("c.md", "c.md", {"portfolio": {"state": "needs-conversion", "reason": "a picture"}}, "", "candidate", "candidate")
+        self.assertEqual(L.check([c], b)[0], [])
 
     def test_bound_series(self):
         tmp, repo = copy_fixture(with_git=False)

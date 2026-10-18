@@ -152,8 +152,8 @@ def check(docs, bindings):
         st = str(p.get("state") or "")
         if st and st not in D.STATES:
             errors.append(f"{where}: portfolio.state {st} is not one of {', '.join(D.STATES)}")
-        if st and d.is_candidate:
-            errors.append(f"{where}: a candidate carries no portfolio.state; promote it to a placeholder instead")
+        if st and d.is_candidate and st != "needs-conversion":
+            errors.append(f"{where}: a candidate's only portfolio.state is needs-conversion; promote it to a placeholder instead")
         pr = str(p.get("priority") or "")
         if pr and pr not in D.PRIORITIES:
             errors.append(f"{where}: portfolio.priority {pr} is not one of {', '.join(D.PRIORITIES)}")

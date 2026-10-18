@@ -45,7 +45,7 @@ portfolio:                             # optional: priority, target_quarter, com
 ---
 ```
 
-An `id`, when a candidate has one, is a kebab-case slug, never a series identifier. A candidate carries no `portfolio.state`: it becomes a pattern by being promoted from the backlog, when it is committed.
+An `id`, when a candidate has one, is a kebab-case slug, never a series identifier. A candidate carries no `portfolio.state` but one: `needs-conversion`, which the convert skill sets on a source it cannot convert yet, such as a picture awaiting the agent. It becomes a pattern by being converted, or by being promoted from the backlog when it is committed.
 
 ## The portfolio block
 
