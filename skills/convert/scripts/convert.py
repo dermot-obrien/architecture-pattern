@@ -23,7 +23,7 @@ verify   validates a document with model, regenerates its diagram from its table
 archive  archives the originals of a run made with --no-archive.
 
 TYPE is architecture-pattern, reference-architecture, use-case or collaboration (or AP,
-RA, UC, CO). Unset, each unit's type is chosen from its content, and report.md says why.
+RA, UC, CL). Unset, each unit's type is chosen from its content, and report.md says why.
 
 Bindings, all optional, in [suite.convert] of .agents/skill-bindings.toml, relative to
 that file: workDir (default conversions/ at the repository root), archiveDir (default
@@ -98,8 +98,14 @@ def bound(binding_file, value) -> str:
 
 
 def convert_table(start) -> tuple:
+    """[suite.convert], with archiveDir falling back to [suite.portfolio] archiveDir, so a
+    repository that binds a portfolio has one archive folder."""
     path, raw = load_bindings(start)
-    return path, ((raw.get("suite") or {}).get("convert") or {})
+    suite = raw.get("suite") or {}
+    table = dict(suite.get("convert") or {})
+    if not table.get("archiveDir") and (suite.get("portfolio") or {}).get("archiveDir"):
+        table["archiveDir"] = suite["portfolio"]["archiveDir"]
+    return path, table
 
 
 def node_series(raw, profile):
@@ -652,6 +658,7 @@ def cmd_run(a, cwd):
                     u["type"] = classify.normalise(a.type)
                 save_unit(udir, u)
                 un["status"] = "needs-agent"
+                un["candidate"] = write_candidate(u, spec, s, places, entries)
                 manifest["units"].append(un)
                 worst = 1
                 continue
@@ -679,6 +686,45 @@ def cmd_run(a, cwd):
     report = write_report(run_dir, manifest)
     summarise(manifest, report, a.json)
     return worst
+
+
+def write_candidate(u, spec, unit_slug, places, entries) -> dict:
+    """A placeholder document for a source that needs the agent, marked needs-conversion so
+    the portfolio's tagging finds it. Removed by draft once the real document is written,
+    if no one has changed it."""
+    type_name = u.get("type", "")
+    folder = os.path.join(places.folder(type_name or "architecture-pattern"), unit_slug)
+    doc = os.path.join(folder, "index.md")
+    if os.path.exists(doc):
+        return {"path": doc, "written": False}
+    kept = {e["original"]: e.get("archive") or e["original"] for e in entries}
+    sources = [os.path.relpath(kept.get(p, p), folder).replace(os.sep, "/")
+               for p in [spec["diagram"]] + spec["texts"]]
+    text = draft.candidate(u, type_name, sources, "a picture with no diagram inside it, waiting "
+                           "for the agent to read it and run convert.py draft",
+                           datetime.date.today().isoformat())
+    os.makedirs(folder, exist_ok=True)
+    with open(doc, "w", encoding="utf-8") as fh:
+        fh.write(text)
+    return {"path": doc, "written": True, "sha256": ws.sha256(doc)}
+
+
+def remove_candidate(un, res) -> None:
+    """Remove the placeholder a run wrote, once the real document exists, unless edited."""
+    c = un.get("candidate") or {}
+    path = c.get("path")
+    if not (c.get("written") and path and os.path.isfile(path)):
+        return
+    if ws.sha256(path) != c.get("sha256"):
+        res["notes"].append(f"the placeholder {path} was edited, so it was left; remove it by hand")
+        return
+    os.unlink(path)
+    try:
+        os.rmdir(os.path.dirname(path))
+    except OSError:
+        pass
+    res["notes"].append(f"the needs-conversion placeholder {path} was removed")
+    c["written"] = False
 
 
 def run_draft(u, places, cwd, ident=None, force=False) -> dict:
@@ -800,6 +846,7 @@ def cmd_draft(a, cwd):
             res = {"status": "failed", "notes": [str(ex)], "type": u["type"]}
         if res.get("status") == "drafted":
             res["verify"] = verify.check(res["document"], source_unit or u)
+            remove_candidate(un, res)
         un.update({"type": u["type"], "classification": u["classification"], "result": res,
                    "status": res.get("status", ""), "extraction": u.get("extraction", ""),
                    "uncertain": uncertain_list(u)})

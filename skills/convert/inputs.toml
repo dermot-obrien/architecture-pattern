@@ -21,5 +21,5 @@ the root of the repository the run starts in, else beside the working directory.
 type = "dir"
 required = false
 description = """Where originals tracked by git are moved, with git mv, at the same path below it
-as below the repository root. Unset, archive/ at the root of the repository holding each
-source. Originals outside git, or untracked, are copied and left where they are."""
+as below the repository root. Unset, [suite.portfolio] archiveDir, so a repository has one
+archive, else archive/ at the root of the repository holding each source. Originals outside git, or untracked, are copied and left where they are."""

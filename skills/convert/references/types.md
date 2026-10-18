@@ -43,7 +43,7 @@ Purpose, Agreements, Open Questions and Catalogue Mapping are the only other sec
 ```toml
 [suite.pattern.types.collaboration]
 label    = "Collaboration"
-idSeries = "CO"
+idSeries = "CL"
 ```
 
 The architecture continuum's schema knows two kinds of pattern document, the architecture pattern and the reference architecture. Adding collaboration there is separate work in that repository.

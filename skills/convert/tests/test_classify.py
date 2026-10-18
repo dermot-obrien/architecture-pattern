@@ -41,8 +41,8 @@ def test_pages_of_one_file_choose_together():
 
 def test_given_type_wins():
     u = read("order-intake/order-intake.drawio")[0]
-    assert classify.classify(u, "CO") == {"type": "collaboration", "how": "given", "scores": {},
-                                          "reasons": ["--type CO was given"]}
+    assert classify.classify(u, "CL") == {"type": "collaboration", "how": "given", "scores": {},
+                                          "reasons": ["--type CL was given"]}
 
 
 def test_declared_type_wins():

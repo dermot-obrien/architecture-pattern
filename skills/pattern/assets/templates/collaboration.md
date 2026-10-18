@@ -4,7 +4,10 @@ status: Draft
 # The pattern type, as your repository binds it. A collaboration: participants working
 # together, drawn with the same diagram and scenarios as any pattern, without the
 # building-block rigour of an architecture pattern or a reference architecture.
+kind: pattern
 pattern_type: collaboration
+# problem, domain, capability-area, platform, hosting-profile or epic, as for any pattern.
+pattern_scope: problem
 version: "0.1"
 last_modified: 2026-10-18
 author: "<your name>"
@@ -15,7 +18,7 @@ provenance:
   review_state: ai-raw
 ---
 
-# CO-NNN Collaboration Name
+# CL-NNN Collaboration Name
 
 <!--
 HOW TO USE THIS TEMPLATE
@@ -51,7 +54,7 @@ takes more than one of them. Name who relies on the outcome.
 
 ## Diagram
 
-<!-- The view publish.py renders from the two tables below: ![CO-NNN participants and interactions](./components.svg) -->
+<!-- The view publish.py renders from the two tables below: ![CL-NNN participants and interactions](./components.svg) -->
 
 ## Participants
 

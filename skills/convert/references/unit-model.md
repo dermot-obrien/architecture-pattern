@@ -38,7 +38,7 @@ A unit is one diagram and the text that goes with it. Every reader writes the sa
 |---|---|
 | `name` | The document's name, without an identifier |
 | `summary` | The source's opening text; drafted under the type's opening section |
-| `type` | `architecture-pattern`, `reference-architecture`, `use-case` or `collaboration` (or `AP`, `RA`, `UC`, `CO`). Empty: chosen from the content |
+| `type` | `architecture-pattern`, `reference-architecture`, `use-case` or `collaboration` (or `AP`, `RA`, `UC`, `CL`). Empty: chosen from the content |
 | `status` | `needs-agent` until someone has read a picture; `ready` to draft |
 | `extraction` | `exact`, `heuristic` or `agent`: how the diagram was read. `agent` skips the comparison with the source, which has no structure |
 | `id` | Set after drafting: the document's identifier. Kept on a redraft |

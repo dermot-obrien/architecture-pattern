@@ -33,7 +33,7 @@ A collaboration is new in `pattern` 0.13.0. It is a pattern of participants, peo
 ```toml
 [suite.pattern.types.collaboration]
 label    = "Collaboration"
-idSeries = "CO"
+idSeries = "CL"
 ```
 
 ## What it needs
@@ -97,11 +97,25 @@ Each run makes one conversion folder, `conversions/<date>-<name>/` at the reposi
 
 Documents go where the `pattern` and `use-case` skills put them, each type's `outputDir` (by default `patterns/` and `use-cases/` at the repository root), numbered in the type's series from the register when one is bound, and registered. `--out <folder>` puts them all in one folder instead.
 
+### What the front matter says
+
+A document is found by its front matter, never by its file or folder name, so every document convert writes opens with the same signature:
+
+| Key | Value |
+|---|---|
+| `kind` | `pattern`, or `use-case` |
+| `id`, `title` | The identifier and the name |
+| `pattern_type`, `pattern_scope` | For a pattern: its type, and its scope. The scope is `problem` for up to eight boxes and `domain` above, unless the unit sets it, and the conversion notes ask you to confirm it |
+| `status` | `Draft` |
+| `provenance`, `converted_from` | `origin: ai-generated`, `review_state: ai-raw`, and where each source is now kept |
+
+A source that cannot be converted yet, a picture waiting for the agent, gets a placeholder in its place: `kind: candidate`, `candidate_type` when the type is known, and `portfolio.state: needs-conversion` with the reason and the date, so a portfolio lists it as work outstanding. `convert.py draft` removes the placeholder when it writes the real document, unless someone has edited it.
+
 ### Archiving the originals
 
 When git tracks a source, the run moves it with `git mv` into the archive folder, at the same path below it as below the repository root: `docs/old/payments.drawio` becomes `archive/docs/old/payments.drawio`. History follows it, and the new document's `converted_from` points at it. A source outside git, or one git does not track, is copied and left where it is. Nothing is ever deleted, and an archive path already taken is never overwritten.
 
-`[suite.convert] archiveDir` moves the archive folder. `--no-archive` copies without moving; `convert.py archive <conversion folder>` archives later. The moves are staged, not committed: review them, then commit them with the new documents.
+`[suite.convert] archiveDir` moves the archive folder; unset, `[suite.portfolio] archiveDir` is used when bound, so one repository has one archive. `--no-archive` copies without moving; `convert.py archive <conversion folder>` archives later. The moves are staged, not committed: review them, then commit them with the new documents.
 
 ### After the run
 
@@ -121,7 +135,7 @@ All optional, in `[suite.convert]` of `.agents/skill-bindings.toml`, relative to
 | Key | Default | Sets |
 |---|---|---|
 | `workDir` | `conversions/` at the repository root | Where each run's conversion folder is made |
-| `archiveDir` | `archive/` at the root of the repository holding each source | Where originals tracked by git are moved |
+| `archiveDir` | `[suite.portfolio] archiveDir`, else `archive/` at the root of the repository holding each source | Where originals tracked by git are moved |
 
 Where documents go, how they are numbered and which template each type uses are the `pattern` and `use-case` skills' own bindings. When the binding file maps the type's tables and sets `[model] local_pattern`, the document reads with it; otherwise a `model.toml` is written beside the document so it reads on its own, and the report says so.
 
@@ -135,7 +149,7 @@ Where documents go, how they are numbered and which template each type uses are 
 | `convert.py verify <document> [--source source.json] [--json]` | Validates a document, and compares its regenerated diagram with a source |
 | `convert.py archive <conversion folder> [--dry-run]` | Archives the originals of a run made with `--no-archive` |
 
-`T` is `architecture-pattern`, `reference-architecture`, `use-case` or `collaboration`, or `AP`, `RA`, `UC`, `CO`. Exit codes: 0 every unit drafted and valid, 1 a unit needs the agent or did not draft or validate, 2 usage, 3 a skill this one needs is not installed.
+`T` is `architecture-pattern`, `reference-architecture`, `use-case` or `collaboration`, or `AP`, `RA`, `UC`, `CL`. Exit codes: 0 every unit drafted and valid, 1 a unit needs the agent or did not draft or validate, 2 usage, 3 a skill this one needs is not installed.
 
 ## Examples
 

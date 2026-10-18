@@ -14,5 +14,6 @@
 - The type chosen from the content, with the reasons in the report; `--type`, front matter, or `unit.json` override it. [references/types.md](references/types.md).
 - Drafting from the type's template as the repository binds it, numbering from the pattern skill's register series, a register row when one is bound, local ids, Catalogue Mapping gap rows, and conversion notes listing every uncertain reading.
 - The diagram adopted from the source drawing with `model sync --adopt`, keeping its layout, or redrawn at a plain SVG's positions, else generated; a stamped preview view when draw.io desktop is not installed, so `publish.py` and the walkthrough work at once.
+- The front matter signature on every document, written in one place: `kind`, `id`, `title`, and for a pattern `pattern_type` and `pattern_scope`, then `status` and `provenance`. A source waiting for the agent gets a `kind: candidate` placeholder with `portfolio.state: needs-conversion`, removed by `draft` once the document exists. `archiveDir` falls back to `[suite.portfolio] archiveDir`.
 - Verification: `model validate`, then the diagram regenerated from the document's tables compared with the source, box by box and line by line.
 - Examples in every format, rich, sparse and no text, and all four types, with unit and end-to-end tests.

@@ -26,7 +26,7 @@ ALIASES = {"ap": "architecture-pattern", "pattern": "architecture-pattern",
            "architecture-pattern": "architecture-pattern",
            "ra": "reference-architecture", "reference-architecture": "reference-architecture",
            "uc": "use-case", "use-case": "use-case", "usecase": "use-case",
-           "co": "collaboration", "collaboration": "collaboration"}
+           "co": "collaboration", "cl": "collaboration", "collaboration": "collaboration"}
 
 LOGICAL = r"\b(service|services|capability|capabilities|component|components|layer|logical|store|registry|gateway|engine|manager|broker|adapter|orchestrator|repository|catalogue|catalog|pipeline|module|function|building block|abb|pattern|interface|boundary|cache|application|client|relay|breaker|proxy|scheduler|processor|worker|consumer|producer|publisher|subscriber|index|portal|channel|api|queue|log)\b"
 PHYSICAL = (r"\b(database|db|cluster|queue|topic|bucket|server|servers|vm|virtual machine|runtime|"

@@ -123,7 +123,7 @@ class TestWholeSet:
     "claims-portal/claims-portal.svg",
     "appointment-booking/appointment-booking.drawio.png",
 ])
-@pytest.mark.parametrize("type_name", ["AP", "RA", "UC", "CO"])
+@pytest.mark.parametrize("type_name", ["AP", "RA", "UC", "CL"])
 def test_every_format_to_every_type(tmp_path, src, type_name):
     data, r = run_json("run", source(*src.split("/")), "--type", type_name, "--out", tmp_path / "out",
                        "--work", tmp_path / "work", "--no-archive", cwd=tmp_path)
@@ -140,6 +140,9 @@ def test_a_picture_read_by_the_agent(tmp_path, copy_sources, name, expected):
     data, r = run_json("run", material, "--out", tmp_path / "out", "--work", tmp_path / "work",
                        cwd=tmp_path)
     assert r.returncode == 1 and data["units"][0]["status"] == "needs-agent"
+    placeholder = tmp_path / "out" / name / "index.md"
+    text = placeholder.read_text(encoding="utf-8")
+    assert "kind: candidate" in text and "state: needs-conversion" in text
     unit = os.path.join(data["run"], "units", name, "unit.json")
     shutil.copy(os.path.join(EXAMPLES, "agent", f"{name}.unit.json"), unit)
     data, r = run_json("draft", data["run"], cwd=tmp_path)
@@ -149,9 +152,11 @@ def test_a_picture_read_by_the_agent(tmp_path, copy_sources, name, expected):
     assert u["agrees"] is None                      # an image has no structure to compare
     results = published_ok(tmp_path / "out")
     assert any("animated" in n for n in results[0]["notes"])
-    doc = next((tmp_path / "out").glob("CO-*")) / "index.md"
+    doc = next((tmp_path / "out").glob("CL-*")) / "index.md"
     text = doc.read_text(encoding="utf-8")
     assert "Drafted from an image" in text
+    assert "kind: pattern" in text and "pattern_type: collaboration" in text
+    assert not placeholder.exists()
     assert "incident-handover.png" in text or "release-approval.png" in text
 
 
@@ -240,7 +245,7 @@ physical = "most"
 
 [suite.pattern.types.collaboration]
 label    = "Collaboration"
-idSeries = "CO"
+idSeries = "CL"
 
 [suite.use-case]
 outputDir = "../use-cases"
@@ -267,14 +272,14 @@ def test_a_bound_workspace(git_repo, copy_sources):
     docs = {u["slug"]: os.path.relpath(u["document"], git_repo) for u in data["units"]}
     assert docs == {
         "order-intake": os.path.join("patterns", "AP-008-order-intake", "index.md"),
-        "supplier-onboarding": os.path.join("patterns", "CO-001-supplier-onboarding", "index.md"),
+        "supplier-onboarding": os.path.join("patterns", "CL-001-supplier-onboarding", "index.md"),
         "edge-gateway": os.path.join("patterns", "RA-001-edge-gateway", "index.md"),
         "claims-portal": os.path.join("use-cases", "UC-001-submit-a-claim", "index.md"),
     }
     # The workspace's binding reads the tables, so no model.toml is written.
     assert not list(git_repo.glob("patterns/*/model.toml"))
     register = (git_repo / "register.csv").read_text(encoding="utf-8")
-    assert "CO-001,collaboration,Supplier onboarding,Draft,patterns/CO-001-supplier-onboarding" in register
+    assert "CL-001,collaboration,Supplier onboarding,Draft,patterns/CL-001-supplier-onboarding" in register
     assert data["run"].startswith(str(git_repo / "work" / "conversions"))
     assert (git_repo / "work" / "archive" / "order-intake" / "order-intake.drawio").exists()
     pattern_check = os.path.join(SKILL, "..", "pattern", "scripts", "check.py")

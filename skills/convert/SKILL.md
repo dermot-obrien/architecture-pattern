@@ -36,7 +36,7 @@ python <skills>/model/bin/model.py doctor --skill pattern --json
 | `use-case` | Participants, one with a goal | Actors and their goals: actor shapes, "as a ... I want ... so that" | The use-case skill's |
 | `collaboration` | Participants working together | Otherwise: people, teams, boards, handovers, with no building-block rigour | The pattern skill's `collaboration` |
 
-A collaboration is a pattern type with the lightest rules: its own template, the four essential parts, local ids and a free Kind. It reads with the same Participants and Interactions bindings as a use case. A repository that numbers it binds `[suite.pattern.types.collaboration]` with an `idSeries`, `CO` by default. [references/types.md](references/types.md) has the evidence each type scores and how a tie falls.
+A collaboration is a pattern type with the lightest rules: its own template, the four essential parts, local ids and a free Kind. It reads with the same Participants and Interactions bindings as a use case. A repository that numbers it binds `[suite.pattern.types.collaboration]` with an `idSeries`, `CL` by default. [references/types.md](references/types.md) has the evidence each type scores and how a tie falls.
 
 ## Procedure
 
@@ -63,9 +63,11 @@ It makes one conversion folder per run, `<workDir>/<date>-<name>/`, holding `sou
 5. Writes `components.drawio`: the source drawing itself with the document's identifiers adopted onto its shapes (`model sync --adopt`), so the layout is kept; for a plain SVG, a redrawing at the source's positions, adopted the same way; otherwise one generated from the tables. Then a view of its structure layer, rendered by draw.io desktop when installed, else a plain preview, stamped with `model stamp`.
 6. Checks the draft: `model validate`, then the diagram regenerated from the document's tables, compared with the source box by box and line by line. Differences are reported, never hidden.
 
+Every document carries the front matter signature the portfolio discovers it by, never its file or folder name: `kind` (`pattern` or `use-case`), `id`, `title`, and for a pattern `pattern_type` and `pattern_scope`, then `status: Draft` and `provenance`. A unit that needs you (step 3) gets a placeholder instead, `kind: candidate` with `portfolio.state: needs-conversion`, which `draft` removes once the real document is written.
+
 Finally it archives, then writes `report.md`. Read the report in full before step 4.
 
-Archiving moves each source git tracks, with `git mv`, to the same path under `archiveDir` (default `archive/` at that repository's root), so its history follows it. A source outside git, or untracked, is copied and left where it is. Nothing is ever deleted. `--no-archive` copies only; `convert.py archive <conversion folder>` archives later.
+Archiving moves each source git tracks, with `git mv`, to the same path under `archiveDir` (default `archive/` at that repository's root), so its history follows it. A source outside git, or untracked, is copied and left where it is. Nothing is ever deleted. `archiveDir` falls back to `[suite.portfolio] archiveDir`, so a repository has one archive. `--no-archive` copies only; `convert.py archive <conversion folder>` archives later.
 
 ### 3. Read a picture
 
@@ -82,10 +84,11 @@ python <skills>/convert/scripts/convert.py draft <conversion folder> [--unit <un
 The draft holds what the source shows; the rest of the template is yours to write from the source text and the user's answers, by the pattern or use-case skill's own rules. In order:
 
 1. Work through the `CONVERSION NOTES` comment under the H1: every uncertain reading, every note, and the reminder that Provider and Consumer follow each arrow's direction. Fix each in the tables, then delete the comment.
-2. Fold the `## Notes from the source` section into the sections its text belongs in, then delete it.
-3. Replace each `TBD` (a box with no description, a link with no label) from the source, or ask.
-4. If the source showed no sequence, write S1 from what the text says happens, or ask the user for it. A scenario is a straight line of five to ten steps.
-5. Write the opening section (Context or Intent, the solution in one sentence, Purpose) and the remaining sections from the template's guidance, then remove guidance comments and example rows you have completed.
+2. Set `pattern_scope` if the notes say it was inferred from the number of boxes.
+3. Fold the `## Notes from the source` section into the sections its text belongs in, then delete it.
+4. Replace each `TBD` (a box with no description, a link with no label) from the source, or ask.
+5. If the source showed no sequence, write S1 from what the text says happens, or ask the user for it. A scenario is a straight line of five to ten steps.
+6. Write the opening section (Context or Intent, the solution in one sentence, Purpose) and the remaining sections from the template's guidance, then remove guidance comments and example rows you have completed.
 
 Then `model sync index.md components.drawio` after any table change, never `emit`, and check and publish with the owning skill: `python <skills>/pattern/scripts/publish.py <folder>` for every type. After arranging the diagram in draw.io, render or export its structure layer again and stamp it.
 

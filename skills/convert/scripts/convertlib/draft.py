@@ -33,7 +33,7 @@ PROFILES = {
         "lead": ("The solution in one sentence",), "skill": "use-case",
         "template": "assets/template.md", "group": "Kind", "label": "use case"},
     "collaboration": {
-        "suite": "pattern", "series": "CO", "nodes": "Participants", "edges": "Interactions",
+        "suite": "pattern", "series": "CL", "nodes": "Participants", "edges": "Interactions",
         "lead": ("Purpose",), "skill": "pattern",
         "template": "assets/templates/collaboration.md", "group": "Kind",
         "label": "collaboration"},
@@ -288,17 +288,56 @@ def set_key(fm_lines, key, value_lines):
     return out
 
 
+# The portfolio discovers a document by its front matter alone, never by its file or
+# folder name, so every document convert writes carries this signature, and it is
+# written here and nowhere else.
+SIGNATURE_KEYS = ("kind", "id", "title", "pattern_type", "pattern_scope", "candidate_type",
+                  "status", "document_type")
+
+
+def scope_of(u) -> str:
+    """The pattern_scope to write: the unit's own, else problem for a small design and
+    domain for a larger one, which the conversion notes ask the author to confirm."""
+    return u.get("scope") or ("problem" if len(u["boxes"]) <= 8 else "domain")
+
+
+def signature(kind, ident, title, type_name="", scope="", portfolio=None) -> list:
+    """The front matter lines that say what a document is.
+
+    kind is pattern, use-case or candidate. A pattern names its pattern_type and
+    pattern_scope; a candidate may name the type it is expected to become. `portfolio`
+    is the optional portfolio block, such as {"state": "needs-conversion", ...}, left
+    out when the document is live with nothing pending."""
+    out = [f"kind: {kind}"]
+    if ident:
+        out.append(f"id: {ident}")
+    out.append(f'title: "{title}"')
+    if kind == "pattern":
+        out += [f"pattern_type: {type_name}", f"pattern_scope: {scope}"]
+    elif kind == "candidate" and type_name:
+        out.append(f"candidate_type: {type_name}")
+    out.append("status: Draft")
+    if kind == "use-case":
+        out.append("document_type: use-case")
+    if portfolio:
+        out.append("portfolio:")
+        out += [f"  {k}: {v}" for k, v in portfolio.items()]
+    return out
+
+
+def provenance(sources) -> list:
+    return (["provenance:", "  origin: ai-generated", "  review_state: ai-raw",
+             "converted_from:"] + [f'  - "{s}"' for s in sources])
+
+
 def front_matter(lines, u, ident, type_name, profile, sources, today):
     if not lines or lines[0].strip() != "---":
         lines = ["---", "---"] + lines
     end = next(i for i, ln in enumerate(lines[1:], 1) if ln.strip() == "---")
     fm, body = lines[1:end], lines[end + 1:]
     fm = [ln for ln in fm if not ln.lstrip().startswith("#")]
-    fm = set_key(fm, "status", ["status: Draft"])
-    if profile["suite"] == "pattern":
-        fm = set_key(fm, "pattern_type", [f"pattern_type: {type_name}"])
-    else:
-        fm = set_key(fm, "document_type", ["document_type: use-case"])
+    for key in SIGNATURE_KEYS + ("portfolio", "provenance", "converted_from"):
+        fm = drop_key(fm, key)
     fm = set_key(fm, "last_modified", [f"last_modified: {today}"])
     for key in ("realises", "implements", "realised_by", "former_ids"):
         if any(re.match(rf"^{key}\s*:", ln) for ln in fm):
@@ -310,9 +349,35 @@ def front_matter(lines, u, ident, type_name, profile, sources, today):
     if any(re.match(r"^sidebar_label\s*:", ln) for ln in fm):
         fm = set_key(fm, "sidebar_label", [f"sidebar_label: \"{u['name']}\""])
     fm = set_key(fm, "model", ["model:", "  diagram: components.drawio"])
-    fm = set_key(fm, "provenance", ["provenance:", "  origin: converted", "  review_state: ai-raw"])
-    fm = set_key(fm, "converted_from", ["converted_from:"] + [f"  - \"{s}\"" for s in sources])
-    return ["---"] + fm + ["---"] + body
+    kind = "pattern" if profile["suite"] == "pattern" else "use-case"
+    head = signature(kind, ident, u["name"], type_name, scope_of(u))
+    return ["---"] + head + fm + provenance(sources) + ["---"] + body
+
+
+def drop_key(fm_lines, key):
+    """Front matter lines without a top-level key's block."""
+    out, skipping = [], False
+    for ln in fm_lines:
+        if re.match(rf"^{re.escape(key)}\s*:", ln):
+            skipping = True
+            continue
+        if skipping and (ln.startswith((" ", "\t")) or not ln.strip()):
+            continue
+        skipping = False
+        out.append(ln)
+    return out
+
+
+def candidate(u, type_name, sources, reason, today) -> str:
+    """A placeholder for a source that could not be converted yet, marked so the
+    portfolio's tagging finds it: kind candidate, portfolio state needs-conversion."""
+    fm = signature("candidate", "", u["name"], type_name, portfolio={
+        "state": "needs-conversion", "reason": f'"{reason}"', "since": today})
+    body = [f"# {u['name']}", "",
+            "Not converted yet. " + reason[:1].upper() + reason[1:] + ".", ""]
+    if u.get("summary"):
+        body += [u["summary"], ""]
+    return "\n".join(["---"] + fm + provenance(sources) + ["---", ""] + body)
 
 
 # ------------------------------------------------------------------ the document
@@ -335,6 +400,8 @@ def review_comment(u) -> list:
         for st in sc["steps"]:
             if st.get("uncertain"):
                 items.append(f"{sc['key']} step {st['step']}: {st['uncertain']}.")
+    if u.get("_scope_note"):
+        items.append(u["_scope_note"])
     items.append("Provider and Consumer follow each arrow's direction on the source "
                  "diagram; swap any where the arrow showed a call rather than what is provided.")
     items += [n[:1].upper() + n[1:] + ("" if n.endswith(".") else ".") for n in u.get("notes", [])]
@@ -347,6 +414,9 @@ def review_comment(u) -> list:
 def render(template_text, u, ident, type_name, sources, today=None) -> str:
     profile = PROFILES[type_name]
     today = today or datetime.date.today().isoformat()
+    if profile["suite"] == "pattern" and not u.get("scope"):
+        u["_scope_note"] = (f"pattern_scope is {scope_of(u)}, from the number of boxes; set it to "
+                            "problem, domain, capability-area, platform, hosting-profile or epic.")
     lines = template_text.splitlines()
     lines = front_matter(lines, u, ident, type_name, profile, sources, today)
 

@@ -103,12 +103,19 @@ def test_every_template_takes_the_tables(type_name):
     assert "A key on the diagram was left out." in out
     fm = out.split("---", 2)[1]
     assert "status: Draft" in fm and "last_modified: 2026-01-02" in fm
-    assert "diagram: components.drawio" in fm and "origin: converted" in fm
+    assert "diagram: components.drawio" in fm and "origin: ai-generated" in fm
     assert '- "../src/a.drawio"' in fm
+    assert "id: XX-001" in fm and 'title: "Order intake"' in fm and "portfolio:" not in fm
     if profile["suite"] == "pattern":
-        assert f"pattern_type: {type_name}" in fm
+        assert fm.lstrip().startswith("kind: pattern")
+        assert f"pattern_type: {type_name}" in fm and "pattern_scope: problem" in fm
+        assert "pattern_scope is problem" in out
     else:
+        assert fm.lstrip().startswith("kind: use-case")
         assert "document_type: use-case" in fm and "<ID>" not in out
+    # Each signature key once, whatever the template carried.
+    for key in ("kind", "pattern_type", "status", "provenance"):
+        assert len(re.findall(rf"^{key}:", fm, re.M)) <= 1
 
 
 def test_the_reference_architecture_realises_column():
@@ -128,7 +135,7 @@ def test_no_scenario_removes_the_examples_and_asks_for_one():
 
 def test_the_kind_column_of_a_collaboration():
     u = draft.assign_ids(sample())
-    out = draft.render(template("collaboration"), u, "CO-001", "collaboration", [], "2026-01-02")
+    out = draft.render(template("collaboration"), u, "CL-001", "collaboration", [], "2026-01-02")
     assert "| ABB-012 Order Store | TBD | store |" in out
     assert "| 01 Order API | Takes orders | participant |" in out
 
@@ -145,3 +152,20 @@ def test_model_toml_reads_and_covers_the_prefixes():
 
 def test_folder_name():
     assert draft.folder_name("AP-001", "Order Intake: v2!") == "AP-001-order-intake-v2"
+
+
+def test_a_scope_the_unit_sets_is_kept():
+    u = draft.assign_ids(sample())
+    u["scope"] = "platform"
+    out = draft.render(template("collaboration"), u, "CL-001", "collaboration", [], "2026-01-02")
+    assert "pattern_scope: platform" in out and "pattern_scope is" not in out
+
+
+def test_a_candidate_is_marked_needs_conversion():
+    u = sample()
+    text = draft.candidate(u, "collaboration", ["../src/a.png"], "a picture to read", "2026-01-02")
+    fm = text.split("---", 2)[1]
+    assert fm.lstrip().startswith("kind: candidate")
+    assert "candidate_type: collaboration" in fm and "id:" not in fm
+    assert "portfolio:\n  state: needs-conversion\n" in fm and "since: 2026-01-02" in fm
+    assert "# Order intake" in text
