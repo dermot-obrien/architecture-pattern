@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# The draft skill binds nothing of its own. It reads [suite.portfolio], [suite.pattern] and
+# [suite.use-case] of .agents/skill-bindings.toml through the portfolio skill, to find
+# placeholders and the documents related to them.
+#
+# Checked by:  python <skills>/draft/scripts/check.py
+
+[inputs]
+short_description = "Nothing to bind: the draft skill reads the portfolio's bindings"
