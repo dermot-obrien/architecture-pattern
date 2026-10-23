@@ -274,7 +274,8 @@ architecture pattern that the block makes concrete. Bass's reference architectur
 exactly this mapping of a reference model's functions onto software elements, and it
 need not be one to one: one block may realise two ABBs, and one ABB may take two
 blocks. Walk every ABB of every pattern in implements: each appears in Realises, or
-Risks and Trade-offs says it is a gap. A local role is allowed where no technology is
+Risks and Trade-offs says it is a gap. model validate (0.10.0 and later) warns on any it
+cannot find, as implements_uncovered. A local role is allowed where no technology is
 chosen yet; say why in Decisions.
 
 Write prose beneath this table ONLY for the architecturally significant components, as a
