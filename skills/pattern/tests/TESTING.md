@@ -108,7 +108,7 @@ These tests run automatically on every push and pull request via GitHub Actions:
 def test_new_pattern_feature(temp_workspace):
     """Test description."""
     # Create pattern directory
-    pattern_dir = temp_workspace / "patterns" / "PAT-XXX-test"
+    pattern_dir = temp_workspace / "patterns" / "AP-XXX-test"
     pattern_dir.mkdir(parents=True)
     
     # Create pattern content

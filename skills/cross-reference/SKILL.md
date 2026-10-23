@@ -4,7 +4,7 @@ description: Refer to another catalogue's architecture identifiers, such as its 
 license: CC-BY-4.0 AND Apache-2.0. Content under CC BY 4.0, code under Apache-2.0; see LICENSE and NOTICE.
 compatibility: Node 18+. No other skills and no npm packages. The Docusaurus plugins work with Docusaurus 3; the registers, CLI and check work with any static site generator or none.
 metadata:
-  version: "0.3.0"
+  version: "0.3.1"
   homepage: https://github.com/dermot-obrien/architecture-pattern
 ---
 
@@ -105,7 +105,7 @@ const local = fromRegister('registers/catalogue.csv');     // relative to the si
 remarkPlugins: [[require(`./${skill}/remark-xref.cjs`), {
   namespaces: 'registers/identifier-namespaces.csv',
   localUrlFor: local.localUrlFor,     // links to the Markdown file, relative to the page
-  bare: true,                         // also link PAT-004 written without a code
+  bare: true,                         // also link AP-004 written without a code
 }]],
 plugins: [[require.resolve(`./${skill}/id-routes.cjs`), {localMap: local.localMap}]],
 ```

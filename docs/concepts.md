@@ -116,7 +116,7 @@ A rendered view has a record beside it, `components.svg.render.json`, naming the
 
 ## Composite patterns
 
-A composite pattern's scenario steps run other patterns' flows, its participating patterns. A `Uses` column on the steps table names, on a participation step, the participating pattern's id and scenario key, `PAT-001 S1`, optionally with a role binding of its boxes to this pattern's, `PAT-001 S1 (01=01, 03=02)`, or `TBD <name>` for one not yet written. A scenario another pattern runs declares `Start:` and `Finish:` under its heading. An approved pattern cannot rest on an unapproved or unwritten one. [Composing patterns](composing.md) covers it in full.
+A composite pattern's scenario steps run other patterns' flows, its participating patterns. A `Uses` column on the steps table names, on a participation step, the participating pattern's id and scenario key, `AP-001 S1`, optionally with a role binding of its boxes to this pattern's, `AP-001 S1 (01=01, 03=02)`, or `TBD <name>` for one not yet written. A scenario another pattern runs declares `Start:` and `Finish:` under its heading. An approved pattern cannot rest on an unapproved or unwritten one. [Composing patterns](composing.md) covers it in full.
 
 ## Links from each box to its page
 

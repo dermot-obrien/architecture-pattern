@@ -83,7 +83,7 @@ test('bindings and the local map load from the workspace', () => {
   assert.equal(b.namespaces, '../registers/identifier-namespaces.csv');
   assert.equal(b.base, path.join(EXAMPLE, '.agents'));
   assert.deepEqual(b.scan, ['../docs']);
-  assert.equal(loadLocalMap(EXAMPLE, b).get('PAT-001'), 'patterns/pat-001/');
+  assert.equal(loadLocalMap(EXAMPLE, b).get('AP-001'), 'patterns/ap-001/');
 });
 
 function para(...children) {
@@ -139,11 +139,11 @@ test('id routes write redirects and the manifest', () => {
   const outDir = fs.mkdtempSync(path.join(os.tmpdir(), 'xref-out-'));
   const regs = loadRegisters({namespaces: reg('identifier-namespaces.csv')});
   const {manifest, pages} = writeIdRoutes({
-    outDir, baseUrl: '/catalogue/', map: new Map([['BB-001', '/blocks/bb-001'], ['PAT-001', '/patterns/pat-001#scenarios'], ['bad id', '/x']]),
+    outDir, baseUrl: '/catalogue/', map: new Map([['BB-001', '/blocks/bb-001'], ['AP-001', '/patterns/ap-001#scenarios'], ['bad id', '/x']]),
     self: regs.self, siteName: 'x', siteUrl: 'x',
   });
   assert.equal(pages, 4);
-  assert.deepEqual(manifest.ids, {'BB-001': 'blocks/bb-001/', 'PAT-001': 'patterns/pat-001/#scenarios'});
+  assert.deepEqual(manifest.ids, {'BB-001': 'blocks/bb-001/', 'AP-001': 'patterns/ap-001/#scenarios'});
   assert.equal(manifest.namespace, 'ex');
   assert.match(fs.readFileSync(path.join(outDir, 'id', 'bb-001', 'index.html'), 'utf8'), /url=\/catalogue\/blocks\/bb-001\//);
   assert.equal(pagePath('/'), '');
@@ -211,14 +211,14 @@ function tmpRegister() {
     fs.mkdirSync(path.dirname(path.join(dir, rel)), {recursive: true});
     fs.writeFileSync(path.join(dir, rel), text);
   };
-  write('docs/patterns/integration/PAT-001-order-intake/index.md', '# PAT-001 Order intake\n');
-  write('docs/patterns/platform/PAT-002-event-backbone/index.md', '# PAT-002 Event backbone\n');
-  write('docs/guide.md', 'See PAT-001.\n');
+  write('docs/patterns/integration/AP-001-order-intake/index.md', '# AP-001 Order intake\n');
+  write('docs/patterns/platform/AP-002-event-backbone/index.md', '# AP-002 Event backbone\n');
+  write('docs/guide.md', 'See AP-001.\n');
   write('registers/catalogue.csv', [
     'id,type,name,status,path,url,summary',
-    'PAT-001,pattern,Order intake,Approved,../docs/patterns/integration/PAT-001-order-intake,,"Accepts orders, all channels"',
-    'PAT-002,pattern,Event backbone,Draft,../docs/patterns/platform/PAT-002-event-backbone/index.md,,',
-    'PAT-003,pattern,Moved away,Draft,../docs/patterns/gone/PAT-003-x,,',
+    'AP-001,pattern,Order intake,Approved,../docs/patterns/integration/AP-001-order-intake,,"Accepts orders, all channels"',
+    'AP-002,pattern,Event backbone,Draft,../docs/patterns/platform/AP-002-event-backbone/index.md,,',
+    'AP-003,pattern,Moved away,Draft,../docs/patterns/gone/AP-003-x,,',
     'UC-001,use-case,Track an order,Draft,,https://wiki.example.org/uc-001,',
   ].join('\n') + '\n');
   return dir;
@@ -227,7 +227,7 @@ function tmpRegister() {
 test('the register is a local map, for the CLI', () => {
   const dir = tmpRegister();
   const map = registerToMap(path.join(dir, 'registers', 'catalogue.csv'));
-  assert.deepEqual([...map.keys()], ['PAT-001', 'PAT-002', 'PAT-003', 'UC-001']);
+  assert.deepEqual([...map.keys()], ['AP-001', 'AP-002', 'AP-003', 'UC-001']);
   assert.equal(map.get('UC-001'), 'https://wiki.example.org/uc-001');
   fs.mkdirSync(path.join(dir, '.agents'));
   fs.writeFileSync(path.join(dir, '.agents', 'skill-bindings.toml'),
@@ -238,16 +238,16 @@ test('the register is a local map, for the CLI', () => {
 test('fromRegister links a page to the file relative to it, and url wins', () => {
   const dir = tmpRegister();
   const local = fromRegister('registers/catalogue.csv', {root: dir});
-  assert.deepEqual(local.localUrlFor('PAT-001', {path: path.join(dir, 'docs', 'guide.md')}),
-    {url: './patterns/integration/PAT-001-order-intake/index.md', title: 'PAT-001 Order intake'});
-  assert.equal(local.localUrlFor('PAT-002', {path: path.join(dir, 'docs', 'patterns', 'integration', 'PAT-001-order-intake', 'index.md')}).url,
-    '../../platform/PAT-002-event-backbone/index.md');
-  assert.equal(local.localUrlFor('PAT-003', {path: path.join(dir, 'docs', 'guide.md')}), null, 'a path that names nothing');
+  assert.deepEqual(local.localUrlFor('AP-001', {path: path.join(dir, 'docs', 'guide.md')}),
+    {url: './patterns/integration/AP-001-order-intake/index.md', title: 'AP-001 Order intake'});
+  assert.equal(local.localUrlFor('AP-002', {path: path.join(dir, 'docs', 'patterns', 'integration', 'AP-001-order-intake', 'index.md')}).url,
+    '../../platform/AP-002-event-backbone/index.md');
+  assert.equal(local.localUrlFor('AP-003', {path: path.join(dir, 'docs', 'guide.md')}), null, 'a path that names nothing');
   assert.equal(local.localUrlFor('UC-001', {}).url, 'https://wiki.example.org/uc-001');
-  assert.equal(local.localUrlFor('PAT-001', {path: path.join(dir, 'docs/patterns/integration/PAT-001-order-intake/index.md')}), null, 'never the page itself');
-  const routes = new Map([['docs/patterns/integration/PAT-001-order-intake/index.md', '/patterns/order-intake/']]);
+  assert.equal(local.localUrlFor('AP-001', {path: path.join(dir, 'docs/patterns/integration/AP-001-order-intake/index.md')}), null, 'never the page itself');
+  const routes = new Map([['docs/patterns/integration/AP-001-order-intake/index.md', '/patterns/order-intake/']]);
   assert.deepEqual([...local.localMap({routes})], [
-    ['PAT-001', '/patterns/order-intake/'],
+    ['AP-001', '/patterns/order-intake/'],
     ['UC-001', 'https://wiki.example.org/uc-001'],
   ]);
 });
@@ -264,18 +264,18 @@ test('bare identifiers link when asked, only when known, and never in a heading'
     onWarn: (m) => warnings.push(m),
   });
   const tree = {type: 'root', children: [
-    {type: 'heading', depth: 1, children: [{type: 'text', value: 'PAT-001 in a heading'}]},
-    {type: 'paragraph', children: [{type: 'text', value: 'PAT-001, ISO-9001, x-PAT-002, ex:PAT-002 and ops:BB-024.'}]},
+    {type: 'heading', depth: 1, children: [{type: 'text', value: 'AP-001 in a heading'}]},
+    {type: 'paragraph', children: [{type: 'text', value: 'AP-001, ISO-9001, x-AP-002, ex:AP-002 and ops:BB-024.'}]},
   ]};
   plugin(tree, {path: path.join(dir, 'docs', 'guide.md')});
   assert.equal(tree.children[0].children.length, 1, 'the heading is untouched');
   const links = tree.children[1].children.filter((k) => k.type === 'link');
-  assert.deepEqual(links.map((l) => l.children[0].value), ['PAT-001', 'ex:PAT-002', 'ops:BB-024']);
-  assert.equal(links[0].title, 'PAT-001 Order intake');
+  assert.deepEqual(links.map((l) => l.children[0].value), ['AP-001', 'ex:AP-002', 'ops:BB-024']);
+  assert.equal(links[0].title, 'AP-001 Order intake');
   assert.deepEqual(warnings, []);
   // Without the option a bare identifier stays text, as before.
   const off = remarkXref({root: EXAMPLE, namespaces: 'registers/identifier-namespaces.csv', localUrlFor: local.localUrlFor, onWarn: () => {}});
-  const t2 = para({type: 'text', value: 'PAT-001 here'});
+  const t2 = para({type: 'text', value: 'AP-001 here'});
   off(t2, {path: path.join(dir, 'docs', 'guide.md')});
   assert.equal(t2.children[0].children.length, 1);
 });

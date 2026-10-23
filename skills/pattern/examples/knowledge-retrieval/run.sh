@@ -24,5 +24,5 @@ python "$MODEL" render components.drawio --out components.svg --layer Structure
 python "$MODEL" animate index.md
 
 echo "6. publish the deck"
-node "$DECK" build index.md --out dist --theme default --eyebrow "PAT-900 Knowledge Retrieval"
+node "$DECK" build index.md --out dist --theme default --eyebrow "AP-900 Knowledge Retrieval"
 node "$DECK" pdf dist/deck.html --out dist/deck.pdf

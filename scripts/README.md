@@ -107,13 +107,13 @@ The script will:
 
 **Example output:**
 ```
-[PAT-001] ✓ Order Intake Pattern
+[AP-001] ✓ Order Intake Pattern
   Version: 1.0
-  Path: ./patterns/PAT-001-order-intake
+  Path: ./patterns/AP-001-order-intake
 
-[PAT-002] ✗ Event-Driven Architecture
+[AP-002] ✗ Event-Driven Architecture
   Version: 2.1
-  Path: ./patterns/PAT-002-event-driven
+  Path: ./patterns/AP-002-event-driven
   Validation:
     warning: diagram drift detected in components.drawio
 ```

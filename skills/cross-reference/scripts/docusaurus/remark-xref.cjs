@@ -24,7 +24,7 @@
  *     localUrlFor: (id) => '/abbs/abb-024',                // or localMap: () => Map of id -> path
  *   }]]
  *
- * bare: true also links an identifier written without a code, PAT-004, when localUrlFor or
+ * bare: true also links an identifier written without a code, AP-004, when localUrlFor or
  * localMap knows it. One it does not know is left alone without a warning, since text is
  * full of things shaped like identifiers (ISO-9001). Never inside a heading, so a page's
  * own title is not a link.

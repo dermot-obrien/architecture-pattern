@@ -27,8 +27,8 @@ Install the three skills into a workspace (below), bind it in `.agents/skill-bin
 
 ```
 python .agents/skills/pattern/scripts/check.py
-python .agents/skills/model/bin/model.py emit patterns/PAT-001-order-intake/index.md --to drawio --out patterns/PAT-001-order-intake/components.drawio
-python .agents/skills/model/bin/model.py validate patterns/PAT-001-order-intake/index.md
+python .agents/skills/model/bin/model.py emit patterns/AP-001-order-intake/index.md --to drawio --out patterns/AP-001-order-intake/components.drawio
+python .agents/skills/model/bin/model.py validate patterns/AP-001-order-intake/index.md
 python .agents/skills/pattern/scripts/publish.py patterns --recursive
 ```
 
@@ -38,6 +38,7 @@ Or ask your agent for a pattern and it does the same. The [quick start](docs/qui
 
 | Page | For |
 |---|---|
+| [Architect's guide](docs/architect-guide.md) | The minimum steps to install the skills, then edit, check and publish architecture patterns and reference architectures, standalone |
 | [Quick start](docs/quick-start.md) | From nothing to a published pattern, its view, walkthrough, deck and PDF, and a composite pattern |
 | [Concepts](docs/concepts.md) | What a pattern is, and the ideas behind the tables, the diagram, the walkthrough and the deck |
 | [Releasing](docs/RELEASING.md) | **For maintainers:** How to create releases, manage version dependencies, and coordinate tags across repositories |

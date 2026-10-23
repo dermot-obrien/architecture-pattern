@@ -2,6 +2,12 @@
 
 # Changelog
 
+## [0.3.1] - 2026-10-17
+
+### Changed
+
+- The example catalogue, the specification's example and the tests use the `AP` series, the architecture pattern's, in place of the retired `PAT`.
+
 ## [0.3.0] - 2026-10-15
 
 ### Added

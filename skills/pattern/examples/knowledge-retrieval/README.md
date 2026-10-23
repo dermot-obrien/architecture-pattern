@@ -1,6 +1,6 @@
 <!-- SPDX-License-Identifier: CC-BY-4.0 -->
 
-# Worked example: PAT-900 Knowledge Retrieval
+# Worked example: AP-900 Knowledge Retrieval
 
 Everything here is generated from one file, [index.md](./index.md). The building block identifiers and names are invented for the example; the composition is illustrative, not an approved architecture.
 

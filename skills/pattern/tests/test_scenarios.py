@@ -15,18 +15,18 @@ from pathlib import Path
 
 def test_single_scenario_pattern(temp_workspace):
     """Test pattern with single simple scenario."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-020-single"
+    pattern_dir = temp_workspace / "patterns" / "AP-020-single"
     pattern_dir.mkdir(parents=True)
     
     pattern_content = """---
-title: "PAT-020 Single Scenario"
+title: "AP-020 Single Scenario"
 pattern_scope: problem
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-020 Single Scenario
+# AP-020 Single Scenario
 
 ## Building Blocks
 
@@ -67,18 +67,18 @@ Finish: 02 Server
 
 def test_multiple_scenarios_pattern(temp_workspace):
     """Test pattern with 5 different scenarios."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-021-multi"
+    pattern_dir = temp_workspace / "patterns" / "AP-021-multi"
     pattern_dir.mkdir(parents=True)
     
     pattern_content = """---
-title: "PAT-021 Multiple Scenarios"
+title: "AP-021 Multiple Scenarios"
 pattern_scope: solution
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-021 Multiple Scenarios
+# AP-021 Multiple Scenarios
 
 ## Building Blocks
 
@@ -185,18 +185,18 @@ Finish: 05 Database
 
 def test_long_scenario_many_steps(temp_workspace):
     """Test scenario with 15+ steps."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-022-long"
+    pattern_dir = temp_workspace / "patterns" / "AP-022-long"
     pattern_dir.mkdir(parents=True)
     
     pattern_content = """---
-title: "PAT-022 Long Scenario"
+title: "AP-022 Long Scenario"
 pattern_scope: capability-area
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-022 Long Scenario
+# AP-022 Long Scenario
 
 ## Building Blocks
 
@@ -284,18 +284,18 @@ Finish: 09 Primary Database
 
 def test_scenario_with_explicit_start_finish(temp_workspace):
     """Test that Start and Finish are explicitly declared."""
-    pattern_dir = temp_workspace / "patterns" / "PAT-023-explicit"
+    pattern_dir = temp_workspace / "patterns" / "AP-023-explicit"
     pattern_dir.mkdir(parents=True)
     
     pattern_content = """---
-title: "PAT-023 Explicit Start/Finish"
+title: "AP-023 Explicit Start/Finish"
 pattern_scope: problem
 status: Draft
 model:
   diagram: components.drawio
 ---
 
-# PAT-023 Explicit Start/Finish
+# AP-023 Explicit Start/Finish
 
 ## Building Blocks
 

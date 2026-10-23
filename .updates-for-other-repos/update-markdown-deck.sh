@@ -1,4 +1,6 @@
 #!/bin/bash
+# SPDX-FileCopyrightText: 2026 Dermot O'Brien
+# SPDX-License-Identifier: Apache-2.0
 # Update markdown-deck skill
 # Usage: ./scripts/update-markdown-deck.sh [--user] [--check-only]
 

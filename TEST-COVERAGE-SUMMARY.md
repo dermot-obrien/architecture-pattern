@@ -102,13 +102,13 @@ Tests pattern composition and participation:
 
 ✅ **Simple Composite**
 - One pattern calls another
-- PAT-031 Composite uses PAT-030 Base Pattern
+- AP-031 Composite uses AP-030 Base Pattern
 - Role bindings (01=02, 03=02)
 
 ✅ **Multi-Level Composition** (3 levels deep)
-- Level 1: PAT-032 Base
-- Level 2: PAT-033 uses PAT-032
-- Level 3: PAT-034 uses PAT-033
+- Level 1: AP-032 Base
+- Level 2: AP-033 uses AP-032
+- Level 3: AP-034 uses AP-033
 - Tests transitive composition
 
 ✅ **Open Participating Pattern**
@@ -118,7 +118,7 @@ Tests pattern composition and participation:
 
 ✅ **Approval Gate Enforcement**
 - Approved patterns CANNOT reference Draft patterns
-- PAT-037 (Approved) referencing PAT-036 (Draft) should FAIL
+- AP-037 (Approved) referencing AP-036 (Draft) should FAIL
 - Tests status hierarchy enforcement
 
 ### 5. Edge Cases (`test_edge_cases.py`) - 13 Tests
