@@ -2,6 +2,12 @@
 
 # Changelog
 
+## [0.3.2] - 2026-10-28
+
+### Changed
+
+- `realised_by` may name solution designs (`SD-NNN`) as well as architecture patterns and reference architectures, now that the pattern skill 0.13.0 ships a solution design template. Requires pattern ^0.13.0.
+
 ## [0.3.1] - 2026-10-17
 
 ### Changed

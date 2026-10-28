@@ -70,9 +70,14 @@ physical = "none"     # ABBs and local roles only
 label    = "Reference architecture"
 idSeries = "RA"
 physical = "most"     # mainly SBBs and products
+
+[suite.pattern.types.solution-design]
+label    = "Solution design"
+idSeries = "SD"
+physical = "most"     # one solution, built from products and services
 ```
 
-A document's type is its front matter `pattern_type`, or else the type whose series its identifier carries, so `RA-007` is a reference architecture. `model validate` warns when its boxes do not fit, an SBB in an architecture pattern say. A reference architecture names the architecture pattern it makes concrete, `implements: [AP-004]`, as an SBB realises an ABB, and `validate` checks that pattern exists. With no types bound, every pattern is just a pattern, in `idSeries`. A catalogue declares its level in the binding (`[[catalogues]] level`), which is how `validate` knows what a `COMP-001` is.
+A document's type is its front matter `pattern_type`, or else the type whose series its identifier carries, so `RA-007` is a reference architecture. `model validate` warns when its boxes do not fit, an SBB in an architecture pattern say. A reference architecture names the architecture pattern it makes concrete, `implements: [AP-004]`, as an SBB realises an ABB, and `validate` checks that pattern exists. A solution design instantiates one of them for one consumer, `implements: [RA-004]`, and is the document a team builds and runs from. Its shipped template adds what a solution has and a pattern does not: who uses it, where it sits, its trust zones and data, how it realises its pattern, its models, agents and evals, its operations and its evidence. Each table's columns are the fields a design assessment reads, so the document can be turned into a design specification row by row. With no types bound, every pattern is just a pattern, in `idSeries`. A catalogue declares its level in the binding (`[[catalogues]] level`), which is how `validate` knows what a `COMP-001` is.
 
 ## The tables are the model
 
