@@ -137,7 +137,7 @@ jobs:
           # The example's tables, so the shipped templates are checked against a real contract.
           sed -n '/^\[model\]/,/^\[rules\]/p' skills/pattern/examples/knowledge-retrieval/model.toml | sed '$d' > /tmp/ws/tables.toml
           printf 'bindingsVersion = "1.0"\n\n' | cat - /tmp/ws/tables.toml > /tmp/ws/.agents/skill-bindings.toml
-          printf '\n[suite.pattern]\noutputDir = "../patterns"\n\n[suite.pattern.types.architecture-pattern]\nidSeries = "AP"\nphysical = "none"\n\n[suite.pattern.types.reference-architecture]\nidSeries = "RA"\nphysical = "most"\n\n[suite.use-case]\nidSeries = "UC"\n\n[suite.cross-reference]\nnamespaces = "../namespaces.csv"\n' >> /tmp/ws/.agents/skill-bindings.toml
+          printf '\n[suite.pattern]\noutputDir = "../patterns"\n\n[suite.pattern.types.architecture-pattern]\nidSeries = "AP"\nphysical = "none"\n\n[suite.pattern.types.reference-architecture]\nidSeries = "RA"\nphysical = "most"\n\n[suite.pattern.types.solution-design]\nidSeries = "SD"\nphysical = "most"\n\n[suite.use-case]\nidSeries = "UC"\n\n[suite.cross-reference]\nnamespaces = "../namespaces.csv"\n' >> /tmp/ws/.agents/skill-bindings.toml
           node scripts/validate-bundle.mjs --run-checks /tmp/ws --skills skills .
       - name: The worked example agrees with itself, without draw.io
         working-directory: skills/pattern/examples/knowledge-retrieval

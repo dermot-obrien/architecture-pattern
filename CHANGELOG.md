@@ -18,17 +18,29 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - The draft skill: writes a first draft of a placeholder from research in the repository and online, in the proper template, citing every source, and marks it as an AI-generated draft for review. See [its changelog](skills/draft/CHANGELOG.md).
 
-## [pattern 0.13.0] - 2026-10-18
+## [pattern 0.14.0] - 2026-10-28
 
 ### Changed
 
-- The shipped templates carry `kind: pattern`, the signature the portfolio skill finds a pattern by.
+- The shipped templates, the solution design template among them, carry `kind: pattern`, the signature the portfolio skill finds a pattern by.
 
-## [use-case 0.4.0] - 2026-10-18
+## [use-case 0.4.0] - 2026-10-28
 
 ### Changed
 
 - The template carries `kind: use-case`, the signature the portfolio skill finds a use case by.
+
+## [pattern 0.13.0] - 2026-10-28
+
+### Added
+
+- A third shipped template, `assets/templates/solution-design.md`, for a `solution-design` type (`SD`): one solution, for one consumer, that a team builds and runs, instantiating the reference architecture or architecture pattern it names in `implements`. Its tables carry the fields of a design specification (who uses it, where it sits, trust zones and data, pattern realisation, model-backed components, agents, evals, quality, failure and misuse scenarios, fitness functions, operations, decisions, open questions, risks and evidence), in the specification's own vocabulary, so the architecture skill's `specify` flow translates it table by table.
+
+## [use-case 0.3.2] - 2026-10-28
+
+### Changed
+
+- `realised_by` may name solution designs (`SD-NNN`) as well. Requires pattern ^0.13.0.
 
 ## [pattern 0.12.0] - 2026-10-17
 

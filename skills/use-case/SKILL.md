@@ -6,7 +6,7 @@ compatibility: Python 3.11+ and Node 18+. Requires the `pattern` skill (this rep
 metadata:
   version: "0.4.0"
   homepage: https://github.com/dermot-obrien/architecture-pattern
-  x-skill-requires: "pkg:generic/dermot-obrien/architecture-pattern/pattern ^0.13.0, pkg:generic/dermot-obrien/diagram-model/model ^0.9.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
+  x-skill-requires: "pkg:generic/dermot-obrien/architecture-pattern/pattern ^0.14.0, pkg:generic/dermot-obrien/diagram-model/model ^0.9.0, pkg:generic/dermot-obrien/markdown-deck/markdown-deck ^0.6.0"
 ---
 
 # Use case
@@ -140,7 +140,7 @@ When the user says a local use case has been endorsed:
 
 ## Use cases and patterns
 
-A use case lists the patterns that realise it in its front matter, `realised_by: [AP-004]`, and in its header table. A pattern that serves a use case can say so in its Intent. Write the use case first when the question is whether to build something; write the pattern first when the question is how. Neither validates the other yet.
+A use case lists the patterns that realise it in its front matter, `realised_by: [AP-004]`, and in its header table: architecture patterns (`AP-NNN`), reference architectures (`RA-NNN`) and solution designs (`SD-NNN`). A pattern that serves a use case can say so in its Intent. Write the use case first when the question is whether to build something; write the pattern first when the question is how. Neither validates the other yet.
 
 ## Rules that are easy to get wrong
 

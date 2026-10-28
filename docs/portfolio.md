@@ -29,7 +29,7 @@ A document is a pattern because its front matter says so, and for no other reaso
 | `kind: use-case` | A use case, `UC-NNN` |
 | `kind: candidate` | A possible pattern, not formally one yet |
 
-This is the continuum's front matter standard, so the same pages pass the continuum's check. The pattern and use-case templates carry `kind` from pattern 0.13.0 and use-case 0.4.0, so everything new is signed from the start.
+This is the continuum's front matter standard, so the same pages pass the continuum's check. The pattern and use-case templates carry `kind` from pattern 0.14.0 and use-case 0.4.0, so everything new is signed from the start.
 
 The portfolio's own fields sit in one optional block:
 

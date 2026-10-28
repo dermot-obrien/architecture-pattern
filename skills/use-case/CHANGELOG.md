@@ -2,12 +2,18 @@
 
 # Changelog
 
-## [0.4.0] - 2026-10-18
+## [0.4.0] - 2026-10-28
 
 ### Changed
 
 - The template, and the worked example, carry `kind: use-case`, the signature by which the portfolio skill finds a use case. `document_type: use-case` stays for tools that read it.
-- Requires pattern 0.13.0.
+- Requires pattern ^0.14.0, whose templates carry `kind: pattern`.
+
+## [0.3.2] - 2026-10-28
+
+### Changed
+
+- `realised_by` may name solution designs (`SD-NNN`) as well as architecture patterns and reference architectures, now that the pattern skill 0.13.0 ships a solution design template. Requires pattern ^0.13.0.
 
 ## [0.3.1] - 2026-10-17
 

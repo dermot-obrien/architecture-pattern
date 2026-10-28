@@ -2,11 +2,18 @@
 
 # Changelog
 
-## [0.13.0] - 2026-10-18
+## [0.14.0] - 2026-10-28
 
 ### Changed
 
 - The shipped templates, and the worked examples, carry `kind: pattern`: the signature the continuum's front matter standard gives a pattern, by which the portfolio skill finds it. With `pattern_type` beside it, a document says what it is in its front matter, and no tool reads its file or folder name to decide.
+
+## [0.13.0] - 2026-10-28
+
+### Added
+
+- A third shipped template, `assets/templates/solution-design.md`, for a `solution-design` type: one solution, for one consumer, that a team builds and runs, instantiating the reference architecture or architecture pattern it names in `implements`. On top of a reference architecture's sections it has tables for who uses the solution, where it sits in the catalogue, stakeholders, constraints, assumptions and obligations, trust zones and data sets, how each building block of the implemented pattern is realised (and any departure), model-backed components, agents, grounding and output handling, evals with separate false positive and false negative ceilings, quality, failure and misuse scenarios with measures, fitness functions, operations, open questions and evidence with its date and design version. Each table's columns are the fields a design assessment reads, so a design specification can be produced from the document row by row. Bind it with `[suite.pattern.types.solution-design]`, `idSeries = "SD"`; `template.py which --type solution-design` finds it with no `template` binding.
+- `SKILL.md` describes the solution design, and says that it records no target-state position and no assessment outcome.
 
 ## [0.12.0] - 2026-10-17
 
