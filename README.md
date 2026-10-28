@@ -68,13 +68,34 @@ Install all three skills wherever your agent reads skills, `use-case` beside the
 | `.claude/skills/` in the project | Claude Code, and also VS Code with GitHub Copilot and Cursor |
 | `~/.agents/skills/`, `~/.copilot/skills/`, `~/.cursor/skills/`, `~/.claude/skills/` | The same tools, for every project |
 
-A directory in the project installs the skills for that workspace; one under your home folder installs them for every project. This repository has no installer of its own. Whichever route you use, run the post-install check from the workspace root afterwards: `python <skills>/pattern/scripts/check.py`, and `python <skills>/use-case/scripts/check.py` for `use-case`.
+A directory in the project installs the skills for that workspace; one under your home folder installs them for every project. The install script installs or updates them all in one run; the routes after it do the same by hand. Whichever route you use, run each skill's post-install check from the workspace root afterwards, such as `python <skills>/pattern/scripts/check.py` (the script runs them for you).
+
+### With the install script
+
+Run from the root of the repository to install into. It installs every skill of the latest release (`pattern`, `use-case`, `cross-reference`, `portfolio`, `draft`, `convert`) with `model` and `markdown-deck` into `.agents/skills/`, runs `npm install` for `markdown-deck` and runs each skill's check. Run it again to update: it backs up the installed copies first. `-Skills pattern,use-case` (bash: `--skills pattern,use-case`) installs only those, and `-CheckOnly` (`--check-only`) shows what it would do. In a workspace that declares its skills in `.agents/skills.json`, as [Architecture Continuum](https://github.com/dermot-obrien/architecture-continuum) installs them, it moves each declared skill to its latest release tag and reinstalls with the workspace's own installer instead.
+
+PowerShell:
+
+```powershell
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/dermot-obrien/architecture-pattern/main/scripts/update-skills.ps1" -OutFile update-skills.ps1
+.\update-skills.ps1
+```
+
+bash:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/dermot-obrien/architecture-pattern/main/scripts/update-skills.sh -o update-skills.sh
+bash update-skills.sh
+```
 
 ### With the GitHub CLI, for any agent
 
 ```bash
 gh skill install dermot-obrien/architecture-pattern pattern
 gh skill install dermot-obrien/architecture-pattern use-case   # optional
+gh skill install dermot-obrien/architecture-pattern convert    # optional: bring existing diagrams in
+gh skill install dermot-obrien/architecture-pattern portfolio  # optional: manage the patterns as a portfolio
+gh skill install dermot-obrien/architecture-pattern draft      # optional: draft placeholders, with portfolio
 gh skill install dermot-obrien/diagram-model model
 gh skill install dermot-obrien/markdown-deck markdown-deck
 # --agent github-copilot|cursor|claude-code|codex|gemini-cli|... chooses the host
@@ -88,15 +109,15 @@ gh skill install dermot-obrien/markdown-deck markdown-deck
 Clone each repository at a release tag and copy its skill folder. This works with any agent; the [quick start](docs/quick-start.md#2-make-a-workspace-and-install-the-three-skills) has the same commands for PowerShell.
 
 ```bash
-git clone --depth 1 --branch use-case--v0.2.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
-git clone --depth 1 --branch model--v0.8.2 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
+git clone --depth 1 --branch pattern--v0.15.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
+git clone --depth 1 --branch model--v0.9.2 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
 git clone --depth 1 --branch markdown-deck--v0.6.8 https://github.com/dermot-obrien/markdown-deck.git _src/markdown-deck
 mkdir -p .agents/skills
 cp -r _src/architecture-pattern/skills/pattern _src/architecture-pattern/skills/use-case _src/diagram-model/skills/model _src/markdown-deck/skills/markdown-deck .agents/skills/
 rm -rf _src
 ```
 
-Copy into `.claude/skills`, `.cursor/skills`, `.github/skills` or a home directory from the table instead of `.agents/skills` to suit your agent. Release tags are named `<skill>--v<version>`; the `use-case--v0.2.0` tag also carries `pattern` 0.10.3, and the three above were tested together. Leave out `use-case` if you do not write use cases. For a user-level install, copy into `~/.agents/skills` (or your agent's own) and run the check from any workspace.
+Copy into `.claude/skills`, `.cursor/skills`, `.github/skills` or a home directory from the table instead of `.agents/skills` to suit your agent. Release tags are named `<skill>--v<version>`. Every skill a release changes is tagged on the same commit, so the `pattern--v0.15.0` clone also carries use-case 0.4.1, cross-reference 0.3.1, and portfolio, draft and convert 0.1.0; copy any of them from `_src/architecture-pattern/skills/` the same way. The three tags above were tested together. Leave out `use-case` if you do not write use cases. For a user-level install, copy into `~/.agents/skills` (or your agent's own) and run the check from any workspace.
 
 ### VS Code with GitHub Copilot, or Cursor
 
@@ -136,15 +157,16 @@ An installed skill is a copy. Pulling this repository, or a newer release appear
 
 | How you installed | To update |
 |---|---|
+| The install script | Run it again. It backs up the installed copies, installs the latest release and runs the checks |
 | GitHub CLI | Run the same `gh skill install` commands again |
 | git | Fetch the newer tags (or `git pull` a clone you keep), delete each installed skill folder, copy it again from the clone, as in [With git](#with-git-for-any-agent). Deleting first matters: copying over the top leaves files a release removed |
 | Claude Code plugin | `/plugin marketplace update architecture-pattern`, and the same for `diagram-model` and `markdown-deck`, then reinstall the plugins |
-| A workspace installer that pins each source to a commit | Move the pin to the new commit, run the installer, and commit the pin with whatever the update changes |
+| A workspace that declares its skills in `.agents/skills.json` | Run the install script, which moves each declared skill to its latest release tag and reinstalls with the workspace's installer; or move the pins by hand and run the installer. Commit the declaration and the lock |
 
 Then, every time:
 
 1. `npm install` again in the installed `markdown-deck` folder if `markdown-deck` changed.
-2. Run each post-install check from the workspace root, `python <skills>/pattern/scripts/check.py` and `python <skills>/use-case/scripts/check.py`. Both must end `ok`. A new release can add a required binding, which the check names.
+2. Run each installed skill's post-install check from the workspace root, such as `python <skills>/pattern/scripts/check.py` and `python <skills>/use-case/scripts/check.py`. Each must end `ok`. A new release can add a required binding, which the check names.
 3. Republish a pattern or use case you rely on, `publish.py <folder>`, to see that it still builds.
 
 Never edit an installed copy: the next install overwrites it. Keep your own configuration in `.agents/skill-bindings.toml`, your own template and your own theme, which an update never touches, and give changes to the skills back here (see [CONTRIBUTING](CONTRIBUTING.md#open-source-and-giving-improvements-back)).

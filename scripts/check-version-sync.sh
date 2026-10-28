@@ -37,11 +37,13 @@ else
     echo "  ✓ pattern version matches"
 fi
 
-if ! grep -q "model--v$REQUIRED_MODEL" docs/quick-start.md; then
-    echo "  ✗ Error: quick-start.md doesn't reference model--v$REQUIRED_MODEL"
+# For model, allow any patch version >= minimum, as for markdown-deck
+MODEL_MINOR_PREFIX=$(echo "$REQUIRED_MODEL" | cut -d. -f1-2)
+if ! grep -qE "model--v${MODEL_MINOR_PREFIX//./\\.}\.[0-9]+" docs/quick-start.md; then
+    echo "  ✗ Error: quick-start.md doesn't reference model--v${MODEL_MINOR_PREFIX}.x"
     ERRORS=$((ERRORS + 1))
 else
-    echo "  ✓ model version matches"
+    echo "  ✓ model version compatible (>= v$REQUIRED_MODEL)"
 fi
 
 # For markdown-deck, allow any patch version >= minimum
@@ -57,8 +59,12 @@ fi
 # Check README.md
 echo ""
 echo "Checking README.md..."
-# README should mention the dependencies but doesn't pin versions - that's OK
-echo "  + (version-agnostic references only)"
+if ! grep -q "pattern--v$PATTERN_VERSION" README.md; then
+    echo "  ✗ Error: README.md doesn't reference pattern--v$PATTERN_VERSION"
+    ERRORS=$((ERRORS + 1))
+else
+    echo "  ✓ pattern version matches"
+fi
 
 # Check update scripts reference the right repos
 echo ""
@@ -96,9 +102,9 @@ echo "  + Repository URLs correct"
 # Check that tags exist locally for current skill versions
 echo ""
 echo "Checking if current skill versions are tagged..."
-for skill in "pattern:$PATTERN_VERSION" "use-case:$USE_CASE_VERSION" "cross-reference:$XREF_VERSION"; do
-    SKILL_NAME=$(echo "$skill" | cut -d: -f1)
-    VERSION=$(echo "$skill" | cut -d: -f2)
+for skill_md in skills/*/SKILL.md; do
+    SKILL_NAME=$(basename "$(dirname "$skill_md")")
+    VERSION=$(grep 'version:' "$skill_md" | head -1 | sed 's/.*"\(.*\)".*/\1/')
     TAG="${SKILL_NAME}--v${VERSION}"
     
     if git tag -l "$TAG" | grep -q "$TAG"; then

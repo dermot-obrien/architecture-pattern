@@ -58,27 +58,27 @@ Checking docs/quick-start.md...
 
 ### `update-skills.sh` / `update-skills.ps1`
 
-Automatically update the pattern, use-case, cross-reference, model, and markdown-deck skills to the latest versions.
+Install the skills into a repository, or update them to the latest releases. A first install and an update are the same run. Run from the root of the repository the skills go into.
 
-**Usage:**
 ```bash
-# Bash (run from repository root)
-./scripts/update-skills.sh              # Update skills in .agents/skills
-./scripts/update-skills.sh --check-only # Check versions without updating
-
-# PowerShell (run from repository root)
-.\scripts\update-skills.ps1             # Update skills in .agents\skills
-.\scripts\update-skills.ps1 -CheckOnly  # Check versions without updating
+bash update-skills.sh                            # install or update every skill of the latest release
+bash update-skills.sh --check-only               # what would change, changing nothing
+bash update-skills.sh --skills pattern,use-case  # only these (copies), or add these (a declaration)
+bash update-skills.sh --yes                      # do not ask first
 ```
 
-**Important:** Always run from your repository root directory. Skills are installed in `.agents/skills` in the current directory only.
+```powershell
+.\update-skills.ps1
+.\update-skills.ps1 -CheckOnly
+.\update-skills.ps1 -Skills pattern,use-case
+.\update-skills.ps1 -Yes
+```
 
-The script will:
-1. Check current vs latest versions
-2. Backup your current installation to `.skill-backups/`
-3. Download and install latest versions
-4. Run `npm install` for markdown-deck
-5. Verify all installations
+With copies in `.agents/skills/` (no `.agents/skills.json`), it reads the latest release's `bundle.json` and installs every skill it lists (`pattern`, `use-case`, `cross-reference`, `portfolio`, `draft`, `convert`), with the latest `model` and `markdown-deck`: it backs up any installed copy to `.skill-backups/<time>/`, copies the new ones, runs `npm install` for `markdown-deck`, and runs each skill's post-install check from `bundle.json`. A skill added to a later release is installed with no change to the script.
+
+With a `.agents/skills.json`, it moves each declared skill to its latest `<skill>--v` tag (and the Architecture Continuum bundle to its latest release), adds any skill named with `--skills`, and reinstalls with the workspace's own installer: `scripts/architecture.mjs reinit`, else `scripts/skills.mjs sync --copy`.
+
+Needs git, Node 18 or later and Python 3.11 or later. [Updating](../docs/updating.md) has the details for users.
 
 ## List Scripts
 
