@@ -1,0 +1,13 @@
+architecture-pattern: convert
+Copyright 2026 Dermot O'Brien
+
+This product is licensed under CC BY 4.0 (content) and Apache-2.0 (code).
+See LICENSE and the texts in LICENSES/.
+
+Origin
+------
+
+The convert skill was written in this repository, architecture-pattern, and first
+released here as convert 0.1.0. It drives the pattern and use-case skills of this
+repository and the model skill of diagram-model, and is not derived from another
+product.

@@ -1,4 +1,6 @@
 ---
+# The portfolio signature: the continuum front matter standard says what this document is.
+kind: pattern
 sidebar_label: Pattern Template
 status: Draft
 # Optional. One of the pattern types your repository binds, such as architecture-pattern or

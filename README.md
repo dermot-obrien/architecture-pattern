@@ -6,13 +6,16 @@ Author an architecture pattern, at any scope from one recurring problem to a who
 
 The document's tables generate the draw.io diagram and its numbered scenario overlays, and are validated against it, so a diagram that drifts is caught rather than believed. The document's tagged sections publish as HTML slides and a PDF.
 
-This repository ships three [Agent Skills](https://agentskills.io/specification), usable in VS Code with GitHub Copilot, Cursor, Claude Code, Codex, Gemini CLI and any other agent that reads the format. Nothing in them assumes a particular agent, IDE or organisation.
+This repository ships six [Agent Skills](https://agentskills.io/specification), usable in VS Code with GitHub Copilot, Cursor, Claude Code, Codex, Gemini CLI and any other agent that reads the format. Nothing in them assumes a particular agent, IDE or organisation.
 
 | Skill | What it writes |
 |---|---|
 | `pattern` | An architecture pattern: how a solution is built |
 | `use-case` | A use case: what a solution does for someone and what it needs, before anyone designs how it is built. It publishes with `pattern`'s tools; see [use cases](docs/use-cases.md) |
+| `convert` | Any of the above from existing material: a diagram in draw.io, SVG or PNG with whatever notes go with it becomes an architecture pattern, a reference architecture, a use case or a collaboration, with the originals archived. See [converting](docs/converting.md) |
 | `cross-reference` | References to another catalogue's building blocks and patterns, `ops:ABB-024`, without clashes, and stable addresses for your own. It needs only Node; see [cross-references](docs/cross-references.md) |
+| `portfolio` | The repository's patterns as a managed portfolio: an inventory page, tags for what needs conversion or deprecation, an archive kept with `git mv`, and placeholders from a backlog. It finds patterns only by the signature in their front matter; see [the portfolio](docs/portfolio.md) |
+| `draft` | A first draft of a placeholder, from research in the repository and online, citing every source and marked for review; see [drafting a placeholder](docs/portfolio.md#drafting-a-placeholder) |
 
 `pattern` is composition. It depends on two skills that are useful on their own and live in their own repositories:
 
@@ -49,11 +52,13 @@ Or ask your agent for a pattern and it does the same. The [quick start](docs/qui
 | [Troubleshooting](docs/troubleshooting.md) | Each error and warning message, and its fix |
 | [Examples](docs/examples.md) | The worked examples and what each shows |
 | [Use cases](docs/use-cases.md) | The `use-case` skill: binding it, writing a use case, adapting the template |
+| [Converting](docs/converting.md) | The `convert` skill: pointing it at existing diagrams and notes, what it reads, the four types, archiving, and completing the result |
 | [Cross-references](docs/cross-references.md) | The `cross-reference` skill: namespace codes, the two registers, checking references, the Docusaurus plugins |
+| [The portfolio](docs/portfolio.md) | The `portfolio` and `draft` skills: the signature, the inventory, tagging and archiving, backlogs and placeholders, drafting from research, and cleaning out a repository |
 
 ## Install
 
-Install all three skills wherever your agent reads skills, and `use-case` beside them if you write use cases. They need not be in the same directory.
+Install all three skills wherever your agent reads skills, `use-case` beside them if you write use cases, and `convert` with both if you bring in existing material. They need not be in the same directory.
 
 | Directory | Read by |
 |---|---|

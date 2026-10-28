@@ -1,0 +1,12 @@
+architecture-pattern: draft skill
+Copyright 2026 Dermot O'Brien
+
+This product is licensed under CC BY 4.0 (content) and Apache-2.0 (code).
+See LICENSE and the texts in LICENSES/.
+
+Origin
+------
+
+Written in this repository and first released as draft 0.1.0. It reads and
+writes front matter with the portfolio skill's library rather than shipping
+its own.

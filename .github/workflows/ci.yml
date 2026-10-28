@@ -37,6 +37,15 @@ jobs:
             echo "::error::an unregistered identifier in a namespace with no site resolved"; exit 1
           fi
 
+      # portfolio and draft are standard library only, and their tests run offline: the draft
+      # skill's online research is replaced by a recorded fixture. Both YAML readers are tested.
+      - name: portfolio and draft tests
+        run: |
+          python3 -m unittest discover -s skills/portfolio/tests
+          python3 -m unittest discover -s skills/draft/tests
+          PORTFOLIO_PURE_YAML=1 python3 -m unittest discover -s skills/portfolio/tests
+          PORTFOLIO_PURE_YAML=1 python3 -m unittest discover -s skills/draft/tests
+
       # register.py is standard library only, so it runs here too.
       - name: register.py numbers, registers, follows a moved folder, and fails on a duplicate
         run: |
@@ -190,6 +199,56 @@ jobs:
           if python "$MODEL" validate /tmp/examples/$DOC; then
             echo "::error::an approved composite pattern passed over an unapproved participating pattern"; exit 1
           fi
+
+  convert-tests:
+    name: Convert skill tests, converting every example and publishing the results
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Choose the diagram-model ref
+        id: model-ref
+        env:
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          ref=main
+          if git ls-remote --exit-code --heads https://github.com/dermot-obrien/diagram-model "refs/heads/$BRANCH" >/dev/null 2>&1; then
+            ref="$BRANCH"
+          fi
+          echo "diagram-model at $ref"
+          echo "ref=$ref" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          repository: dermot-obrien/diagram-model
+          ref: ${{ steps.model-ref.outputs.ref }}
+          path: .deps/diagram-model
+      # publish.py looks for markdown-deck before it starts; --no-deck never runs it.
+      - uses: actions/checkout@v4
+        with:
+          repository: dermot-obrien/markdown-deck
+          path: .deps/markdown-deck
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install test dependencies
+        run: pip install -r skills/convert/tests/requirements-test.txt
+      - name: Run the convert skill's tests
+        env:
+          AGENT_SKILLS_PATH: ${{ github.workspace }}/.deps/diagram-model/skills:${{ github.workspace }}/.deps/markdown-deck/skills
+        run: |
+          git config --global user.email ci@example.org
+          git config --global user.name CI
+          pytest -v --tb=short skills/convert/tests
+      - name: The examples convert, and every draft validates and publishes
+        env:
+          AGENT_SKILLS_PATH: ${{ github.workspace }}/.deps/diagram-model/skills:${{ github.workspace }}/.deps/markdown-deck/skills
+        run: |
+          python skills/convert/scripts/convert.py run skills/convert/examples/sources --out /tmp/converted --work /tmp/conversions --no-archive --json > /tmp/convert.json || true
+          python -c "import json,sys; u=json.load(open('/tmp/convert.json'))['units']; print([(x['slug'], x['type'], x['status'], x['valid'], x['agrees']) for x in u]); bad=[x for x in u if x['status'] != 'needs-agent' and (x['status'], x['valid'], x['agrees']) != ('drafted', 'ok', True)]; sys.exit(1 if bad or len(u) != 13 else 0)"
+          python skills/pattern/scripts/publish.py /tmp/converted --recursive --no-deck --render never --json > /tmp/publish-converted.json
+          python -c "import json,sys; r=json.load(open('/tmp/publish-converted.json'))['results']; print(r); sys.exit(0 if len(r) == 11 and all(x['status'] == 'ok' for x in r) else 1)"
 
   pattern-tests:
     name: Pattern skill test suite

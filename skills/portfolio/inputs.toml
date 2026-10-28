@@ -1,0 +1,78 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# What the portfolio skill needs from the repository it is installed into. The repository
+# answers in [suite.portfolio] of its .agents/skill-bindings.toml. Paths are relative to that
+# file's folder. Every key is optional: with none bound, the whole repository is scanned and
+# the defaults below apply.
+#
+# It also reads, and never writes, [suite.pattern] (outputDir, types.*.idSeries, types.*.template,
+# template, register) and [suite.use-case] (outputDir, idSeries, template, register), so a
+# placeholder goes where a pattern or use case made by hand would go.
+#
+# Checked by:  python <skills>/portfolio/scripts/check.py
+
+[inputs]
+short_description = "Where the portfolio looks for patterns, and where it archives them"
+
+[inputs.options.roots]
+type = "list"
+required = false
+description = """Folders to scan for documents carrying the signature. Unset, the whole repository,
+skipping .git, node_modules, build output and the skills folders."""
+
+[inputs.options.exclude]
+type = "list"
+required = false
+description = "Folders never scanned, such as a vendored copy of another catalogue."
+
+[inputs.options.archiveDir]
+type = "dir"
+required = false
+default = "archive"
+description = """Where archived documents go, each keeping its place in the tree below this folder.
+Unset, archive/ at the repository root."""
+
+[inputs.options.inventory]
+type = "file"
+required = false
+description = """The inventory page, written by `portfolio.py inventory` with no --out. Its extension
+says the format: .md, .html or .json. Unset, the page is printed."""
+
+[inputs.options.candidatesDir]
+type = "dir"
+required = false
+default = "candidates"
+description = "Where `backlog --candidates` writes candidate pages. Unset, candidates/ at the repository root."
+
+[inputs.options.linkBase]
+type = "str"
+required = false
+description = """The site's base URL path, such as /architecture/. When set, the inventory links each
+identifier to {linkBase}id/{ID}/, the stable address the cross-reference skill's plugin gives it,
+which keeps working when a page moves to the archive."""
+
+[inputs.options.stubs]
+type = "bool"
+required = false
+default = false
+description = "Leave a stub page saying where an archived page went, as --stub does."
+
+[inputs.options.staleAfterDays]
+type = "int"
+required = false
+description = "Propose for deprecation a document whose last_modified is older than this. Unset, age is not a reason."
+
+[inputs.options.defaultOwner]
+type = "str"
+required = false
+default = "unassigned"
+description = "The owner a placeholder carries when its backlog row names none."
+
+[inputs.options.form]
+type = "table"
+required = false
+description = """The headings each type's four parts take, when the repository's template names them
+differently: [suite.portfolio.form.<type>] with diagram, boxes, links and scenarios, each a heading or
+a list of them. Defaults: Diagram, Building Blocks, Interfaces, Scenarios for an architecture pattern
+or a reference architecture; Diagram, Participants, Interactions, Scenarios for a collaboration or a
+use case."""

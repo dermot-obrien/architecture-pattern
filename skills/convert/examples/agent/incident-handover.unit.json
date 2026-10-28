@@ -1,0 +1,26 @@
+{
+  "name": "Incident handover",
+  "type": "collaboration",
+  "status": "ready",
+  "extraction": "agent",
+  "boxes": [
+    {"label": "Night Operations", "description": "Runs the service overnight and owns open incidents until handover", "kind": "team", "geom": [40, 120, 200, 70]},
+    {"label": "Day Operations", "description": "Runs the service by day and takes over open incidents", "kind": "team", "geom": [600, 120, 200, 70]},
+    {"label": "Shift Log", "description": "Holds every open incident and who owns it", "kind": "system", "geom": [320, 300, 200, 70]},
+    {"label": "Duty Manager", "description": "TBD", "kind": "person", "geom": [320, 20, 200, 70], "uncertain": "the picture names the box but not its role"}
+  ],
+  "links": [
+    {"source": "Night Operations", "target": "Shift Log", "label": "record open incidents"},
+    {"source": "Night Operations", "target": "Day Operations", "label": "brief at handover"},
+    {"source": "Day Operations", "target": "Shift Log", "label": "accept incidents"},
+    {"source": "Day Operations", "target": "Duty Manager", "label": "escalate breaches"}
+  ],
+  "scenarios": [
+    {"name": "Morning handover", "steps": [
+      {"actor": "Night Operations", "target": "Shift Log", "action": "records every open incident"},
+      {"actor": "Night Operations", "target": "Day Operations", "action": "briefs the day team on each one"},
+      {"actor": "Day Operations", "target": "Shift Log", "action": "accepts each incident"},
+      {"actor": "Day Operations", "target": "Duty Manager", "action": "escalates any breach of a target", "uncertain": "the picture gives no order; the text implies escalation comes last"}
+    ]}
+  ]
+}
