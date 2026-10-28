@@ -89,7 +89,7 @@ The skill ships a template for each kind of pattern it knows, and any of them ca
 |---|---|---|
 | 1 | The repository's own for that type | `[suite.pattern.types.<type>] template`, a path relative to the binding file, or `builtin:<name>` for a shipped one |
 | 2 | The repository's own for every pattern | `[suite.pattern] template` |
-| 3 | Shipped for that type | `assets/templates/architecture-pattern.md`, `assets/templates/reference-architecture.md` |
+| 3 | Shipped for that type | `assets/templates/architecture-pattern.md`, `assets/templates/reference-architecture.md`, `assets/templates/solution-design.md`, `assets/templates/collaboration.md` |
 | 4 | Shipped for any pattern | `assets/template.md` |
 
 `python <skills>/pattern/scripts/template.py which --type <type>` prints the one in use and where it came from.
@@ -105,7 +105,7 @@ template = "../templates/reference-architecture.md"   # ours, checked against th
 
 ### idSeries
 
-The identifier prefix for new patterns when no types are bound: `AP` gives `AP-001`, an architecture pattern. No script reads it; the agent uses it to name the next pattern. With the two types bound, each has its own: `AP` for an architecture pattern, `RA` for a reference architecture. For a Uses cell to recognise the series, it must also match `[model] pattern_id` (default `[A-Z]{2,5}-[0-9]{3}`), so a four-digit series needs `pattern_id` set too.
+The identifier prefix for new patterns when no types are bound: `AP` gives `AP-001`, an architecture pattern. No script reads it; the agent uses it to name the next pattern. With types bound, each has its own: `AP` for an architecture pattern, `RA` for a reference architecture, `SD` for a solution design. For a Uses cell to recognise the series, it must also match `[model] pattern_id` (default `[A-Z]{2,5}-[0-9]{3}`), so a four-digit series needs `pattern_id` set too.
 
 ```toml
 idSeries = "AP"
@@ -162,12 +162,17 @@ label    = "Reference architecture"
 idSeries = "RA"
 physical = "most"
 
+[suite.pattern.types.solution-design]
+label    = "Solution design"
+idSeries = "SD"
+physical = "most"
+
 [suite.pattern.types.collaboration]
 label    = "Collaboration"
 idSeries = "CL"
 ```
 
-The skill ships a template for each of these three: `collaboration` is participants working together, with Participants and Interactions tables read by the same bindings as a use case's, so bind those tables too (the [use cases](use-cases.md) page has them). [Converting](converting.md#the-collaboration-type) says more.
+The skill ships a template for each of these four: `collaboration` is participants working together, with Participants and Interactions tables read by the same bindings as a use case's, so bind those tables too (the [use cases](use-cases.md) page has them). [Converting](converting.md#the-collaboration-type) says more.
 
 | Key | Meaning |
 |---|---|
@@ -362,7 +367,9 @@ Keys in a pattern document's YAML front matter.
 | `title` | string | recommended | markdown-deck, sites | Deck and page title; the deck falls back to `sidebar_label`, then the file name |
 | `sidebar_label` | string | no | sites, markdown-deck | Short label; markdown-deck's eyebrow falls back to it |
 | `description` | string | no | sites | One-line summary |
-| `document_type` | string | no | your site or catalogue | `pattern` |
+| `kind` | string | recommended | the portfolio skill, the continuum's check | `pattern`: the signature by which the [portfolio](portfolio.md) finds the document. The shipped templates carry it |
+| `id` | string | recommended | the portfolio skill, the continuum's check | The identifier, `AP-012`; without it, the first heading's |
+| `document_type` | string | no | your site or catalogue | `pattern`. Read as a legacy signature where `kind` is missing |
 | `pattern_type` | string | no | `model validate`, the register | One of the bound [types](#types); unset, the type whose `idSeries` the identifier carries |
 | `implements` | list | no | `model validate` | The patterns this one makes concrete, `[AP-004]`; each must have a document |
 | `pattern_scope` | enum | yes | the agent, readers | `problem`, `domain`, `capability-area`, `platform`, `hosting-profile` or `epic` |
@@ -373,6 +380,9 @@ Keys in a pattern document's YAML front matter.
 | `flows` | list | no | a capability model | Only these flows of them; omit for every flow |
 | `references` | list of `{type, path}` | no | a capability model | `type: cost-model` or `type: evidence` |
 | `provenance` | map | no | your review process | `origin` and `review_state` |
+| `portfolio` | map | no | the portfolio and draft skills | `state`, `priority`, `target_quarter`, `committed`, `reason`, `since`, `backlog_ref`, `archived_from`; see [the signature reference](../skills/portfolio/references/signature.md) |
+| `unlisted` | boolean | no | sites | Set on an archived page: built, but out of the sidebar, search and sitemap |
+| `banner` | map | no | sites | `{ tone, text }`, a notice at the top of the page; the draft skill sets one on a draft |
 | `deck_*` | various | no | markdown-deck | `deck_theme`, `deck_palette`, `deck_eyebrow`, `deck_comments`, `deck_thumbnails`, `deck_pdf`, `deck_table_rows`, `deck_feedback_to`, `deck_feedback_subject`, `deck_id`, `deck_publish`; see markdown-deck |
 
 ```yaml

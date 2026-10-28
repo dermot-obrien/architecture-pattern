@@ -12,8 +12,8 @@
     {
       "name": "pattern",
       "path": "skills/pattern",
-      "version": "0.13.0",
-      "purl": "pkg:generic/dermot-obrien/architecture-pattern/pattern@0.13.0",
+      "version": "0.15.0",
+      "purl": "pkg:generic/dermot-obrien/architecture-pattern/pattern@0.15.0",
       "requires": [
         {
           "purl": "pkg:generic/dermot-obrien/diagram-model/model",
@@ -36,21 +36,12 @@
     {
       "name": "use-case",
       "path": "skills/use-case",
-      "version": "0.3.2",
-      "purl": "pkg:generic/dermot-obrien/architecture-pattern/use-case@0.3.2",
+      "version": "0.4.1",
+      "purl": "pkg:generic/dermot-obrien/architecture-pattern/use-case@0.4.1",
       "requires": [
-        {
-          "purl": "pkg:generic/dermot-obrien/architecture-pattern/pattern",
-          "range": "^0.13.0"
-        },
-        {
-          "purl": "pkg:generic/dermot-obrien/diagram-model/model",
-          "range": "^0.9.0"
-        },
-        {
-          "purl": "pkg:generic/dermot-obrien/markdown-deck/markdown-deck",
-          "range": "^0.6.0"
-        }
+        { "purl": "pkg:generic/dermot-obrien/architecture-pattern/pattern", "range": "^0.15.0" },
+        { "purl": "pkg:generic/dermot-obrien/diagram-model/model", "range": "^0.9.0" },
+        { "purl": "pkg:generic/dermot-obrien/markdown-deck/markdown-deck", "range": "^0.6.0" }
       ],
       "check": {
         "command": [
@@ -69,11 +60,11 @@
       "requires": [
         {
           "purl": "pkg:generic/dermot-obrien/architecture-pattern/pattern",
-          "range": "^0.13.0"
+          "range": "^0.15.0"
         },
         {
           "purl": "pkg:generic/dermot-obrien/architecture-pattern/use-case",
-          "range": "^0.3.1"
+          "range": "^0.4.0"
         },
         {
           "purl": "pkg:generic/dermot-obrien/diagram-model/model",
@@ -102,6 +93,41 @@
         ],
         "runtime": "node",
         "description": "[suite.cross-reference] binds the namespace register, every register row passes the rules, and the catalogue's identifier map loads"
+      }
+    },
+    {
+      "name": "portfolio",
+      "path": "skills/portfolio",
+      "version": "0.1.0",
+      "purl": "pkg:generic/dermot-obrien/architecture-pattern/portfolio@0.1.0",
+      "requires": [
+        { "purl": "pkg:generic/dermot-obrien/architecture-pattern/pattern", "range": "^0.15.0" },
+        { "purl": "pkg:generic/dermot-obrien/architecture-pattern/use-case", "range": "^0.4.0" }
+      ],
+      "check": {
+        "command": [
+          "python",
+          "scripts/check.py"
+        ],
+        "runtime": "python",
+        "description": "[suite.portfolio] resolves, the pattern and use-case skills are found for placeholders, and every signed document passes portfolio.py check"
+      }
+    },
+    {
+      "name": "draft",
+      "path": "skills/draft",
+      "version": "0.1.0",
+      "purl": "pkg:generic/dermot-obrien/architecture-pattern/draft@0.1.0",
+      "requires": [
+        { "purl": "pkg:generic/dermot-obrien/architecture-pattern/portfolio", "range": "^0.1.0" }
+      ],
+      "check": {
+        "command": [
+          "python",
+          "scripts/check.py"
+        ],
+        "runtime": "python",
+        "description": "the portfolio skill is installed, and the placeholders and drafts are listed"
       }
     }
   ],

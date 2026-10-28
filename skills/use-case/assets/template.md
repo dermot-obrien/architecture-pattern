@@ -1,10 +1,12 @@
 ---
+# The portfolio signature: the continuum front matter standard says what this document is.
+kind: use-case
 document_type: use-case
 status: Draft
 version: "0.1"
 last_modified: 2026-10-01
 author: "<your name>"
-realised_by: []            # optional: the architecture patterns (AP-NNN) and reference architectures (RA-NNN) that design it
+realised_by: []            # optional: the architecture patterns (AP-NNN), reference architectures (RA-NNN) and solution designs (SD-NNN) that design it
 former_ids: []             # on endorsement: the local id it had, such as EP-12-UC1
 model:
   diagram: components.drawio

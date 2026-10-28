@@ -37,6 +37,15 @@ jobs:
             echo "::error::an unregistered identifier in a namespace with no site resolved"; exit 1
           fi
 
+      # portfolio and draft are standard library only, and their tests run offline: the draft
+      # skill's online research is replaced by a recorded fixture. Both YAML readers are tested.
+      - name: portfolio and draft tests
+        run: |
+          python3 -m unittest discover -s skills/portfolio/tests
+          python3 -m unittest discover -s skills/draft/tests
+          PORTFOLIO_PURE_YAML=1 python3 -m unittest discover -s skills/portfolio/tests
+          PORTFOLIO_PURE_YAML=1 python3 -m unittest discover -s skills/draft/tests
+
       # register.py is standard library only, so it runs here too.
       - name: register.py numbers, registers, follows a moved folder, and fails on a duplicate
         run: |
@@ -128,7 +137,7 @@ jobs:
           # The example's tables, so the shipped templates are checked against a real contract.
           sed -n '/^\[model\]/,/^\[rules\]/p' skills/pattern/examples/knowledge-retrieval/model.toml | sed '$d' > /tmp/ws/tables.toml
           printf 'bindingsVersion = "1.0"\n\n' | cat - /tmp/ws/tables.toml > /tmp/ws/.agents/skill-bindings.toml
-          printf '\n[suite.pattern]\noutputDir = "../patterns"\n\n[suite.pattern.types.architecture-pattern]\nidSeries = "AP"\nphysical = "none"\n\n[suite.pattern.types.reference-architecture]\nidSeries = "RA"\nphysical = "most"\n\n[suite.use-case]\nidSeries = "UC"\n\n[suite.cross-reference]\nnamespaces = "../namespaces.csv"\n' >> /tmp/ws/.agents/skill-bindings.toml
+          printf '\n[suite.pattern]\noutputDir = "../patterns"\n\n[suite.pattern.types.architecture-pattern]\nidSeries = "AP"\nphysical = "none"\n\n[suite.pattern.types.reference-architecture]\nidSeries = "RA"\nphysical = "most"\n\n[suite.pattern.types.solution-design]\nidSeries = "SD"\nphysical = "most"\n\n[suite.use-case]\nidSeries = "UC"\n\n[suite.cross-reference]\nnamespaces = "../namespaces.csv"\n' >> /tmp/ws/.agents/skill-bindings.toml
           node scripts/validate-bundle.mjs --run-checks /tmp/ws --skills skills .
       - name: The worked example agrees with itself, without draw.io
         working-directory: skills/pattern/examples/knowledge-retrieval

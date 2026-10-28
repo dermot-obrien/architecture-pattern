@@ -18,6 +18,7 @@ Documentation for the `pattern` skill, the `use-case` skill that publishes with 
 | [Use cases](use-cases.md) | The `use-case` skill: what it needs, binding it, writing a use case, adapting the template, its worked example |
 | [Converting](converting.md) | The `convert` skill: turning existing diagrams (draw.io, SVG, PNG) and their notes into architecture patterns, reference architectures, use cases or collaborations, and archiving the originals |
 | [Cross-references](cross-references.md) | The `cross-reference` skill: referring to another catalogue's identifiers, the registers, checks, and the Docusaurus plugins |
+| [The portfolio](portfolio.md) | The `portfolio` and `draft` skills: the front matter signature, the inventory page, tagging and archiving, backlogs and placeholders, drafting from research, and a guide to cleaning out a repository |
 
 The skill itself, what an agent reads, is [skills/pattern/SKILL.md](../skills/pattern/SKILL.md), with detail in [references/compose.md](../skills/pattern/references/compose.md) and [references/links.md](../skills/pattern/references/links.md).
 

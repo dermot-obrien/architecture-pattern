@@ -1,4 +1,5 @@
 ---
+kind: use-case
 title: "UC-900 Map a business use case to an industry reference model"
 description: "Worked example: a use case written from the use case template, with its diagram, walkthrough and deck generated from its own tables"
 document_type: use-case
