@@ -89,7 +89,7 @@ The skill ships a template for each kind of pattern it knows, and any of them ca
 |---|---|---|
 | 1 | The repository's own for that type | `[suite.pattern.types.<type>] template`, a path relative to the binding file, or `builtin:<name>` for a shipped one |
 | 2 | The repository's own for every pattern | `[suite.pattern] template` |
-| 3 | Shipped for that type | `assets/templates/architecture-pattern.md`, `assets/templates/reference-architecture.md` |
+| 3 | Shipped for that type | `assets/templates/architecture-pattern.md`, `assets/templates/reference-architecture.md`, `assets/templates/solution-design.md` |
 | 4 | Shipped for any pattern | `assets/template.md` |
 
 `python <skills>/pattern/scripts/template.py which --type <type>` prints the one in use and where it came from.
@@ -105,7 +105,7 @@ template = "../templates/reference-architecture.md"   # ours, checked against th
 
 ### idSeries
 
-The identifier prefix for new patterns when no types are bound: `AP` gives `AP-001`, an architecture pattern. No script reads it; the agent uses it to name the next pattern. With the two types bound, each has its own: `AP` for an architecture pattern, `RA` for a reference architecture. For a Uses cell to recognise the series, it must also match `[model] pattern_id` (default `[A-Z]{2,5}-[0-9]{3}`), so a four-digit series needs `pattern_id` set too.
+The identifier prefix for new patterns when no types are bound: `AP` gives `AP-001`, an architecture pattern. No script reads it; the agent uses it to name the next pattern. With types bound, each has its own: `AP` for an architecture pattern, `RA` for a reference architecture, `SD` for a solution design. For a Uses cell to recognise the series, it must also match `[model] pattern_id` (default `[A-Z]{2,5}-[0-9]{3}`), so a four-digit series needs `pattern_id` set too.
 
 ```toml
 idSeries = "AP"
@@ -160,6 +160,11 @@ physical = "none"
 [suite.pattern.types.reference-architecture]
 label    = "Reference architecture"
 idSeries = "RA"
+physical = "most"
+
+[suite.pattern.types.solution-design]
+label    = "Solution design"
+idSeries = "SD"
 physical = "most"
 ```
 
