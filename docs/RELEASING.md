@@ -6,7 +6,7 @@
 
 ## Branches
 
-The repository follows Git Flow. Work merges into `develop` through pull requests, with merge commits. A release is a pull request from `develop` to `main`, merged with a merge commit, never squashed; the tags go on that merge commit on `main`. `main` is protected: it takes changes only through pull requests.
+The repository follows Git Flow. Work merges into `develop` through pull requests, squash merged with the pull request's title as the subject. A release is a pull request from `develop` to `main`, titled `release: ...`, merged with a merge commit, never squashed; the tags go on that merge commit on `main`. `main` is protected: it takes changes only through pull requests.
 
 ## Version Dependencies
 
