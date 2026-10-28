@@ -11,7 +11,8 @@ Run from the workspace root. The template for a pattern type is the first of:
                                                ("builtin:<name>" names a shipped one)
     2. [suite.pattern] template                the repository's own for every pattern
     3. assets/templates/<TYPE>.md              shipped with this skill for that type:
-                                               architecture-pattern, reference-architecture
+                                               architecture-pattern, reference-architecture,
+                                               solution-design
     4. assets/template.md                      shipped with this skill, for any pattern
 
 Without --type, or with no types bound, it is 2 else 4. A repository's template may say

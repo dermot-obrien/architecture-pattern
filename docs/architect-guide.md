@@ -127,7 +127,7 @@ columns    = { id = "Interface", source = "Provider", target = "Consumer", label
 [markdown.scenarios]
 section = "Scenarios"
 
-# Where patterns live, and the two kinds of document.
+# Where patterns live, and the three kinds of document.
 [suite.pattern]
 outputDir = "../patterns"
 
@@ -139,6 +139,11 @@ physical = "none"
 [suite.pattern.types.reference-architecture]
 label    = "Reference architecture"
 idSeries = "RA"
+physical = "most"
+
+[suite.pattern.types.solution-design]
+label    = "Solution design"
+idSeries = "SD"
 physical = "most"
 ```
 
@@ -168,7 +173,7 @@ The last line should be `pattern: ok`. A warning that draw.io desktop was not fo
 
 Skip this step to edit one that already exists.
 
-First get the next free identifier. Use `architecture-pattern` or `reference-architecture`:
+First get the next free identifier. Use `architecture-pattern`, `reference-architecture` or `solution-design`:
 
 ```
 python .agents/skills/pattern/scripts/register.py next --type architecture-pattern
@@ -192,7 +197,7 @@ mkdir -p patterns/$ID
 cp "$(python .agents/skills/pattern/scripts/template.py which --type architecture-pattern)" patterns/$ID/index.md
 ```
 
-Change the H1 and `title` to the identifier and the name, such as `AP-001 Order Intake`. For a reference architecture, set `implements:` in the front matter to the architecture patterns it makes concrete, such as `implements: [AP-001]`. Delete the guidance comments as you fill each section in. The front matter's `model: diagram: components.drawio` line tells the tools where the diagram is. Keep it.
+Change the H1 and `title` to the identifier and the name, such as `AP-001 Order Intake`. For a reference architecture, set `implements:` in the front matter to the architecture patterns it makes concrete, such as `implements: [AP-001]`. For a solution design, set it to the reference architecture or architecture pattern the solution instantiates, such as `implements: [RA-001]`, and fill in every table you can answer: leave a cell blank rather than guess, because a blank is a question an assessment will ask. Delete the guidance comments as you fill each section in. The front matter's `model: diagram: components.drawio` line tells the tools where the diagram is. Keep it.
 
 The blank document's example rows, such as `ABB-NNN Official Name`, fail the check until you replace them with real rows. The check also says `components.drawio: not found` until you generate the diagram the first time (step 8).
 

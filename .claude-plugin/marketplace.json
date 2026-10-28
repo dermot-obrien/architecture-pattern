@@ -15,7 +15,7 @@
       "source": "./",
       "strict": false,
       "description": "Author an architecture pattern at any scope as one Markdown document that is also the model and the deck: the draw.io diagram and scenario overlays are generated from its tables and validated against it, and its tagged sections publish as HTML slides and a PDF.",
-      "version": "0.12.0",
+      "version": "0.13.0",
       "author": {
         "name": "Dermot O'Brien",
         "url": "https://github.com/dermot-obrien"
@@ -54,7 +54,7 @@
       "source": "./",
       "strict": false,
       "description": "Author a use case as one Markdown document that is also the model and the deck: what a solution does for someone and what it needs, before anyone designs how it is built. Its participants and interactions generate the draw.io diagram and an animated walkthrough of the main flow, and its tagged sections publish as HTML slides and a PDF.",
-      "version": "0.3.1",
+      "version": "0.3.2",
       "author": {
         "name": "Dermot O'Brien",
         "url": "https://github.com/dermot-obrien"
@@ -76,7 +76,7 @@
       "dependencies": [
         {
           "name": "pattern",
-          "version": "^0.12.0"
+          "version": "^0.13.0"
         },
         {
           "name": "model",
