@@ -4,6 +4,10 @@
 
 **IMPORTANT:** This repository contains multiple skills that must be tagged separately with coordinated versions. Always verify version compatibility across repositories before releasing.
 
+## Branches
+
+The repository follows Git Flow. Work merges into `develop` through pull requests, with merge commits. A release is a pull request from `develop` to `main`, merged with a merge commit, never squashed; the tags go on that merge commit on `main`. `main` is protected: it takes changes only through pull requests.
+
 ## Version Dependencies
 
 The skills in this repository depend on specific versions of skills in other repositories:
@@ -101,8 +105,10 @@ bash scripts/check-version-sync.sh  # or .\scripts\check-version-sync.ps1
 
 # If sync check passes, commit
 git add -A
-git commit -m "chore: prepare pattern v0.12.0 release"
+git commit -m "chore: prepare pattern 0.15.0"
 ```
+
+This happens on a branch from `develop`, merged into `develop` by pull request. Then open the release pull request from `develop` to `main` and merge it with a merge commit.
 
 **The version sync checker verifies:**
 - SKILL.md versions match what's in quick-start.md
@@ -112,20 +118,16 @@ git commit -m "chore: prepare pattern v0.12.0 release"
 
 ### Step 2: Create and push the tag
 
+Tag the release's merge commit on `main`, one tag for every skill whose version changed, all on the same commit:
+
 ```bash
-# Create annotated tag
-git tag -a pattern--v0.12.0 -m "Release pattern v0.12.0
-
-- Feature X added
-- Bug Y fixed
-- Requires model >= 0.9.0"
-
-# Push the tag
-git push origin pattern--v0.12.0
-
-# Also push the commit
-git push origin main
+git fetch origin
+git tag pattern--v0.15.0 origin/main
+git tag use-case--v0.4.1 origin/main
+git push origin pattern--v0.15.0 use-case--v0.4.1
 ```
+
+Nothing is pushed to `main` directly; the merge of the release pull request is the commit.
 
 ### Step 3: Verify tag is accessible
 
@@ -155,24 +157,15 @@ When releasing multiple skills in this repository:
 2. **Tag each skill separately** with its own version
 3. **Test each skill independently** before moving to the next
 
-Example for releasing all three skills:
+Example: a release that changes several skills tags each of them on the release's merge commit:
 
 ```bash
-# Release cross-reference first (fewest dependencies)
-git tag -a cross-reference--v0.4.0 -m "Release cross-reference v0.4.0"
-git push origin cross-reference--v0.4.0
-
-# Then use-case
-git tag -a use-case--v0.4.0 -m "Release use-case v0.4.0"
-git push origin use-case--v0.4.0
-
-# Finally pattern (depends on others)
-git tag -a pattern--v0.12.0 -m "Release pattern v0.12.0"
-git push origin pattern--v0.12.0
-
-# Push all commits
-git push origin main
+git fetch origin
+for tag in pattern--v0.15.0 use-case--v0.4.1 portfolio--v0.1.0 draft--v0.1.0 convert--v0.1.0; do git tag "$tag" origin/main; done
+git push origin pattern--v0.15.0 use-case--v0.4.1 portfolio--v0.1.0 draft--v0.1.0 convert--v0.1.0
 ```
+
+The install script (`scripts/update-skills.ps1`, `.sh`) installs each skill at its newest `<skill>--v` tag, so a skill without a new tag stays at its last one.
 
 ## Cross-Repository Release Coordination
 

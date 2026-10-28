@@ -40,17 +40,18 @@ Write-Host ""
 Write-Host "Checking docs/quick-start.md..."
 $quickStartContent = Get-Content 'docs/quick-start.md' -Raw
 if ($quickStartContent -notmatch "pattern--v$PATTERN_VERSION") {
-    Write-Host "  × Error: quick-start.md doesn't reference pattern--v$PATTERN_VERSION" -ForegroundColor Red
+    Write-Host "  x Error: quick-start.md doesn't reference pattern--v$PATTERN_VERSION" -ForegroundColor Red
     $ERRORS++
 } else {
-    Write-Host "  ✓ pattern version matches" -ForegroundColor Green
+    Write-Host "  + pattern version matches" -ForegroundColor Green
 }
 
-if ($quickStartContent -notmatch "model--v$REQUIRED_MODEL") {
-    Write-Host "  × Error: quick-start.md doesn't reference model--v$REQUIRED_MODEL" -ForegroundColor Red
+$modelParts = $REQUIRED_MODEL.Split('.')
+if ($quickStartContent -notmatch "model--v$($modelParts[0])\.$($modelParts[1])\.\d+") {
+    Write-Host "  x Error: quick-start.md doesn't reference model--v$($modelParts[0]).$($modelParts[1]).x" -ForegroundColor Red
     $ERRORS++
 } else {
-    Write-Host "  ✓ model version matches" -ForegroundColor Green
+    Write-Host "  + model version matches" -ForegroundColor Green
 }
 
 # For markdown-deck, allow any patch version >= minimum
@@ -58,76 +59,79 @@ $deckParts = $REQUIRED_DECK -split '\.'
 $deckMajor = $deckParts[0]
 $deckMinor = $deckParts[1]
 if ($quickStartContent -match "markdown-deck--v$deckMajor\.$deckMinor\.\d+") {
-    Write-Host "  ✓ markdown-deck version compatible (>= v$REQUIRED_DECK)" -ForegroundColor Green
+    Write-Host "  + markdown-deck version compatible (>= v$REQUIRED_DECK)" -ForegroundColor Green
 } else {
-    Write-Host "  × Error: quick-start.md doesn't reference markdown-deck--v$deckMajor.$deckMinor.x" -ForegroundColor Red
+    Write-Host "  x Error: quick-start.md doesn't reference markdown-deck--v$deckMajor.$deckMinor.x" -ForegroundColor Red
     $ERRORS++
 }
 
 # Check README.md
 Write-Host ""
 Write-Host "Checking README.md..."
-Write-Host "  ✓ (version-agnostic references only)" -ForegroundColor Green
+if ((Get-Content 'README.md' -Raw) -notmatch "pattern--v$PATTERN_VERSION") {
+    Write-Host "  x Error: README.md doesn't reference pattern--v$PATTERN_VERSION" -ForegroundColor Red
+    $ERRORS++
+} else {
+    Write-Host "  + pattern version matches" -ForegroundColor Green
+}
 
 # Check update scripts reference the right repos
 Write-Host ""
 Write-Host "Checking scripts/update-skills.sh..."
 $updateShContent = Get-Content 'scripts/update-skills.sh' -Raw
 if ($updateShContent -notmatch 'REPO_PATTERN="https://github.com/dermot-obrien/architecture-pattern.git"') {
-    Write-Host "  × Error: update-skills.sh has wrong REPO_PATTERN" -ForegroundColor Red
+    Write-Host "  x Error: update-skills.sh has wrong REPO_PATTERN" -ForegroundColor Red
     $ERRORS++
 }
 if ($updateShContent -notmatch 'REPO_MODEL="https://github.com/dermot-obrien/diagram-model.git"') {
-    Write-Host "  × Error: update-skills.sh has wrong REPO_MODEL" -ForegroundColor Red
+    Write-Host "  x Error: update-skills.sh has wrong REPO_MODEL" -ForegroundColor Red
     $ERRORS++
 }
 if ($updateShContent -notmatch 'REPO_DECK="https://github.com/dermot-obrien/markdown-deck.git"') {
-    Write-Host "  × Error: update-skills.sh has wrong REPO_DECK" -ForegroundColor Red
+    Write-Host "  x Error: update-skills.sh has wrong REPO_DECK" -ForegroundColor Red
     $ERRORS++
 }
-Write-Host "  ✓ Repository URLs correct" -ForegroundColor Green
+Write-Host "  + Repository URLs correct" -ForegroundColor Green
 
 Write-Host ""
 Write-Host "Checking scripts/update-skills.ps1..."
 $updatePs1Content = Get-Content 'scripts/update-skills.ps1' -Raw
 if ($updatePs1Content -notmatch 'REPO_PATTERN = "https://github.com/dermot-obrien/architecture-pattern.git"') {
-    Write-Host "  × Error: update-skills.ps1 has wrong REPO_PATTERN" -ForegroundColor Red
+    Write-Host "  x Error: update-skills.ps1 has wrong REPO_PATTERN" -ForegroundColor Red
     $ERRORS++
 }
 if ($updatePs1Content -notmatch 'REPO_MODEL = "https://github.com/dermot-obrien/diagram-model.git"') {
-    Write-Host "  × Error: update-skills.ps1 has wrong REPO_MODEL" -ForegroundColor Red
+    Write-Host "  x Error: update-skills.ps1 has wrong REPO_MODEL" -ForegroundColor Red
     $ERRORS++
 }
 if ($updatePs1Content -notmatch 'REPO_DECK = "https://github.com/dermot-obrien/markdown-deck.git"') {
-    Write-Host "  × Error: update-skills.ps1 has wrong REPO_DECK" -ForegroundColor Red
+    Write-Host "  x Error: update-skills.ps1 has wrong REPO_DECK" -ForegroundColor Red
     $ERRORS++
 }
-Write-Host "  ✓ Repository URLs correct" -ForegroundColor Green
+Write-Host "  + Repository URLs correct" -ForegroundColor Green
 
 # Check that tags exist locally for current skill versions
 Write-Host ""
 Write-Host "Checking if current skill versions are tagged..."
-foreach ($skill in @(
-    @{name='pattern'; version=$PATTERN_VERSION},
-    @{name='use-case'; version=$USE_CASE_VERSION},
-    @{name='cross-reference'; version=$XREF_VERSION}
-)) {
+foreach ($skill in (Get-ChildItem skills -Directory | Where-Object { Test-Path (Join-Path $_.FullName 'SKILL.md') } | ForEach-Object {
+    @{name=$_.Name; version=(Select-String -Path (Join-Path $_.FullName 'SKILL.md') -Pattern 'version:\s*"([^"]+)"' | Select-Object -First 1).Matches.Groups[1].Value}
+})) {
     $tag = "$($skill.name)--v$($skill.version)"
     $tagExists = git tag -l $tag
     if ($tagExists) {
-        Write-Host "  ✓ $tag exists locally" -ForegroundColor Green
+        Write-Host "  + $tag exists locally" -ForegroundColor Green
     } else {
-        Write-Host "  ⚠ Warning: $tag not found locally (may not be released yet)" -ForegroundColor Yellow
+        Write-Host "  ! Warning: $tag not found locally (may not be released yet)" -ForegroundColor Yellow
     }
 }
 
 # Summary
 Write-Host ""
 if ($ERRORS -eq 0) {
-    Write-Host "✅ All version references are consistent" -ForegroundColor Green
+    Write-Host "+ All version references are consistent" -ForegroundColor Green
     exit 0
 } else {
-    Write-Host "❌ Found $ERRORS version inconsistency error(s)" -ForegroundColor Red
+    Write-Host "x Found $ERRORS version inconsistency error(s)" -ForegroundColor Red
     Write-Host ""
     Write-Host "To fix:"
     Write-Host "  1. Update version in skills/*/SKILL.md"
