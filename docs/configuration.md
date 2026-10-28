@@ -89,7 +89,7 @@ The skill ships a template for each kind of pattern it knows, and any of them ca
 |---|---|---|
 | 1 | The repository's own for that type | `[suite.pattern.types.<type>] template`, a path relative to the binding file, or `builtin:<name>` for a shipped one |
 | 2 | The repository's own for every pattern | `[suite.pattern] template` |
-| 3 | Shipped for that type | `assets/templates/architecture-pattern.md`, `assets/templates/reference-architecture.md`, `assets/templates/solution-design.md` |
+| 3 | Shipped for that type | `assets/templates/architecture-pattern.md`, `assets/templates/reference-architecture.md`, `assets/templates/solution-design.md`, `assets/templates/collaboration.md` |
 | 4 | Shipped for any pattern | `assets/template.md` |
 
 `python <skills>/pattern/scripts/template.py which --type <type>` prints the one in use and where it came from.
@@ -166,7 +166,13 @@ physical = "most"
 label    = "Solution design"
 idSeries = "SD"
 physical = "most"
+
+[suite.pattern.types.collaboration]
+label    = "Collaboration"
+idSeries = "CL"
 ```
+
+The skill ships a template for each of these four: `collaboration` is participants working together, with Participants and Interactions tables read by the same bindings as a use case's, so bind those tables too (the [use cases](use-cases.md) page has them). [Converting](converting.md#the-collaboration-type) says more.
 
 | Key | Meaning |
 |---|---|
@@ -214,6 +220,15 @@ Precedence: `[model] approved_statuses` wins over `[suite.pattern] approvedStatu
 ```toml
 approvedStatuses = ["Approved", "Published"]
 ```
+
+## `[suite.convert]`
+
+Optional, for the `convert` skill; see [converting](converting.md#bindings).
+
+| Key | Default | Sets |
+|---|---|---|
+| `workDir` | `conversions/` at the repository root | Where each conversion run's folder is made |
+| `archiveDir` | `archive/` at the root of the repository holding each source | Where originals tracked by git are moved with `git mv` |
 
 ## `model` keys the pattern relies on
 

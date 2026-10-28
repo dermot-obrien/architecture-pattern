@@ -2,6 +2,13 @@
 
 # Changelog
 
+## [0.15.0] - 2026-10-28
+
+### Added
+
+- A fourth shipped template, `assets/templates/collaboration.md`, for the `collaboration` type, `kind: pattern` with `pattern_type: collaboration` and a `pattern_scope`: participants working together, with the four parts every pattern has (the diagram, Participants, Interactions and Scenarios) and only Purpose besides, as required sections. Its tables are the use case's, so a repository that binds use cases reads it already; one that numbers collaborations binds `[suite.pattern.types.collaboration]` with an `idSeries` such as `CL`, and `template.py which --type collaboration` finds the shipped template. `template.py check` holds it to the binding like the others.
+- `SKILL.md` names the shipped types, and points to the new `convert` skill for bringing existing diagrams and notes in as patterns.
+
 ## [0.14.0] - 2026-10-28
 
 ### Changed

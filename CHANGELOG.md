@@ -2,6 +2,28 @@
 
 # Changelog
 
+Releases of the architecture-pattern plugin. Each skill keeps its own changelog with the detail, [pattern](skills/pattern/CHANGELOG.md), [use-case](skills/use-case/CHANGELOG.md) and [convert](skills/convert/CHANGELOG.md), and a release takes the version of the skill it releases.
+
+Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+
+## [convert 0.1.0] - 2026-10-28
+
+### Added
+
+- A new skill, `convert`: a diagram in draw.io, SVG or PNG, with whatever Markdown goes with it, becomes an architecture pattern, a reference architecture, a use case or a collaboration. It gathers the sources into one conversion folder with a manifest and a report, archives originals tracked by git with `git mv`, reads boxes, links and sequences, chooses the type and says why, drafts from the type's template, and checks the draft against the source. See [converting](docs/converting.md).
+
+## [pattern 0.15.0] - 2026-10-28
+
+### Added
+
+- A shipped template for a fourth type, `collaboration`: participants working together, with the four essential parts and the use case's Participants and Interactions tables.
+
+## [use-case 0.4.1] - 2026-10-28
+
+### Changed
+
+- Requires pattern ^0.15.0.
+
 Releases of the architecture-pattern plugin. Each skill keeps its own changelog with the detail, [pattern](skills/pattern/CHANGELOG.md), [use-case](skills/use-case/CHANGELOG.md), [portfolio](skills/portfolio/CHANGELOG.md) and [draft](skills/draft/CHANGELOG.md), and a release takes the version of the skill it releases.
 
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).

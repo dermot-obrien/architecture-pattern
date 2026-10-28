@@ -6,7 +6,7 @@ compatibility: Python 3.11+ and git. Standard library only. Placeholders are wri
 metadata:
   version: "0.1.0"
   homepage: https://github.com/dermot-obrien/architecture-pattern
-  x-skill-requires: "pkg:generic/dermot-obrien/architecture-pattern/pattern ^0.14.0, pkg:generic/dermot-obrien/architecture-pattern/use-case ^0.4.0"
+  x-skill-requires: "pkg:generic/dermot-obrien/architecture-pattern/pattern ^0.15.0, pkg:generic/dermot-obrien/architecture-pattern/use-case ^0.4.0"
 ---
 
 # Portfolio

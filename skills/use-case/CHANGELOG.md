@@ -2,6 +2,12 @@
 
 # Changelog
 
+## [0.4.1] - 2026-10-28
+
+### Changed
+
+- Requires pattern ^0.15.0, whose collaboration template reads with the same Participants and Interactions bindings as a use case.
+
 ## [0.4.0] - 2026-10-28
 
 ### Changed
