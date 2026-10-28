@@ -8,7 +8,7 @@ pattern_type: solution-design
 # The reference architecture or architecture pattern this solution instantiates. Every
 # building block there is accounted for in Pattern Realisation below.
 implements: [RA-NNN]
-version: "0.1"
+version: "0.1.0"
 last_modified: 2026-10-28
 author: "<your name>"
 owner: "<the team accountable for the solution>"
@@ -48,11 +48,14 @@ HOW TO USE THIS TEMPLATE
   as you complete its section.
 - Identifiers below are written as SBB-NNN for solution building blocks, ABB-NNN for
   architecture building blocks, IF-NN for interfaces, TZ-NN for trust zones, DS-NN for data
-  sets and RA-NNN or AP-NNN for patterns. Your repository's own series come from its
+  sets, EVAL-NN for evals and RA-NNN or AP-NNN for patterns. They are local to this
+  document. Your repository's own series come from its
   binding file. A box with no catalogue entry yet takes a local number such as 07 and a
   row in Catalogue Mapping; never invent a catalogue identifier.
 - Write each endpoint (Provider, Consumer, Actor, Target, and Building Block in the facet
-  tables) as the identifier followed by the name. The model reads only the leading
+  tables) as the identifier followed by the name. On an interface the Consumer calls the
+  Provider: a request goes from the Consumer to the Provider. A data set's Owner is the
+  building block that holds it. The model reads only the leading
   identifier; scripts/name-endpoints.py fills in names from Building Blocks.
 - Never hyperlink identifiers in body text. Publishing rewrites them into links.
 - A solution design is longer than a pattern, because it answers more questions. Keep the
@@ -103,9 +106,9 @@ one.
 | Kind | Identifier and name |
 |---|---|
 | Capability | CAP-NNN Capability name |
-| Platform | PLT-NNN Platform name |
+| Platform | PL-NNN Platform name |
 | Bounded context | BC-NNN Context name |
-| Outcome | OUT-NNN Outcome name |
+| Outcome | OC-NNN Outcome name |
 | Use case | UC-NNN Use case name |
 
 ### Stakeholders
@@ -170,9 +173,9 @@ fine-tune or evaluate a model says so in Used for AI.
 |---|---|---|
 | TZ-01 Zone name | trusted / partly trusted / untrusted | One clause |
 
-| Data set | Owner | Classification | Personal data | Residency | Retention | Used for AI |
-|---|---|---|---|---|---|---|
-| DS-01 Data set name | Owning team | Internal | No | Region | Period | Grounding |
+| Data set | Owner | Classification | Personal data | Residency | Retention | Where it comes from | Used for AI |
+|---|---|---|---|---|---|---|---|
+| DS-01 Data set name | SBB-NNN Official Name | Internal | No | Region | Period | The source and how it is copied | Grounding |
 
 <!-- deck:slide label="Building Blocks" -->
 
@@ -186,10 +189,10 @@ implemented pattern that this one makes concrete. Source says which pattern the 
 from, or loose for one no pattern owns.
 -->
 
-| Building Block | Role in this solution | Kind | Realises | Owner | Trust zone | Deployed to | Source |
-|---|---|---|---|---|---|---|---|
-| SBB-NNN Official Name | What it does here, one clause | sbb | ABB-NNN Official Name | Owning team | TZ-01 | Environment or node | RA-NNN |
-| 07 Local role name | A role with no catalogue entry yet | local-role | ABB-NNN Official Name | Owning team | TZ-01 | | loose |
+| Building Block | Role in this solution | Kind | Realises | Bounded context | Owner | Trust zone | Deployed to | Source |
+|---|---|---|---|---|---|---|---|---|
+| SBB-NNN Official Name | What it does here, one clause | sbb | ABB-NNN Official Name | BC-NNN | Owning team | TZ-01 | Environment or node | RA-NNN |
+| 07 Local role name | A role with no catalogue entry yet | local-role | ABB-NNN Official Name | BC-NNN | Owning team | TZ-01 | | loose |
 
 ### Pattern Realisation
 
@@ -213,9 +216,20 @@ trusted, mixed or untrusted. Human oversight is in-the-loop, on-the-loop, after-
 or none. Delete the section if no box calls a model.
 -->
 
-| Building Block | Role | Model and provider | Grounded on | Input trust | Human oversight | Fallback |
-|---|---|---|---|---|---|---|
-| SBB-NNN Official Name | generative | Model, version, provider | DS-01 | mixed | on-the-loop | What happens when it fails |
+| Building Block | Role | Model and provider | Version pinned | Hosting | Input trust | Human oversight | Fallback |
+|---|---|---|---|---|---|---|---|
+| SBB-NNN Official Name | generative | Model, provider | No | Managed platform | mixed | on-the-loop | What happens when it fails |
+
+<!--
+How each model-backed box is grounded and what happens to what it produces. Access
+control says whose permissions decide what it retrieves: the asking user's, or its own.
+Freshness says how soon a change at the source reaches it. Drift monitoring says how a
+change in behaviour over time is noticed.
+-->
+
+| Building Block | Grounded on | Retrieval | Access control | Freshness | Output shown as | Disclosure | Drift monitoring |
+|---|---|---|---|---|---|---|---|
+| SBB-NNN Official Name | DS-01 | Hybrid search | The asking user's permissions | Within 15 minutes | Text with citations | How users are told it is AI | How drift is noticed |
 
 ### Agents
 
@@ -242,9 +256,9 @@ not entitled to it, with how it is tested. Sample size says how many cases, whic
 confident a pass can be.
 -->
 
-| Building Block | Positive | False positive: meaning and ceiling | False negative: meaning and ceiling | Must never happen | Sample size |
-|---|---|---|---|---|---|
-| SBB-NNN Official Name | What a positive is | What it means, at most N% | What it means, at most N% | The error, and its test | N cases |
+| Eval | Building Block | Kind | Dataset | Metric | Threshold | Positive | False positive: meaning and ceiling | False negative: meaning and ceiling | Must never happen | Gates release | Sample size |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| EVAL-01 Name | SBB-NNN Official Name | offline / LLM judge / online | What it is run on | What is measured | The pass mark | What a positive is | What it means, at most N% | What it means, at most N% | The error, and its test | Yes | N cases |
 
 <!-- deck:slide label="Interfaces" -->
 
@@ -267,15 +281,29 @@ that reads it can be steered by it.
 
 <!--
 MANDATORY. What the solution promises under load, under failure and under attack, each
-with a measure that can be tested. Kind is quality, failure or misuse. At least one of
+with a measure that can be tested. Kind is quality, failure or misuse. Importance and
+Difficulty are high, medium or low: how much the scenario matters to the stakeholders,
+and how hard the design finds it to meet. At least one of
 each kind, and a quality scenario for every goal with a measure.
 -->
 
-| Scenario | Kind | Quality attribute | Stimulus | Environment | Response | Response measure |
+| Scenario | Kind | Quality attribute | Source | Stimulus | Environment | Artefact | Response | Response measure | Importance | Difficulty |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Q1 Name | quality | Performance | Staff | 200 users ask at once | Normal operation | The assistant | Answers returned | p95 under 8s | high | low |
+| F1 Name | failure | Availability | The source system | It is unavailable | Business hours | The assistant | Says it cannot answer, and why | No invented answer | high | medium |
+| M1 Name | misuse | Security | Someone outside | A document carries hidden instructions | Normal operation | The assistant | Instructions ignored | Zero actions taken on them | high | high |
+
+### Fitness Functions
+
+<!--
+RECOMMENDED. The automated checks that keep the promises above true after release: what
+each measures, its threshold, when it runs (each build, each deploy, on a schedule or
+continuously) and the scenarios it protects.
+-->
+
+| Fitness function | Characteristic | Measure | Threshold | Automated | Runs | Scenarios |
 |---|---|---|---|---|---|---|
-| Q1 | quality | Performance | 200 users ask at once | Normal operation | Answers returned | p95 under 8s |
-| F1 | failure | Availability | Source system unavailable | Business hours | Says it cannot answer, and why | No invented answer |
-| M1 | misuse | Security | A document carries hidden instructions | Normal operation | Instructions ignored | Zero actions taken on them |
+| FF-01 Name | Security | What is measured | Zero | Yes | deploy | M1 |
 
 ## Scenarios
 
@@ -369,7 +397,7 @@ produced for, so stale evidence is visible.
 
 | Evidence | Kind | Date | Design version | Outcome |
 |---|---|---|---|---|
-| Link or path | eval / test / review / proof of concept | 2026-10-28 | 0.1 | What it showed |
+| Link or path | eval / test / review / proof of concept | 2026-10-28 | 0.1.0 | What it showed |
 
 ## Catalogue Mapping
 
