@@ -22,15 +22,15 @@ You need Python 3.11 or newer, Node 18 or newer and any recent git. draw.io desk
 
 `pattern` does its work through two other skills, `model` (from the diagram-model repository) and `markdown-deck`. Install all three into `.agents/skills/`, the project folder most agents read. [Install](../README.md#install) lists the other folders and installers; this guide copies them with git so it works the same everywhere.
 
-**Note:** If you already have the skills installed and need to update to a newer version, see [Updating](updating.md) for automated update scripts and instructions.
+**Note:** The [install script](../README.md#with-the-install-script) does this step, and step 2's `npm install`, in one run. To update skills you already have, see [Updating](updating.md).
 
 PowerShell:
 
 ```powershell
 New-Item -ItemType Directory pattern-quickstart | Out-Null
 Set-Location pattern-quickstart
-git clone --depth 1 --branch pattern--v0.12.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
-git clone --depth 1 --branch model--v0.9.0 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
+git clone --depth 1 --branch pattern--v0.15.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
+git clone --depth 1 --branch model--v0.9.2 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
 git clone --depth 1 --branch markdown-deck--v0.6.8 https://github.com/dermot-obrien/markdown-deck.git _src/markdown-deck
 New-Item -ItemType Directory -Force .agents/skills | Out-Null
 Copy-Item -Recurse _src/architecture-pattern/skills/pattern .agents/skills/
@@ -43,8 +43,8 @@ bash:
 
 ```bash
 mkdir pattern-quickstart && cd pattern-quickstart
-git clone --depth 1 --branch pattern--v0.12.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
-git clone --depth 1 --branch model--v0.9.0 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
+git clone --depth 1 --branch pattern--v0.15.0 https://github.com/dermot-obrien/architecture-pattern.git _src/architecture-pattern
+git clone --depth 1 --branch model--v0.9.2 https://github.com/dermot-obrien/diagram-model.git _src/diagram-model
 git clone --depth 1 --branch markdown-deck--v0.6.8 https://github.com/dermot-obrien/markdown-deck.git _src/markdown-deck
 mkdir -p .agents/skills
 cp -r _src/architecture-pattern/skills/pattern _src/diagram-model/skills/model _src/markdown-deck/skills/markdown-deck .agents/skills/
