@@ -1,4 +1,5 @@
 ---
+kind: pattern
 title: "AP-900 Knowledge Retrieval"
 sidebar_label: "AP-900 Knowledge Retrieval"
 description: "Grounded, permission-aware answers over enterprise knowledge, through one retrieval contract"

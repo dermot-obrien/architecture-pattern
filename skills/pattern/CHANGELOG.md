@@ -2,6 +2,12 @@
 
 # Changelog
 
+## [0.14.0] - 2026-10-28
+
+### Changed
+
+- The shipped templates, and the worked examples, carry `kind: pattern`: the signature the continuum's front matter standard gives a pattern, by which the portfolio skill finds it. With `pattern_type` beside it, a document says what it is in its front matter, and no tool reads its file or folder name to decide.
+
 ## [0.13.0] - 2026-10-28
 
 ### Added

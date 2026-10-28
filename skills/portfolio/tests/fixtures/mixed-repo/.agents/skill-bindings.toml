@@ -1,0 +1,21 @@
+bindingsVersion = "1.0"
+
+[suite.pattern]
+outputDir = "../patterns"
+
+[suite.pattern.types.architecture-pattern]
+idSeries = "AP"
+
+[suite.pattern.types.reference-architecture]
+idSeries = "RA"
+
+[suite.pattern.types.collaboration]
+idSeries = "CL"
+
+[suite.use-case]
+outputDir = "../use-cases"
+
+[suite.portfolio]
+archiveDir = "../archive"
+inventory = "../docs/portfolio.md"
+candidatesDir = "../candidates"

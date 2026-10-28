@@ -1,0 +1,4 @@
+name,type,committed,priority,quarter
+Order intake,AP,true,high,2026-Q4
+Zero-trust ingress,RA,true,medium,2027-Q2
+Data mesh,,false,low,

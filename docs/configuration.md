@@ -352,7 +352,9 @@ Keys in a pattern document's YAML front matter.
 | `title` | string | recommended | markdown-deck, sites | Deck and page title; the deck falls back to `sidebar_label`, then the file name |
 | `sidebar_label` | string | no | sites, markdown-deck | Short label; markdown-deck's eyebrow falls back to it |
 | `description` | string | no | sites | One-line summary |
-| `document_type` | string | no | your site or catalogue | `pattern` |
+| `kind` | string | recommended | the portfolio skill, the continuum's check | `pattern`: the signature by which the [portfolio](portfolio.md) finds the document. The shipped templates carry it |
+| `id` | string | recommended | the portfolio skill, the continuum's check | The identifier, `AP-012`; without it, the first heading's |
+| `document_type` | string | no | your site or catalogue | `pattern`. Read as a legacy signature where `kind` is missing |
 | `pattern_type` | string | no | `model validate`, the register | One of the bound [types](#types); unset, the type whose `idSeries` the identifier carries |
 | `implements` | list | no | `model validate` | The patterns this one makes concrete, `[AP-004]`; each must have a document |
 | `pattern_scope` | enum | yes | the agent, readers | `problem`, `domain`, `capability-area`, `platform`, `hosting-profile` or `epic` |
@@ -363,6 +365,9 @@ Keys in a pattern document's YAML front matter.
 | `flows` | list | no | a capability model | Only these flows of them; omit for every flow |
 | `references` | list of `{type, path}` | no | a capability model | `type: cost-model` or `type: evidence` |
 | `provenance` | map | no | your review process | `origin` and `review_state` |
+| `portfolio` | map | no | the portfolio and draft skills | `state`, `priority`, `target_quarter`, `committed`, `reason`, `since`, `backlog_ref`, `archived_from`; see [the signature reference](../skills/portfolio/references/signature.md) |
+| `unlisted` | boolean | no | sites | Set on an archived page: built, but out of the sidebar, search and sitemap |
+| `banner` | map | no | sites | `{ tone, text }`, a notice at the top of the page; the draft skill sets one on a draft |
 | `deck_*` | various | no | markdown-deck | `deck_theme`, `deck_palette`, `deck_eyebrow`, `deck_comments`, `deck_thumbnails`, `deck_pdf`, `deck_table_rows`, `deck_feedback_to`, `deck_feedback_subject`, `deck_id`, `deck_publish`; see markdown-deck |
 
 ```yaml

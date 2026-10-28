@@ -115,6 +115,10 @@ python <skills>/pattern/scripts/name-endpoints.py <file-or-folder>... [--check]
 
 A cell `02` becomes `02 Order service`. A cell that already has a name, or whose id has no Building Blocks row, is left alone; the second is reported on stderr. Line endings are preserved. `publish.py` runs it with `--check` and adds a note when a document needs it.
 
+## The portfolio and draft skills' scripts
+
+`portfolio.py` (discover, inventory, check, tag, sign, archive, backlog), `draft.py` (plan, add-source, write, check), their flags and what each does are in [the portfolio guide's command table](portfolio.md#commands). Each prints its full help with `--help`.
+
 ## model commands a pattern uses
 
 The `model` skill's CLI, `python <skills>/model/bin/model.py <command>`. Every command that reads a document takes `--config <file>` to name the binding file instead of searching upward for it. Exit codes: 0 success; 1 validation found something at or above the fail threshold; 2 usage error or unreadable input; 3 an external tool (draw.io, PyYAML) missing or failed. [diagram-model](https://github.com/dermot-obrien/diagram-model) documents them in full.
@@ -167,6 +171,7 @@ For contributors, from the repository root.
 | `node scripts/validate-bundle.mjs --instance <file.json> --schema <$id\|file>[#pointer]` | One JSON document against a schema |
 | `node scripts/validate-bundle.mjs --run-checks <workspace> [--skills <dir>] [bundleDir]` | Run each skill's post-install check as an installer would, from `<workspace>`, with `SKILL_DIR` set to `<skills dir>/<name>` |
 | `--schemas <dir>` | On any form of `validate-bundle.mjs`, load more schemas by `$id`; repeatable |
+| `python -m unittest discover -s skills/portfolio/tests` and `-s skills/draft/tests` | The portfolio and draft skills' unit and end-to-end tests; standard library only, offline |
 | `skills-ref validate skills/pattern` | The specification's reference validator. Install it as the [README](../README.md#agent-skills-conformance) shows; on Windows set `PYTHONUTF8=1` first |
 
 ### Running what CI runs, locally

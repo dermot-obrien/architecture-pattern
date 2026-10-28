@@ -1,4 +1,6 @@
 ---
+# The portfolio signature: the continuum front matter standard says what this document is.
+kind: pattern
 sidebar_label: Solution Design Template
 status: Draft
 # The pattern type, as your repository binds it. A solution design: one solution for one

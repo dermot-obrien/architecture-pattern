@@ -1,0 +1,16 @@
+architecture-pattern: portfolio skill
+Copyright 2026 Dermot O'Brien
+
+This product is licensed under CC BY 4.0 (content) and Apache-2.0 (code).
+See LICENSE and the texts in LICENSES/.
+
+Origin
+------
+
+Written in this repository and first released as portfolio 0.1.0.
+
+scripts/portfolio_lib/yamlish.py is taken from architecture-continuum
+(https://github.com/dermot-obrien/architecture-continuum), file
+skills/architecture/src/ladder/yamlish.py at commit
+93f1aea6f656940fc7d9bb0467963502f9c1c216, by the same author under Apache-2.0,
+with one environment variable added.
