@@ -39,7 +39,9 @@ HOW TO USE THIS TEMPLATE
   agents and their evals, its operations, and the evidence for it.
 - Every section is a table on purpose. Each table's columns are the fields an assessment
   reads, so a design specification can be produced from this document row by row, with no
-  interpretation. A blank cell is an unanswered question, not an omission: leave it blank
+  interpretation. The architecture skill's specify flow recognises this template and
+  translates it table by table. Where a column offers a choice of words, use one of them:
+  they are the specification's own vocabulary. A blank cell is an unanswered question, not an omission: leave it blank
   rather than guess, and it will be asked.
 - Two things do not belong here. Whether a building block is target state is attested by
   the responsible architect when the assessment is triaged, not claimed by the design. And
@@ -171,7 +173,7 @@ fine-tune or evaluate a model says so in Used for AI.
 
 | Trust zone | Trust | What it holds |
 |---|---|---|
-| TZ-01 Zone name | trusted / partly trusted / untrusted | One clause |
+| TZ-01 Zone name | trusted / partially trusted / untrusted | One clause |
 
 | Data set | Owner | Classification | Personal data | Residency | Retention | Where it comes from | Used for AI |
 |---|---|---|---|---|---|---|---|
@@ -258,7 +260,7 @@ confident a pass can be.
 
 | Eval | Building Block | Kind | Dataset | Metric | Threshold | Positive | False positive: meaning and ceiling | False negative: meaning and ceiling | Must never happen | Gates release | Sample size |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| EVAL-01 Name | SBB-NNN Official Name | offline / LLM judge / online | What it is run on | What is measured | The pass mark | What a positive is | What it means, at most N% | What it means, at most N% | The error, and its test | Yes | N cases |
+| EVAL-01 Name | SBB-NNN Official Name | offline / online / red-team / human review / LLM judge / trajectory | What it is run on | What is measured | The pass mark | What a positive is | What it means, at most N% | What it means, at most N% | The error, and its test | Yes | N cases |
 
 <!-- deck:slide label="Interfaces" -->
 
@@ -370,7 +372,7 @@ implemented pattern or a standard; say what it departs from, until when, and the
 
 | Decision | Chosen | Alternatives rejected | Rationale | Reversibility | Departure |
 |---|---|---|---|---|---|
-| DEC-01 Decision title | What was chosen | What was rejected | Why | Easy / costly / one-way | None |
+| DEC-01 Decision title (accepted) | What was chosen | What was rejected | Why | Two-way door / costly / one-way door | None |
 
 ## Open Questions
 
@@ -397,7 +399,7 @@ produced for, so stale evidence is visible.
 
 | Evidence | Kind | Date | Design version | Outcome |
 |---|---|---|---|---|
-| Link or path | eval / test / review / proof of concept | 2026-10-28 | 0.1.0 | What it showed |
+| Link or path | eval report / load test / threat model / cost model / other | 2026-10-28 | 0.1.0 | passed / passed with conditions / failed |
 
 ## Catalogue Mapping
 
