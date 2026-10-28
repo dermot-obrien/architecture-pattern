@@ -41,7 +41,10 @@ HOW TO USE THIS TEMPLATE
   reads, so a design specification can be produced from this document row by row, with no
   interpretation. The architecture skill's specify flow recognises this template and
   translates it table by table. Where a column offers a choice of words, use one of them:
-  they are the specification's own vocabulary. A blank cell is an unanswered question, not an omission: leave it blank
+  they are the specification's own vocabulary.
+- A cell that holds several items (concerns, alternatives, options) separates them with
+  semicolons. A cell that has nothing to say, such as a decision with no departure, says
+  None; a blank cell is read as a question still to answer. A blank cell is an unanswered question, not an omission: leave it blank
   rather than guess, and it will be asked.
 - Two things do not belong here. Whether a building block is target state is attested by
   the responsible architect when the assessment is triaged, not claimed by the design. And
@@ -117,7 +120,7 @@ one.
 
 | Stakeholder | Concerns |
 |---|---|
-| Role or group | What they need the design to answer |
+| Role or group | First concern; second concern |
 
 ### Constraints, Assumptions and Obligations
 
@@ -372,7 +375,7 @@ implemented pattern or a standard; say what it departs from, until when, and the
 
 | Decision | Chosen | Alternatives rejected | Rationale | Reversibility | Departure |
 |---|---|---|---|---|---|
-| DEC-01 Decision title (accepted) | What was chosen | What was rejected | Why | Two-way door / costly / one-way door | None |
+| DEC-01 Decision title (accepted) | What was chosen | First alternative; second alternative | Why | Two-way door / costly / one-way door | None |
 
 ## Open Questions
 
@@ -381,7 +384,7 @@ with no open questions is not believed. -->
 
 | Question | Options | Owner | Needed by |
 |---|---|---|---|
-| What is not yet decided | The options in play | Who decides | Date |
+| What is not yet decided | First option; second option | Who decides | Date |
 
 ## Risks and Trade-offs
 
