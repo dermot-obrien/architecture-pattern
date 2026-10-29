@@ -2,6 +2,12 @@
 
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+
+- `SKILL.md` and the `template` description of the `types` option in `inputs.toml` name `solution-design` among the shipped templates. It has shipped since 0.13.0, and `builtin:solution-design` binds it, but both lists named only the other three.
+
 ## [0.15.0] - 2026-10-28
 
 ### Added

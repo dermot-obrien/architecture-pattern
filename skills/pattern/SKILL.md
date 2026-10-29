@@ -75,7 +75,7 @@ If `doctor` does not list both under `siblings`, stop and tell the user to insta
 
 Every architecture model is a pattern: building blocks, the interfaces between them and the scenarios that walk across them. What a practice calls its kinds of pattern, such as an architecture pattern (technology-agnostic, ABBs), a reference architecture (technology-specific, mainly SBBs) and a solution design (one for one consumer, with tables a design assessment reads), is the repository's to say, in `types`; this skill authors every kind the same way.
 
-Shipped templates: `architecture-pattern`, `reference-architecture`, `collaboration`; `convert` brings old diagrams in.
+Shipped templates: `architecture-pattern`, `reference-architecture`, `solution-design`, `collaboration`; `convert` brings old diagrams in.
 
 Patterns differ by semantic type, which has up to three parts:
 
