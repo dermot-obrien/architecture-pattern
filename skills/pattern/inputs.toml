@@ -37,8 +37,8 @@ description = """The repository's kinds of pattern, one table each,
 [suite.pattern.types.<name>], with label (what readers call it), idSeries (the prefix of
 its identifiers), physical (none, some, most or all of its boxes SBBs or products) and
 template (the repository's own template for the type, relative to the binding file, or
-builtin:<name> for one this skill ships, architecture-pattern, reference-architecture or
-collaboration; unset, template below, else the shipped one for the type, else
+builtin:<name> for one this skill ships, architecture-pattern, reference-architecture,
+solution-design or collaboration; unset, template below, else the shipped one for the type, else
 assets/template.md).
 A practice that calls a technology-agnostic pattern an architecture pattern and a
 technology-specific one a reference architecture binds both. A document's type is its
