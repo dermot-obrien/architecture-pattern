@@ -2,6 +2,13 @@
 
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- The solution design template answers what a design review asks besides what an assessment reads: a Summary; an optional strengths, weaknesses, opportunities and threats table; Placement (hosting, regions, availability zones and resilience tier per building block); Identity and Access (how user access is granted and removed, each service identity and its credential, and where authorisation is managed); Operations rows for security events, audit, dashboards, backup, management access, currency and vendor support; Roles and Support; Actions beside Open Questions; Delivery Horizons; Future Considerations; References; a Glossary; and Document Administration with the design's governance status, its approvals and its version history. A security standards row joins Cross-Cutting Concerns, and the diagram guidance offers an overview layer above the component view. Every existing table and heading is unchanged, so a document written from the template still translates into a design specification as before; the new sections are read by people, not by the specify flow, until the assessment schema has fields for them.
+- The template says that a section that does not apply says so and why rather than being deleted, except the model, agent and eval facets and Catalogue Mapping, whose absence is the answer.
+
 ## [0.15.0] - 2026-10-28
 
 ### Added

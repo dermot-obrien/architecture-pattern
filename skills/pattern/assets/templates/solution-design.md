@@ -50,7 +50,12 @@ HOW TO USE THIS TEMPLATE
   rather than guess, and it will be asked.
 - Two things do not belong here. Whether a building block is target state is attested by
   the responsible architect when the assessment is triaged, not claimed by the design. And
-  assessment outcomes belong to the assessment, not to the design.
+  assessment outcomes belong to the assessment, not to the design. Document Administration
+  records where the design was submitted and who signed it off, which is not an outcome.
+- A section that does not apply says so in one line and why, rather than being deleted, so a
+  reader can tell it was considered. The facet sections (Model-Backed Components, Agents,
+  Evals) and Catalogue Mapping are the exception: delete them when nothing calls a model or
+  every box is catalogued, because their absence is what says so.
 - Guidance lives in HTML comments, which Markdown renderers do not display. Delete each one
   as you complete its section.
 - Identifiers below are written as SBB-NNN for solution building blocks, ABB-NNN for
@@ -76,6 +81,15 @@ HOW TO USE THIS TEMPLATE
 <!--
 MANDATORY. The problem this solution solves, for whom, and what done looks like. One or
 two paragraphs. Name the consumer: the team, product or business unit it is built for.
+Where it helps, state the need as a story: as a [kind of user], I want to [do something],
+so that [outcome]. Refer back to the target state or the use case it serves.
+-->
+
+### Summary
+
+<!--
+MANDATORY. Two or three sentences for a reader who reads nothing else: what is built, for
+whom, and the outcome it delivers. Write it last.
 -->
 
 ### Goals and Non-Goals
@@ -138,6 +152,20 @@ for example a risk category or a data classification.
 | Assumption | What the design takes as true | Who said so | |
 | Obligation | What must be complied with | The instrument | How it classes this solution |
 
+### Strengths, Weaknesses, Opportunities and Threats
+
+<!--
+OPTIONAL. The design's position: strengths and weaknesses are internal to it, opportunities
+and threats come from outside. A few words per item, separated by semicolons. Delete the
+section if the design review does not ask for it.
+-->
+
+| Strengths | Weaknesses |
+|---|---|
+| First strength; second strength | First weakness; second weakness |
+| **Opportunities** | **Threats** |
+| First opportunity; second opportunity | First threat; second threat |
+
 <!-- deck:slide label="Component View" -->
 
 ## Diagram
@@ -153,6 +181,9 @@ the ones that matter most:
 - Draw the trust zones as labelled boundaries, so the reader sees which connectors cross
   one.
 - Every diagram carries a key.
+- Where the component view is too detailed for a first read, put an overview above it: a
+  layer of the same source that shows only the main boxes, so the two cannot drift. Each
+  view is followed by the tables that explain it, never by the picture alone.
 
     ![SD-NNN components](./components.svg)
 -->
@@ -200,6 +231,20 @@ from, or loose for one no pattern owns.
 |---|---|---|---|---|---|---|---|---|
 | SBB-NNN Official Name | What it does here, one clause | sbb | ABB-NNN Official Name | BC-NNN | Owning team | TZ-01 | Environment or node | RA-NNN |
 | 07 Local role name | A role with no catalogue entry yet | local-role | ABB-NNN Official Name | BC-NNN | Owning team | TZ-01 | | loose |
+
+### Placement
+
+<!--
+MANDATORY for every box that runs somewhere: where it is hosted, across which regions and
+availability zones, and the resilience tier your organisation gives it, with why that
+tier was accepted. A box hosted differently from the rest of the solution, such as a
+vendor's service beside your own, has its own row. Say why where the placement departs
+from your organisation's guidance.
+-->
+
+| Building Block | Hosting | Regions | Availability zones | Resilience tier | Why |
+|---|---|---|---|---|---|
+| SBB-NNN Official Name | Cloud provider, managed service or on premises | Region | Zones | Tier | Why this placement and tier |
 
 ### Pattern Realisation
 
@@ -284,6 +329,23 @@ that reads it can be steered by it.
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | IF-01 | SBB-NNN Official Name | 07 Local role name | What flows and why | request-response | HTTPS | API name v1 | OAuth 2.0, user token | Source system permissions | DS-01 | Yes | Timeout 5s, retry 3x on 503 |
 
+## Identity and Access
+
+<!--
+MANDATORY. Interfaces say how each call is authenticated; this says how the identities
+behind them are managed. Kind is user, service or authorisation. A user row says how
+people sign in, how access is requested, granted and removed, and whether it is copied to
+other systems. A service row names each service account, principal or role, what uses it
+and how its credential is held and rotated. An authorisation row says where roles live in
+a building block and who manages them.
+-->
+
+| Kind | Building Block | Identity | Mechanism | Granted, removed or rotated by |
+|---|---|---|---|---|
+| user | SBB-NNN Official Name | Staff | Single sign-on | Access request, removed on leaving |
+| service | SBB-NNN Official Name | Service principal name | Workload identity | Platform team, rotated automatically |
+| authorisation | SBB-NNN Official Name | Roles in the product | Groups from the directory | Owning team |
+
 ## Quality, Failure and Misuse Scenarios
 
 <!--
@@ -347,6 +409,7 @@ enforced. -->
 |---|---|
 | Identity | Which building block, which interface |
 | Observability | What is logged and traced, and where it goes |
+| Security standards | The standards and certifications the solution and its vendors hold or follow, and any standard pattern it departs from |
 
 <!-- deck:slide label="Operations" -->
 
@@ -361,11 +424,32 @@ solution goes into production; an early design may leave some blank.
 |---|---|
 | Service levels | Availability and response time objectives, and how they are measured |
 | Observability | What is monitored, the alerts, and who receives them |
-| Deployment | How a change reaches production, and how it is rolled back |
+| Security events | The events sent to security monitoring, such as repeated failed sign-ins, and where they surface |
+| Audit | What is recorded of who did what, where it is kept and for how long |
+| Dashboards | What gives visibility of the service, and the limits that are tracked |
+| Deployment | How a change reaches production, how automated that is, and how it is rolled back |
+| Backup | What is backed up, how, how often, and how a restore is tested |
 | Recovery | Recovery time and recovery point objectives, and how they are tested |
+| Management | Consoles or administrative access the solution needs, and who holds it |
+| Currency | How the solution and its stack are kept current: patching, upgrades, end of support |
 | Cost | The cost model, the expected monthly cost, and any cap |
 | Support | Who supports it, during what hours, and how a user reaches them |
+| Vendor support | What each vendor supports, under which agreement, and any change this solution needs to it |
 | Transition | How users and data move to it, and what it replaces |
+
+### Roles and Support
+
+<!--
+MANDATORY. Every team the solution needs, and what each is responsible for. Any technology
+in the design has a team that supports it. Link a RACI or a support swimlane where one
+exists.
+-->
+
+| Role | Team | Responsibilities |
+|---|---|---|
+| Platform | Team name | Hosting, servers and storage |
+| Application | Team name | The application and its services |
+| Vendor | Vendor name | What the vendor supports |
 
 ## Decisions
 
@@ -388,11 +472,38 @@ with no open questions is not believed. -->
 |---|---|---|---|
 | What is not yet decided | First option; second option | Who decides | Date |
 
+### Actions
+
+<!-- RECOMMENDED. What still has to be done before the design can be approved or built, as
+distinct from what is still undecided. -->
+
+| Action | Owner | Due |
+|---|---|---|
+| What has to be done | Who does it | Date |
+
 ## Risks and Trade-offs
 
 | Risk or trade-off | Likelihood | Impact | Mitigation | Owner |
 |---|---|---|---|---|
 | Risk statement | Low / medium / high | Low / medium / high | Mitigation | Who owns it |
+
+## Delivery Horizons
+
+<!--
+RECOMMENDED. How the solution might be delivered and grow: the first outcome, then what
+later horizons could add. These are not committed deliverables; tie each to the goals
+above or to the use cases it could take on.
+-->
+
+| Horizon | Outcome | What it adds | Depends on |
+|---|---|---|---|
+| 1 | The first outcome, from the goals | The scope of the first release | |
+| 2 | A later outcome | What it adds | What must be true first |
+
+## Future Considerations
+
+<!-- OPTIONAL. Where the solution could be extended or reused beyond its horizons, and what
+that would need. One bullet each. -->
 
 ## Evidence
 
@@ -414,3 +525,57 @@ leaves as a gap, until its catalogue entry exists. Delete if every box is catalo
 | Local ID | Maps To | Relationship | Note |
 |---|---|---|---|
 | 07 | ABB-NNN Official Name | partial | What is missing |
+
+## References
+
+<!--
+MANDATORY. Every document the design relies on that is not in its front matter: the target
+state, runbooks and support pages, other designs, repositories, vendor material. Kind is
+target state, operations, design, repository, vendor or other.
+-->
+
+| Reference | Kind | Why it matters here |
+|---|---|---|
+| Title and link | target state | What it settles for this design |
+
+## Glossary
+
+<!-- RECOMMENDED. Every acronym and term a reader outside the team might not know. -->
+
+| Term | Meaning |
+|---|---|
+| Term | What it means here |
+
+## Document Administration
+
+### Governance
+
+<!--
+MANDATORY. Where the design has been submitted and where it stands there. Status is to
+submit, pending, approved or declined. Update it after each forum.
+-->
+
+| Forum | Status | Record | Date |
+|---|---|---|---|
+| Design forum name | to submit | Link to the forum's register entry | |
+
+### Approvals
+
+<!--
+MANDATORY. Each area that must sign the design off, with its concern and how its approval
+is formalised. Add rows for every architecture domain, vendor or business area the
+solution affects.
+-->
+
+| Approver area | Approver | Interest or concern | Formalised by | Record | Status |
+|---|---|---|---|---|---|
+| Solution owner | Name | Ownership and support | Forum or process | Link | pending |
+| Architecture | Name | Design and solution fitness | Forum or process | Link | pending |
+| Engineering | Name | Delivery and operations | Review | Link | pending |
+| Security | Name | Security posture and residual risk | Security assessment | Link | pending |
+
+### Versions
+
+| Version | Date | Author | Change |
+|---|---|---|---|
+| 0.1.0 | 2026-10-28 | Name | First draft |
